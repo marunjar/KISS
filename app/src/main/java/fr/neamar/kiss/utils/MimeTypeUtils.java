@@ -1,10 +1,15 @@
 package fr.neamar.kiss.utils;
 
+import android.accounts.AccountManager;
+import android.accounts.AuthenticatorDescription;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SyncAdapterType;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -13,6 +18,7 @@ import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -34,7 +40,11 @@ public class MimeTypeUtils {
     // Cached label
     private static final Map<String, String> labelCache = new HashMap<>();
     // Cached detail columns
-    private static final Map<String, String> detailColumnCache = new HashMap<>();
+    private static Map<String, String> detailColumnCache = null;
+
+    private static final String CONTACTS_DATA_KIND = "ContactsDataKind";
+    private static final String CONTACT_ATTR_MIME_TYPE = "mimeType";
+    private static final String CONTACT_ATTR_DETAIL_COLUMN = "detailColumn";
 
     private static final String[] METADATA_CONTACTS_NAMES = new String[]{
             "android.provider.ALTERNATE_CONTACTS_STRUCTURE",
@@ -222,46 +232,72 @@ public class MimeTypeUtils {
 
     /**
      * @param context
-     * @param mimeType
-     * @return
+     * @return all mime types and related data columns from contact sync adapters
      */
-    public static String getDetailColumn(Context context, String mimeType) {
-        if (detailColumnCache.containsKey(mimeType)) {
-            return detailColumnCache.get(mimeType);
-        }
-        String detailColumn = null;
-        ResolveInfo resolveInfo = getBestResolve(context, mimeType);
-        if (resolveInfo != null) {
-            XmlResourceParser parser = loadContactsXml(context, resolveInfo.activityInfo.packageName);
-            if (parser != null) {
-                try {
-                    while (detailColumn == null && parser.next() != XmlPullParser.END_DOCUMENT) {
-                        if ("ContactsDataKind".equals(parser.getName())) {
-                            String foundMimeType = null;
-                            String foundDetailColumn = null;
-                            int attributeCount = parser.getAttributeCount();
-                            for (int i = 0; i < attributeCount; i++) {
-                                String attr = parser.getAttributeName(i);
-                                String value = parser.getAttributeValue(i);
-                                if ("mimeType".equals(attr)) {
-                                    foundMimeType = value;
-                                } else if ("detailColumn".equals(attr)) {
-                                    foundDetailColumn = value;
-                                }
-                            }
-                            if (mimeType.equals(foundMimeType)) {
-                                detailColumn = foundDetailColumn;
-                                break;
-                            }
-                        }
-                    }
-                } catch (IOException | XmlPullParserException e) {
+    public static Map<String, String> fetchDetailColumns(Context context) {
+        if (detailColumnCache == null) {
+            long startDetail = System.nanoTime();
+
+            detailColumnCache = new HashMap<>();
+
+            final Set<String> contactSyncableTypes = new HashSet<>();
+
+            SyncAdapterType[] syncAdapterTypes = ContentResolver.getSyncAdapterTypes();
+            for (SyncAdapterType type : syncAdapterTypes) {
+                if (type.authority.equals(ContactsContract.AUTHORITY)) {
+                    contactSyncableTypes.add(type.accountType);
                 }
             }
-        }
 
-        detailColumnCache.put(mimeType, detailColumn);
-        return detailColumn;
+            AuthenticatorDescription[] authenticatorDescriptions = ((AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE)).getAuthenticatorTypes();
+            for (AuthenticatorDescription auth : authenticatorDescriptions) {
+                if (contactSyncableTypes.contains(auth.type)) {
+                    XmlResourceParser parser = loadContactsXml(context, auth.packageName);
+                    if (parser != null) {
+                        try {
+                            while (parser.next() != XmlPullParser.END_DOCUMENT) {
+                                if (CONTACTS_DATA_KIND.equals(parser.getName())) {
+                                    String foundMimeType = null;
+                                    String foundDetailColumn = null;
+                                    int attributeCount = parser.getAttributeCount();
+                                    for (int i = 0; i < attributeCount; i++) {
+                                        String attr = parser.getAttributeName(i);
+                                        String value = parser.getAttributeValue(i);
+                                        if (CONTACT_ATTR_MIME_TYPE.equals(attr)) {
+                                            foundMimeType = value;
+                                        } else if (CONTACT_ATTR_DETAIL_COLUMN.equals(attr)) {
+                                            foundDetailColumn = value;
+                                        }
+                                    }
+                                    if (foundMimeType != null) {
+                                        detailColumnCache.put(foundMimeType, foundDetailColumn);
+                                    }
+                                }
+                            }
+                        } catch (IOException | XmlPullParserException ignored) {
+                        }
+                    }
+                }
+            }
+
+            // Add additional data columns for known mime types
+            detailColumnCache.put(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Email.ADDRESS);
+            detailColumnCache.put(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+            long endDetail = System.nanoTime();
+            Log.i("time", (endDetail - startDetail) / 1000000 + " milliseconds to fetch detail data columns");
+        }
+        return detailColumnCache;
+    }
+
+    /**
+     * @param context
+     * @param mimeType
+     * @return related data column for mime type
+     */
+    public static String getDetailColumn(Context context, String mimeType) {
+        Map<String, String> detailColumns = fetchDetailColumns(context);
+        return detailColumns.get(mimeType);
     }
 
     /**
@@ -272,6 +308,7 @@ public class MimeTypeUtils {
      * @param packageName
      * @return XmlResourceParser for contacts.xml, null if nothing found
      */
+    @SuppressLint("WrongConstant")
     public static XmlResourceParser loadContactsXml(Context context, String packageName) {
         final PackageManager pm = context.getPackageManager();
         final Intent intent = new Intent("android.content.SyncAdapter").setPackage(packageName);
