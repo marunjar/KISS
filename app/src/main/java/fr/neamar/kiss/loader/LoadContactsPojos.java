@@ -205,7 +205,6 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
         columns.add(ContactsContract.Data.LOOKUP_KEY);
         columns.add(ContactsContract.Data.RAW_CONTACT_ID);
         columns.add(ContactsContract.Data._ID);
-        columns.add(ContactsContract.Data.DATA1);
         columns.add(ContactsContract.Data.IS_PRIMARY);
 
         String detailColumn = MimeTypeUtils.getDetailColumn(context.get(), mimeType);
@@ -225,7 +224,6 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                 int rawContactIdIndex = mimeTypeCursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID);
                 int idIndex = mimeTypeCursor.getColumnIndex(ContactsContract.Data._ID);
                 int isPrimaryIndex = mimeTypeCursor.getColumnIndex(ContactsContract.Data.IS_PRIMARY);
-                int data1Index = mimeTypeCursor.getColumnIndex(ContactsContract.Data.DATA1);
                 int detailColumnIndex = -1;
                 if (detailColumn != null) {
                     detailColumnIndex = mimeTypeCursor.getColumnIndex(detailColumn);
@@ -244,12 +242,8 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                     if (detailColumnIndex >= 0) {
                         label = mimeTypeCursor.getString(detailColumnIndex);
                     }
-                    ;
                     if (label == null) {
                         label = MimeTypeUtils.getLabel(context.get(), mimeType);
-                    }
-                    if (label == null) {
-                        label = mimeTypeCursor.getString(data1Index);
                     }
                     Uri icon = basicContact.getIcon();
 
