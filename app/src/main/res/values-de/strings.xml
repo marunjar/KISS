@@ -295,4 +295,5 @@
     <string name="clipboard_warning_dialog">Dadurch wird der Inhalt der Zwischenablage überschrieben.</string>
     <string name="title_import_export">Import &amp; Export</string>
     <string name="theme_bar_color">Farbe der Favoritenleiste und Suchleiste</string>
+    <string name="contact_mime_types_title">Anzuzeigende Kontakte auswählen</string>
 </resources>
