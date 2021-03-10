@@ -68,12 +68,6 @@ public class MimeTypeUtils {
             ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
     ));
 
-    // Known android mime types that are supported by KISS
-    private static final Set<String> SUPPORTED_MIME_TYPES = new HashSet<>(Arrays.asList(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
-            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-    ));
-
     private MimeTypeUtils() {
     }
 
@@ -114,11 +108,8 @@ public class MimeTypeUtils {
         if (UNSUPPORTED_MIME_TYPES.contains(mimeType)) {
             return false;
         }
-        if (SUPPORTED_MIME_TYPES.contains(mimeType)) {
-            return true;
-        }
         // check if intent for custom mime type is registered
-        Intent intent = getRegisteredIntentByMimeType(context, mimeType, -1);
+        Intent intent = getRegisteredIntentByMimeType(context, mimeType, -1, "");
         return intent != null;
     }
 
@@ -131,12 +122,13 @@ public class MimeTypeUtils {
     /**
      * Create a new intent to view given row of contact data.
      *
-     * @param mimeType mimetype of contact data row
-     * @param id       id of contact data row
+     * @param mimeType           mimetype of contact data row
+     * @param id                 id of contact data row
+     * @param schemeSpecificPart
      * @return intent to view contact by mime type and id, null if no activity is registered for intent
      */
-    public static Intent getRegisteredIntentByMimeType(Context context, String mimeType, long id) {
-        final Intent intent = getIntentByMimeType(mimeType, id);
+    public static Intent getRegisteredIntentByMimeType(Context context, String mimeType, long id, String schemeSpecificPart) {
+        final Intent intent = getIntentByMimeType(mimeType, id, schemeSpecificPart);
 
         if (isIntentRegistered(context, intent)) {
             return intent;
@@ -148,14 +140,26 @@ public class MimeTypeUtils {
     /**
      * create a new intent to view given row of contact data
      *
-     * @param mimeType mime type of contact data row
-     * @param id       id of contact data row
+     * @param mimeType           mime type of contact data row
+     * @param id                 id of contact data row
+     * @param schemeSpecificPart
      * @return intent to view contact by mime type and id
      */
-    private static Intent getIntentByMimeType(String mimeType, long id) {
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        final Uri uri = ContentUris.withAppendedId(ContactsContract.Data.CONTENT_URI, id);
-        intent.setDataAndType(uri, mimeType);
+    private static Intent getIntentByMimeType(String mimeType, long id, String schemeSpecificPart) {
+        Intent intent;
+        if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
+            final Uri phoneUri = Uri.fromParts("tel", Uri.encode(schemeSpecificPart), null);
+            intent = new Intent(Intent.ACTION_CALL, phoneUri);
+        } else if (ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE.equals(mimeType)) {
+            final Uri mailUri = Uri.fromParts("mailto", Uri.encode(schemeSpecificPart), null);
+            intent = new Intent(Intent.ACTION_SENDTO, mailUri);
+        } else {
+            intent = new Intent(Intent.ACTION_VIEW);
+            final Uri uri = ContentUris.withAppendedId(ContactsContract.Data.CONTENT_URI, id);
+            intent.setDataAndType(uri, mimeType);
+
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 
@@ -180,7 +184,7 @@ public class MimeTypeUtils {
      */
     private static ResolveInfo getBestResolve(Context context, String mimeType) {
         final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = getIntentByMimeType(mimeType, -1);
+        final Intent intent = getIntentByMimeType(mimeType, -1, "");
         final List<ResolveInfo> matches = packageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
 

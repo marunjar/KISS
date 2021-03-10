@@ -129,7 +129,7 @@ public class ContactsResult extends CallResult {
         if (contactPojo.getImData() != null) {
             messageButton.setVisibility(View.VISIBLE);
             messageButton.setOnClickListener(v -> {
-                launchIm(v.getContext());
+                launchIm(v.getContext(), v);
                 recordLaunch(context, queryInterface);
             });
             // TODO: modify app icon to identify different messaging apps
@@ -270,9 +270,12 @@ public class ContactsResult extends CallResult {
         context.startActivity(i);
     }
 
-    private void launchIm(final Context context) {
-        Intent intent = MimeTypeUtils.getRegisteredIntentByMimeType(context, contactPojo.getImData().getMimeType(), contactPojo.getImData().getId());
+    private void launchIm(final Context context, final View v) {
+        Intent intent = MimeTypeUtils.getRegisteredIntentByMimeType(context, contactPojo.getImData().getMimeType(), contactPojo.getImData().getId(), contactPojo.getImData().getIdentifier());
         if (intent != null) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                intent.setSourceBounds(v.getClipBounds());
+            }
             context.startActivity(intent);
         }
     }
