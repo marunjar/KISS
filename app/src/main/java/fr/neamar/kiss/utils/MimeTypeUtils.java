@@ -9,6 +9,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SyncAdapterType;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -25,11 +27,13 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static java.util.Collections.emptySet;
 
@@ -73,9 +77,9 @@ public class MimeTypeUtils {
 
     /**
      * @param context
-     * @return a list of all possible mime types from existing contacts
+     * @return a list of all supported mime types from existing contacts
      */
-    public static Set<String> getPossibleMimeTypes(Context context) {
+    public static Set<String> getSupportedMimeTypes(Context context) {
         if (!Permission.checkPermission(context, Permission.PERMISSION_READ_CONTACTS)) {
             return emptySet();
         }
@@ -90,7 +94,7 @@ public class MimeTypeUtils {
                 int mimeTypeIndex = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE);
                 while (cursor.moveToNext()) {
                     String mimeType = cursor.getString(mimeTypeIndex);
-                    if (isPossibleMimeType(context, mimeType)) {
+                    if (isSupportedMimeType(context, mimeType)) {
                         mimeTypes.add(mimeType);
                     }
                 }
@@ -98,10 +102,13 @@ public class MimeTypeUtils {
         }
         cursor.close();
 
+        // always add classic phone contacts
+        mimeTypes.add(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+
         return mimeTypes;
     }
 
-    private static boolean isPossibleMimeType(Context context, String mimeType) {
+    private static boolean isSupportedMimeType(Context context, String mimeType) {
         if (mimeType == null) {
             return false;
         }
@@ -113,10 +120,18 @@ public class MimeTypeUtils {
         return intent != null;
     }
 
-    public static Set<String> getAllowedMimeTypes(Context context) {
-        Set<String> mimeTypes = getPossibleMimeTypes(context);
-        // TODO: load settings and remove mime types that shouldn't be shown
-        return mimeTypes;
+    /**
+     * @param context
+     * @return a list of all mime types that should be shown
+     */
+    public static Set<String> getActiveMimeTypes(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> selectedMimeTypes = prefs.getStringSet("selected-contact-mime-types", getDefaultMimeTypes());
+        Set<String> supportedMimeTypes = getSupportedMimeTypes(context);
+
+        supportedMimeTypes.retainAll(selectedMimeTypes);
+
+        return supportedMimeTypes;
     }
 
     /**
@@ -356,4 +371,20 @@ public class MimeTypeUtils {
         return label;
     }
 
+    /**
+     * strip common vnd.android.cursor.item/ from mimeType
+     * @param mimeType
+     * @return
+     */
+    public static String getShortMimeType(String mimeType) {
+        return mimeType.replaceFirst("vnd\\.android\\.cursor\\.item/", "");
+    }
+
+    /**
+     *
+     * @return mimeTypes that are shown by default
+     */
+    public static Set<String> getDefaultMimeTypes() {
+        return new TreeSet<>(Collections.singletonList(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE));
+    }
 }

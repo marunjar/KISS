@@ -125,7 +125,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
             nickCursor.close();
         }
 
-        Set<String> mimeTypes = MimeTypeUtils.getAllowedMimeTypes(context.get());
+        Set<String> mimeTypes = MimeTypeUtils.getActiveMimeTypes(context.get());
 
         // Query all mime types
         for (String mimeType : mimeTypes) {
@@ -247,7 +247,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                     }
                     Uri icon = basicContact.getIcon();
 
-                    ContactsPojo contact = new ContactsPojo(pojoScheme + contactId + '/' + mimeType + '/' + id, lookupKey, icon, primary, basicRawContact.isStarred());
+                    ContactsPojo contact = new ContactsPojo(pojoScheme + contactId + '/' + MimeTypeUtils.getShortMimeType(mimeType) + '/' + id, lookupKey, icon, primary, basicRawContact.isStarred());
 
                     contact.setName(basicContact.getDisplayName());
                     contact.setNickname(basicContact.getNickName());

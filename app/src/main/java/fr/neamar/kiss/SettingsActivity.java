@@ -2,7 +2,6 @@ package fr.neamar.kiss;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,13 +25,12 @@ import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -47,6 +45,7 @@ import fr.neamar.kiss.preference.ExcludePreferenceScreen;
 import fr.neamar.kiss.preference.PreferenceScreenHelper;
 import fr.neamar.kiss.preference.SwitchPreference;
 import fr.neamar.kiss.searcher.QuerySearcher;
+import fr.neamar.kiss.utils.MimeTypeUtils;
 import fr.neamar.kiss.utils.PackageManagerUtils;
 import fr.neamar.kiss.utils.Permission;
 
@@ -135,6 +134,7 @@ public class SettingsActivity extends PreferenceActivity implements
             SettingsActivity.this.setListPreferenceIconsPacksData(iconsPack);
             SettingsActivity.this.runOnUiThread(() -> iconsPack.setEnabled(true));
 
+            SettingsActivity.this.addAdditionalContactsPreferences(prefs);
             SettingsActivity.this.addCustomSearchProvidersPreferences(prefs);
 
             SettingsActivity.this.addHiddenTagsTogglesInformation(prefs);
@@ -156,8 +156,58 @@ public class SettingsActivity extends PreferenceActivity implements
         }
         AsyncTask.execute(alwaysAsync);
 
-
         permissionManager = new Permission(this);
+    }
+
+    private void addAdditionalContactsPreferences(SharedPreferences prefs) {
+        if (prefs.getStringSet("selected-contact-mime-types", null) == null) {
+            // If null, it means this setting has never been accessed before
+            // In this case, null != [] ([] happens when the user manually unselected every single option)
+            // So, when null, we know it's the first time opening this setting and we can write the default value.
+            // note: other preferences are initialized automatically in MainActivity.onCreate() from the preferences XML,
+            // but this preference isn't defined in the XML so can't be initialized that easily.
+            prefs.edit().putStringSet("selected-contact-mime-types", MimeTypeUtils.getDefaultMimeTypes()).apply();
+        }
+
+        MultiSelectListPreference multiPreference = new MultiSelectListPreference(this);
+        //get all supported mime types
+        Set<String> supportedMimeTypes = MimeTypeUtils.getSupportedMimeTypes(getApplicationContext());
+
+        // get labels for mime types
+        Map<String, Set<String>> mappedMimeTypes = new HashMap<>();
+        for (String mimeType : supportedMimeTypes) {
+            String label = MimeTypeUtils.getLabel(getApplicationContext(), mimeType);
+            Set<String> mimeTypesPerLabel = mappedMimeTypes.get(label);
+            if (mimeTypesPerLabel == null) {
+                mimeTypesPerLabel = new HashSet<>();
+                mappedMimeTypes.put(label, mimeTypesPerLabel);
+            }
+            mimeTypesPerLabel.add(mimeType);
+        }
+        String[] mimeTypeEntries = new String[supportedMimeTypes.size()];
+        String[] mimeTypeEntryValues = new String[supportedMimeTypes.size()];
+        int pos = 0;
+        // get entries and values for mime types
+        for (String mimeType : supportedMimeTypes) {
+            String entry = MimeTypeUtils.getLabel(getApplicationContext(), mimeType);
+            if (mappedMimeTypes.get(entry).size() > 1) {
+                // append mime type if an app supports multiple mime types
+                entry += " (" + MimeTypeUtils.getShortMimeType(mimeType) + ")";
+            }
+            mimeTypeEntries[pos] = entry;
+            mimeTypeEntryValues[pos] = mimeType;
+            pos++;
+        }
+
+        String contact_mime_types_title = this.getString(R.string.contact_mime_types_title);
+        multiPreference.setTitle(contact_mime_types_title);
+        multiPreference.setDialogTitle(contact_mime_types_title);
+        multiPreference.setKey("selected-contact-mime-types");
+        multiPreference.setEntries(mimeTypeEntries);
+        multiPreference.setEntryValues(mimeTypeEntryValues);
+
+        PreferenceGroup category = (PreferenceGroup) findPreference("search-result-providers");
+        category.addPreference(multiPreference);
     }
 
     @Override
