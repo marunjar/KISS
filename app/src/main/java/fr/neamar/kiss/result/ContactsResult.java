@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,11 +18,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import androidx.annotation.NonNull;
 import fr.neamar.kiss.R;
 import fr.neamar.kiss.UIColors;
 import fr.neamar.kiss.adapter.RecordAdapter;
@@ -34,11 +33,14 @@ import fr.neamar.kiss.ui.ImprovedQuickContactBadge;
 import fr.neamar.kiss.ui.ListPopup;
 import fr.neamar.kiss.ui.ShapedContactBadge;
 import fr.neamar.kiss.utils.FuzzyScore;
+import fr.neamar.kiss.utils.MimeTypeUtils;
+import fr.neamar.kiss.utils.UserHandle;
 
 public class ContactsResult extends CallResult {
     private final ContactsPojo contactPojo;
     private final QueryInterface queryInterface;
     private Drawable icon = null;
+    private final UserHandle userHandle = new UserHandle();
 
     ContactsResult(QueryInterface queryInterface, ContactsPojo contactPojo) {
         super(contactPojo);
@@ -54,15 +56,23 @@ public class ContactsResult extends CallResult {
 
         // Contact name
         TextView contactName = view.findViewById(R.id.item_contact_name);
-        displayHighlighted(contactPojo.normalizedName, contactPojo.getName(), fuzzyScore, contactName, context);
+        if (!TextUtils.isEmpty(contactPojo.getName())) {
+            displayHighlighted(contactPojo.normalizedName, contactPojo.getName(), fuzzyScore, contactName, context);
+        }
 
-        // Contact phone
+        // Contact phone or IM identifier
         TextView contactPhone = view.findViewById(R.id.item_contact_phone);
-        displayHighlighted(contactPojo.normalizedPhone, contactPojo.phone, fuzzyScore, contactPhone, context);
+        if (contactPojo.getImData() != null && !TextUtils.isEmpty(contactPojo.getImData().getIdentifier())) {
+            displayHighlighted(contactPojo.getImData().getNormalizedIdentifier(), contactPojo.getImData().getIdentifier(), fuzzyScore, contactPhone, context);
+        } else if (!TextUtils.isEmpty(contactPojo.phone)) {
+            displayHighlighted(contactPojo.normalizedPhone, contactPojo.phone, fuzzyScore, contactPhone, context);
+        } else {
+            contactPhone.setVisibility(View.GONE);
+        }
 
         // Contact nickname
         TextView contactNickname = view.findViewById(R.id.item_contact_nickname);
-        if (contactPojo.getNickname().isEmpty()) {
+        if (TextUtils.isEmpty(contactPojo.getNickname())) {
             contactNickname.setVisibility(View.GONE);
         } else {
             contactNickname.setVisibility(View.VISIBLE);
@@ -95,42 +105,47 @@ public class ContactsResult extends CallResult {
         });
 
         int primaryColor = UIColors.getPrimaryColor(context);
+        PackageManager pm = context.getPackageManager();
+        boolean hasPhone = contactPojo.phone != null && pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+
         // Phone action
         ImageButton phoneButton = view.findViewById(R.id.item_contact_action_phone);
         phoneButton.setColorFilter(primaryColor);
+
+        if (hasPhone) {
+            phoneButton.setVisibility(View.VISIBLE);
+            phoneButton.setOnClickListener(v -> {
+                launchCall(v.getContext(), v, contactPojo.phone);
+                recordLaunch(context, queryInterface);
+            });
+        } else {
+            phoneButton.setVisibility(View.INVISIBLE);
+        }
+
         // Message action
         ImageButton messageButton = view.findViewById(R.id.item_contact_action_message);
         messageButton.setColorFilter(primaryColor);
 
-        PackageManager pm = context.getPackageManager();
-
-        if (pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
-            phoneButton.setVisibility(View.VISIBLE);
+        if (contactPojo.getImData() != null) {
             messageButton.setVisibility(View.VISIBLE);
-            phoneButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    launchCall(v.getContext(), v, contactPojo.phone);
-                    recordLaunch(context, queryInterface);
-                }
+            messageButton.setOnClickListener(v -> {
+                launchIm(v.getContext());
+                recordLaunch(context, queryInterface);
+            });
+            // TODO: modify app icon to identify different messaging apps
+        } else if (hasPhone) {
+            messageButton.setVisibility(View.VISIBLE);
+            messageButton.setOnClickListener(v -> {
+                launchMessaging(v.getContext());
+                recordLaunch(context, queryInterface);
             });
 
-            messageButton.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    launchMessaging(v.getContext());
-                    recordLaunch(context, queryInterface);
-                }
-            });
-
-            if (contactPojo.homeNumber)
+            if (contactPojo.isHomeNumber()) {
                 messageButton.setVisibility(View.INVISIBLE);
-            else
+            } else {
                 messageButton.setVisibility(View.VISIBLE);
-
+            }
         } else {
-            phoneButton.setVisibility(View.INVISIBLE);
             messageButton.setVisibility(View.INVISIBLE);
         }
 
@@ -211,7 +226,7 @@ public class ContactsResult extends CallResult {
     @Override
     public View inflateFavorite(@NonNull Context context, @NonNull ViewGroup parent) {
         Drawable drawable = getDrawable(context);
-        if ( drawable != null ) {
+        if (drawable != null) {
             drawable = ShapedContactBadge.getShapedDrawable(context, drawable);
         }
         View favoriteView = super.inflateFavorite(context, parent);
@@ -254,4 +269,12 @@ public class ContactsResult extends CallResult {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
+
+    private void launchIm(final Context context) {
+        Intent intent = MimeTypeUtils.getRegisteredIntentByMimeType(context, contactPojo.getImData().getMimeType(), contactPojo.getImData().getId());
+        if (intent != null) {
+            context.startActivity(intent);
+        }
+    }
+
 }
