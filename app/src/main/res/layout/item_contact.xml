@@ -94,6 +94,7 @@
         android:id="@+id/item_contact_action_message"
         android:layout_width="48dp"
         android:layout_height="?attr/resultButtonHeight"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/item_contact_action_phone"
         android:layout_toLeftOf="@+id/item_contact_action_phone"

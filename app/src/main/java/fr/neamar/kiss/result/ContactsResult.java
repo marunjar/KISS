@@ -63,8 +63,10 @@ public class ContactsResult extends CallResult {
         // Contact phone or IM identifier
         TextView contactPhone = view.findViewById(R.id.item_contact_phone);
         if (contactPojo.getImData() != null && !TextUtils.isEmpty(contactPojo.getImData().getIdentifier())) {
+            contactPhone.setVisibility(View.VISIBLE);
             displayHighlighted(contactPojo.getImData().getNormalizedIdentifier(), contactPojo.getImData().getIdentifier(), fuzzyScore, contactPhone, context);
         } else if (!TextUtils.isEmpty(contactPojo.phone)) {
+            contactPhone.setVisibility(View.VISIBLE);
             displayHighlighted(contactPojo.normalizedPhone, contactPojo.phone, fuzzyScore, contactPhone, context);
         } else {
             contactPhone.setVisibility(View.GONE);
@@ -119,7 +121,7 @@ public class ContactsResult extends CallResult {
                 recordLaunch(context, queryInterface);
             });
         } else {
-            phoneButton.setVisibility(View.INVISIBLE);
+            phoneButton.setVisibility(View.GONE);
         }
 
         // Message action

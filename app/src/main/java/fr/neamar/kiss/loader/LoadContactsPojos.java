@@ -42,6 +42,12 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
             return contacts;
         }
 
+        // Skip if we don't have any mime types to be shown
+        Set<String> mimeTypes = MimeTypeUtils.getActiveMimeTypes(context.get());
+        if (mimeTypes.isEmpty()) {
+            return contacts;
+        }
+
         // Query basic contact information and keep in memory to prevent duplicates
         Map<String, BasicContact> basicContacts = new HashMap<>();
         Cursor contactCursor = context.get().getContentResolver().query(
@@ -124,8 +130,6 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
             }
             nickCursor.close();
         }
-
-        Set<String> mimeTypes = MimeTypeUtils.getActiveMimeTypes(context.get());
 
         // Query all mime types
         for (String mimeType : mimeTypes) {
