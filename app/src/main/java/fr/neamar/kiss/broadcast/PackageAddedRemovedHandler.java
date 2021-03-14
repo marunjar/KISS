@@ -44,6 +44,7 @@ public class PackageAddedRemovedHandler extends BroadcastReceiver {
         }
 
         KissApplication.getApplication(ctx).resetIconsHandler();
+        KissApplication.getMimeTypeCache(ctx).clearCache();
 
         // Reload application list
         final AppProvider provider = KissApplication.getApplication(ctx).getDataHandler().getAppProvider();

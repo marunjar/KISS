@@ -28,8 +28,8 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -170,32 +170,23 @@ public class SettingsActivity extends PreferenceActivity implements
         }
 
         MultiSelectListPreference multiPreference = new MultiSelectListPreference(this);
-        //get all supported mime types
+        // get all supported mime types
         Set<String> supportedMimeTypes = MimeTypeUtils.getSupportedMimeTypes(getApplicationContext());
 
-        // get labels for mime types
-        Map<String, Set<String>> mappedMimeTypes = new HashMap<>();
-        for (String mimeType : supportedMimeTypes) {
-            String label = MimeTypeUtils.getLabel(getApplicationContext(), mimeType);
-            Set<String> mimeTypesPerLabel = mappedMimeTypes.get(label);
-            if (mimeTypesPerLabel == null) {
-                mimeTypesPerLabel = new HashSet<>();
-                mappedMimeTypes.put(label, mimeTypesPerLabel);
-            }
-            mimeTypesPerLabel.add(mimeType);
-        }
+        // get all labels
+        MimeTypeCache mimeTypeCache = KissApplication.getMimeTypeCache(getApplicationContext());
+        Map<String, String> uniqueLabels = mimeTypeCache.getUniqueLabels(getApplicationContext(), supportedMimeTypes);
+
+        // get entries and values for sorted mime types
+        List<String> sortedMimeTypes = new ArrayList<>(supportedMimeTypes);
+        Collections.sort(sortedMimeTypes);
+
         String[] mimeTypeEntries = new String[supportedMimeTypes.size()];
         String[] mimeTypeEntryValues = new String[supportedMimeTypes.size()];
         int pos = 0;
-        // get entries and values for mime types
-        for (String mimeType : supportedMimeTypes) {
-            String entry = MimeTypeUtils.getLabel(getApplicationContext(), mimeType);
-            if (mappedMimeTypes.get(entry).size() > 1) {
-                // append mime type if an app supports multiple mime types
-                entry += " (" + MimeTypeUtils.getShortMimeType(mimeType) + ")";
-            }
-            mimeTypeEntries[pos] = entry;
-            mimeTypeEntryValues[pos] = mimeType;
+        for (String mimeType : sortedMimeTypes) {
+            mimeTypeEntries[pos] = mimeType;
+            mimeTypeEntryValues[pos] = uniqueLabels.get(mimeType);
             pos++;
         }
 

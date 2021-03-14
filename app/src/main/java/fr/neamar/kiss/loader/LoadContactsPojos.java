@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import fr.neamar.kiss.KissApplication;
+import fr.neamar.kiss.MimeTypeCache;
 import fr.neamar.kiss.normalizer.PhoneNormalizer;
 import fr.neamar.kiss.normalizer.StringNormalizer;
 import fr.neamar.kiss.pojo.ContactsPojo;
@@ -173,26 +175,28 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                     long rawContactId = phoneCursor.getLong(rawContactIdIndex);
                     BasicRawContact basicRawContact = basicRawContacts.get(rawContactId);
 
-                    String name = basicContact.getDisplayName();
-                    long contactId = basicContact.getContactId();
+                    if (basicContact != null && basicRawContact != null) {
+                        String name = basicContact.getDisplayName();
+                        long contactId = basicContact.getContactId();
 
-                    String phone = phoneCursor.getString(numberIndex);
-                    if (phone == null) {
-                        phone = "";
+                        String phone = phoneCursor.getString(numberIndex);
+                        if (phone == null) {
+                            phone = "";
+                        }
+
+                        StringNormalizer.Result normalizedPhone = PhoneNormalizer.simplifyPhoneNumber(phone);
+                        boolean starred = basicRawContact.isStarred();
+                        boolean primary = phoneCursor.getInt(isPrimaryIndex) != 0;
+                        Uri icon = basicContact.getIcon();
+
+                        ContactsPojo contact = new ContactsPojo(pojoScheme + contactId + '/' + phone, lookupKey, icon, primary, starred);
+                        contact.setPhone(phone, normalizedPhone, false);
+
+                        contact.setName(name);
+                        contact.setNickname(basicContact.getNickName());
+
+                        addContactToMap(contact, mapContacts);
                     }
-
-                    StringNormalizer.Result normalizedPhone = PhoneNormalizer.simplifyPhoneNumber(phone);
-                    boolean starred = basicRawContact.isStarred();
-                    boolean primary = phoneCursor.getInt(isPrimaryIndex) != 0;
-                    Uri icon = basicContact.getIcon();
-
-                    ContactsPojo contact = new ContactsPojo(pojoScheme + contactId + '/' + phone, lookupKey, icon, primary, starred);
-                    contact.setPhone(phone, normalizedPhone, false);
-
-                    contact.setName(name);
-                    contact.setNickname(basicContact.getNickName());
-
-                    addContactToMap(contact, mapContacts);
                 }
             }
             phoneCursor.close();
@@ -202,6 +206,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
     }
 
     private ArrayList<ContactsPojo> createGenericContacts(String mimeType, Map<String, BasicContact> basicContacts, Map<Long, BasicRawContact> basicRawContacts) {
+        final MimeTypeCache mimeTypeCache = KissApplication.getMimeTypeCache(context.get());
         // Prevent duplicates by keeping in memory encountered contacts.
         Map<String, Set<ContactsPojo>> mapContacts = new HashMap<>();
 
@@ -211,7 +216,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
         columns.add(ContactsContract.Data._ID);
         columns.add(ContactsContract.Data.IS_PRIMARY);
 
-        String detailColumn = MimeTypeUtils.getDetailColumn(context.get(), mimeType);
+        String detailColumn = mimeTypeCache.getDetailColumn(context.get(), mimeType);
         if (detailColumn != null && !columns.contains(detailColumn)) {
             columns.add(detailColumn);
         }
@@ -238,28 +243,30 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                     long rawContactId = mimeTypeCursor.getLong(rawContactIdIndex);
                     BasicRawContact basicRawContact = basicRawContacts.get(rawContactId);
 
-                    long contactId = basicContact.getContactId();
-                    long id = mimeTypeCursor.getLong(idIndex);
-                    boolean primary = mimeTypeCursor.getInt(isPrimaryIndex) != 0;
-                    ComponentName componentName = MimeTypeUtils.getComponentName(context.get(), mimeType);
-                    String label = null;
-                    if (detailColumnIndex >= 0) {
-                        label = mimeTypeCursor.getString(detailColumnIndex);
+                    if (basicContact != null && basicRawContact != null) {
+                        long contactId = basicContact.getContactId();
+                        long id = mimeTypeCursor.getLong(idIndex);
+                        boolean primary = mimeTypeCursor.getInt(isPrimaryIndex) != 0;
+                        ComponentName componentName = mimeTypeCache.getComponentName(context.get(), mimeType);
+                        String label = null;
+                        if (detailColumnIndex >= 0) {
+                            label = mimeTypeCursor.getString(detailColumnIndex);
+                        }
+                        if (label == null) {
+                            label = mimeTypeCache.getLabel(context.get(), mimeType);
+                        }
+                        Uri icon = basicContact.getIcon();
+
+                        ContactsPojo contact = new ContactsPojo(pojoScheme + contactId + '/' + MimeTypeUtils.getShortMimeType(mimeType) + '/' + id, lookupKey, icon, primary, basicRawContact.isStarred());
+
+                        contact.setName(basicContact.getDisplayName());
+                        contact.setNickname(basicContact.getNickName());
+                        ContactsPojo.ImData imData = new ContactsPojo.ImData(mimeType, id, basicRawContact.getAccountType(), componentName);
+                        imData.setIdentifier(label);
+                        contact.setIm(imData);
+
+                        addContactToMap(contact, mapContacts);
                     }
-                    if (label == null) {
-                        label = MimeTypeUtils.getLabel(context.get(), mimeType);
-                    }
-                    Uri icon = basicContact.getIcon();
-
-                    ContactsPojo contact = new ContactsPojo(pojoScheme + contactId + '/' + MimeTypeUtils.getShortMimeType(mimeType) + '/' + id, lookupKey, icon, primary, basicRawContact.isStarred());
-
-                    contact.setName(basicContact.getDisplayName());
-                    contact.setNickname(basicContact.getNickName());
-                    ContactsPojo.ImData imData = new ContactsPojo.ImData(mimeType, id, basicRawContact.getAccountType(), componentName);
-                    imData.setIdentifier(label);
-                    contact.setIm(imData);
-
-                    addContactToMap(contact, mapContacts);
                 }
             }
             mimeTypeCursor.close();
