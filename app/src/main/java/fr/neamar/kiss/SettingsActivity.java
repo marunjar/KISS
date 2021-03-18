@@ -185,8 +185,8 @@ public class SettingsActivity extends PreferenceActivity implements
         String[] mimeTypeEntryValues = new String[supportedMimeTypes.size()];
         int pos = 0;
         for (String mimeType : sortedMimeTypes) {
-            mimeTypeEntries[pos] = mimeType;
-            mimeTypeEntryValues[pos] = uniqueLabels.get(mimeType);
+            mimeTypeEntries[pos] = uniqueLabels.get(mimeType);
+            mimeTypeEntryValues[pos] = mimeType;
             pos++;
         }
 
