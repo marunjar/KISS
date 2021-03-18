@@ -262,11 +262,10 @@ public class MimeTypeCache {
             }
             mimeTypesPerLabel.add(mimeType);
         }
-        // get entries and values for mime types
+        // check supported mime types and make labels unique
         for (String mimeType : mimeTypes) {
             String label = getLabel(context, mimeType);
             if (mappedMimeTypes.get(label).size() > 1) {
-                // append mime type if an app supports multiple mime types
                 label += " (" + MimeTypeUtils.getShortMimeType(mimeType) + ")";
             }
             uniqueLabels.put(mimeType, label);
