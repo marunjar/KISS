@@ -135,18 +135,18 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
 
         // Query all mime types
         for (String mimeType : mimeTypes) {
-            long startDetail = System.nanoTime();
+            long startMimeType = System.nanoTime();
             if (ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
                 contacts.addAll(createPhoneContacts(basicContacts, basicRawContacts));
             } else {
                 contacts.addAll(createGenericContacts(mimeType, basicContacts, basicRawContacts));
             }
-            long endDetail = System.nanoTime();
-            Log.i("time", (endDetail - startDetail) / 1000000 + " milliseconds to list contacts for " + mimeType);
+            long endMimeType = System.nanoTime();
+            Log.i("time", (endMimeType - startMimeType) / 1000000 + " milliseconds to list contacts for " + mimeType);
         }
 
         long end = System.nanoTime();
-        Log.i("time", (end - start) / 1000000 + " milliseconds to list contacts");
+        Log.i("time", (end - start) / 1000000 + " milliseconds to list all contacts");
         return contacts;
     }
 

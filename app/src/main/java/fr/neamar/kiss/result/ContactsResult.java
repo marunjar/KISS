@@ -129,12 +129,16 @@ public class ContactsResult extends CallResult {
         messageButton.setColorFilter(primaryColor);
 
         if (contactPojo.getImData() != null) {
+            // TODO: modify app icon to identify different messaging apps
+//            IconsHandler iconsHandler = KissApplication.getApplication(context).getIconsHandler();
+//            if (messageAppIcon == null)
+//                messageAppIcon = iconsHandler.getDrawableIconForPackage(contactPojo.getImData().getComponentName(), this.userHandle);
+
             messageButton.setVisibility(View.VISIBLE);
             messageButton.setOnClickListener(v -> {
                 launchIm(v.getContext(), v);
                 recordLaunch(context, queryInterface);
             });
-            // TODO: modify app icon to identify different messaging apps
         } else if (hasPhone) {
             messageButton.setVisibility(View.VISIBLE);
             messageButton.setOnClickListener(v -> {

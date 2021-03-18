@@ -100,7 +100,7 @@ public class MimeTypeCache {
      */
     public Map<String, String> fetchDetailColumns(Context context) {
         if (detailColumns == null) {
-            long startDetail = System.nanoTime();
+            long start = System.nanoTime();
 
             detailColumns = new HashMap<>();
 
@@ -148,8 +148,8 @@ public class MimeTypeCache {
             detailColumns.put(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Email.ADDRESS);
             detailColumns.put(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE, ContactsContract.CommonDataKinds.Phone.NUMBER);
 
-            long endDetail = System.nanoTime();
-            Log.i("time", (endDetail - startDetail) / 1000000 + " milliseconds to fetch detail data columns");
+            long end = System.nanoTime();
+            Log.i("time", (end - start) / 1000000 + " milliseconds to fetch detail data columns");
         }
         return detailColumns;
     }

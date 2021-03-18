@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,6 +52,8 @@ public class MimeTypeUtils {
             return emptySet();
         }
 
+        long start = System.nanoTime();
+
         Set<String> mimeTypes = new HashSet<>();
 
         Cursor cursor = context.getContentResolver().query(
@@ -72,6 +75,9 @@ public class MimeTypeUtils {
         // always add classic phone contacts
         mimeTypes.add(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
 
+        long end = System.nanoTime();
+        Log.i("time", (end - start) / 1000000 + " milliseconds to load " + mimeTypes.size() + " supported mime types");
+
         return mimeTypes;
     }
 
@@ -92,11 +98,16 @@ public class MimeTypeUtils {
      * @return a list of all mime types that should be shown
      */
     public static Set<String> getActiveMimeTypes(Context context) {
+        long start = System.nanoTime();
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> selectedMimeTypes = prefs.getStringSet("selected-contact-mime-types", getDefaultMimeTypes());
         Set<String> supportedMimeTypes = getSupportedMimeTypes(context);
 
         supportedMimeTypes.retainAll(selectedMimeTypes);
+
+        long end = System.nanoTime();
+        Log.i("time", (end - start) / 1000000 + " milliseconds to load " + supportedMimeTypes.size() + " active mime types");
 
         return supportedMimeTypes;
     }
