@@ -1,6 +1,5 @@
 package fr.neamar.kiss.loader;
 
-import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -247,7 +246,6 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                         long contactId = basicContact.getContactId();
                         long id = mimeTypeCursor.getLong(idIndex);
                         boolean primary = mimeTypeCursor.getInt(isPrimaryIndex) != 0;
-                        ComponentName componentName = mimeTypeCache.getComponentName(context.get(), mimeType);
                         String label = null;
                         if (detailColumnIndex >= 0) {
                             label = mimeTypeCursor.getString(detailColumnIndex);
@@ -261,7 +259,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
 
                         contact.setName(basicContact.getDisplayName());
                         contact.setNickname(basicContact.getNickName());
-                        ContactsPojo.ImData imData = new ContactsPojo.ImData(mimeType, id, basicRawContact.getAccountType(), componentName);
+                        ContactsPojo.ImData imData = new ContactsPojo.ImData(mimeType, id);
                         imData.setIdentifier(label);
                         contact.setIm(imData);
 

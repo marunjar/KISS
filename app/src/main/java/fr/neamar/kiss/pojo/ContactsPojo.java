@@ -1,6 +1,5 @@
 package fr.neamar.kiss.pojo;
 
-import android.content.ComponentName;
 import android.net.Uri;
 
 import fr.neamar.kiss.normalizer.StringNormalizer;
@@ -79,18 +78,14 @@ public final class ContactsPojo extends Pojo {
     public static class ImData {
         private final long id;
         private final String mimeType;
-        private final String accountType;
-        private final ComponentName componentName;
 
         private String identifier;
         // IM name without special characters
         private StringNormalizer.Result normalizedIdentifier;
 
-        public ImData(String mimeType, long id, String accountType, ComponentName componentName) {
+        public ImData(String mimeType, long id) {
             this.mimeType = mimeType;
             this.id = id;
-            this.accountType = accountType;
-            this.componentName = componentName;
         }
 
         public String getIdentifier() {
@@ -118,14 +113,6 @@ public final class ContactsPojo extends Pojo {
 
         public StringNormalizer.Result getNormalizedIdentifier() {
             return normalizedIdentifier;
-        }
-
-        public String getAccountType() {
-            return accountType;
-        }
-
-        public ComponentName getComponentName() {
-            return componentName;
         }
     }
 }
