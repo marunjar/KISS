@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import fr.neamar.kiss.IconsHandler;
+import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.R;
 import fr.neamar.kiss.UIColors;
 import fr.neamar.kiss.adapter.RecordAdapter;
@@ -40,12 +42,14 @@ public class ContactsResult extends CallResult {
     private final ContactsPojo contactPojo;
     private final QueryInterface queryInterface;
     private Drawable icon = null;
-    private final UserHandle userHandle = new UserHandle();
+    private Drawable appDrawable = null;
+    private final UserHandle userHandle;
 
     ContactsResult(QueryInterface queryInterface, ContactsPojo contactPojo) {
         super(contactPojo);
         this.contactPojo = contactPojo;
         this.queryInterface = queryInterface;
+        this.userHandle = new UserHandle();
     }
 
     @NonNull
@@ -129,11 +133,6 @@ public class ContactsResult extends CallResult {
         messageButton.setColorFilter(primaryColor);
 
         if (contactPojo.getImData() != null) {
-            // TODO: modify app icon to identify different messaging apps
-//            IconsHandler iconsHandler = KissApplication.getApplication(context).getIconsHandler();
-//            if (messageAppIcon == null)
-//                messageAppIcon = iconsHandler.getDrawableIconForPackage(contactPojo.getImData().getComponentName(), this.userHandle);
-
             messageButton.setVisibility(View.VISIBLE);
             messageButton.setOnClickListener(v -> {
                 launchIm(v.getContext(), v);
@@ -154,6 +153,21 @@ public class ContactsResult extends CallResult {
         } else {
             messageButton.setVisibility(View.INVISIBLE);
         }
+
+        // App icon
+        final ImageView appIcon = view.findViewById(R.id.item_app_icon);
+        if (contactPojo.getImData() != null && contactPojo.getImData().getComponentName() != null) {
+            appIcon.setVisibility(View.VISIBLE);
+
+            IconsHandler iconsHandler = KissApplication.getApplication(context).getIconsHandler();
+            if (appDrawable == null) {
+                appDrawable = iconsHandler.getDrawableIconForPackage(contactPojo.getImData().getComponentName(), this.userHandle);
+            }
+            appIcon.setImageDrawable(appDrawable);
+        } else {
+            appIcon.setVisibility(View.GONE);
+        }
+
 
         return view;
     }
