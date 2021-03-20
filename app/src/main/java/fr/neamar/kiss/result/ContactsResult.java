@@ -1,5 +1,6 @@
 package fr.neamar.kiss.result;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -156,12 +157,18 @@ public class ContactsResult extends CallResult {
 
         // App icon
         final ImageView appIcon = view.findViewById(R.id.item_app_icon);
-        if (contactPojo.getImData() != null && contactPojo.getImData().getComponentName() != null) {
+        if (contactPojo.getImData() != null) {
             appIcon.setVisibility(View.VISIBLE);
 
             IconsHandler iconsHandler = KissApplication.getApplication(context).getIconsHandler();
             if (appDrawable == null) {
-                appDrawable = iconsHandler.getDrawableIconForPackage(contactPojo.getImData().getComponentName(), this.userHandle);
+                ComponentName componentName = KissApplication.getMimeTypeCache(context).getComponentName(context, contactPojo.getImData().getMimeType());
+                if (componentName != null) {
+                    appDrawable = iconsHandler.getDrawableIconForPackage(componentName, this.userHandle);
+                } else {
+                    // This should never happen, let's just return the generic activity icon
+                    appDrawable = context.getPackageManager().getDefaultActivityIcon();
+                }
             }
             appIcon.setImageDrawable(appDrawable);
         } else {
