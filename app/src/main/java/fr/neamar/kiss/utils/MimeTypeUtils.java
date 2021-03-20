@@ -144,7 +144,7 @@ public class MimeTypeUtils {
             final Uri phoneUri = Uri.fromParts("tel", Uri.encode(schemeSpecificPart), null);
             intent = new Intent(Intent.ACTION_CALL, phoneUri);
         } else if (ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE.equals(mimeType)) {
-            final Uri mailUri = Uri.fromParts("mailto", Uri.encode(schemeSpecificPart), null);
+            final Uri mailUri = Uri.fromParts("mailto", schemeSpecificPart, null);
             intent = new Intent(Intent.ACTION_SENDTO, mailUri);
         } else {
             intent = new Intent(Intent.ACTION_VIEW);
