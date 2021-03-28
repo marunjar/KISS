@@ -395,7 +395,7 @@
         android:key="providers"
         android:summary="@string/providers_summary"
         android:title="@string/title_providers">
-        <PreferenceCategory android:title="@string/search_results_options" android:key="search-result-providers">
+        <PreferenceCategory android:title="@string/search_results_options">
         <fr.neamar.kiss.preference.SwitchPreference
             android:defaultValue="true"
             android:key="enable-contacts"
