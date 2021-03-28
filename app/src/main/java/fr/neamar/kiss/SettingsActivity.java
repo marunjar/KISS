@@ -160,16 +160,6 @@ public class SettingsActivity extends PreferenceActivity implements
     }
 
     private void addAdditionalContactsPreferences(SharedPreferences prefs) {
-        if (prefs.getStringSet("selected-contact-mime-types", null) == null) {
-            // If null, it means this setting has never been accessed before
-            // In this case, null != [] ([] happens when the user manually unselected every single option)
-            // So, when null, we know it's the first time opening this setting and we can write the default value.
-            // note: other preferences are initialized automatically in MainActivity.onCreate() from the preferences XML,
-            // but this preference isn't defined in the XML so can't be initialized that easily.
-            prefs.edit().putStringSet("selected-contact-mime-types", MimeTypeUtils.getDefaultMimeTypes()).apply();
-        }
-
-        MultiSelectListPreference multiPreference = new MultiSelectListPreference(this);
         // get all supported mime types
         Set<String> supportedMimeTypes = MimeTypeUtils.getSupportedMimeTypes(getApplicationContext());
 
@@ -190,15 +180,12 @@ public class SettingsActivity extends PreferenceActivity implements
             pos++;
         }
 
-        String contact_mime_types_title = this.getString(R.string.contact_mime_types_title);
-        multiPreference.setTitle(contact_mime_types_title);
-        multiPreference.setDialogTitle(contact_mime_types_title);
-        multiPreference.setKey("selected-contact-mime-types");
+        MultiSelectListPreference multiPreference = (MultiSelectListPreference) findPreference("selected-contact-mime-types");
+        if (supportedMimeTypes.isEmpty()) {
+            multiPreference.setEnabled(false);
+        }
         multiPreference.setEntries(mimeTypeEntries);
         multiPreference.setEntryValues(mimeTypeEntryValues);
-
-        PreferenceGroup category = (PreferenceGroup) findPreference("search-result-providers");
-        category.addPreference(multiPreference);
     }
 
     @Override
