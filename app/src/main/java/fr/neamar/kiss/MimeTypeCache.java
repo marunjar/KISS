@@ -7,9 +7,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SyncAdapterType;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
@@ -27,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import fr.neamar.kiss.utils.ComponentUtils;
 import fr.neamar.kiss.utils.MimeTypeUtils;
 
 public class MimeTypeCache {
@@ -70,11 +69,8 @@ public class MimeTypeCache {
             return labels.get(mimeType);
         }
 
-        String label = null;
-        ResolveInfo resolveInfo = getBestResolve(context, mimeType);
-        if (resolveInfo != null) {
-            label = String.valueOf(resolveInfo.loadLabel(context.getPackageManager()));
-        }
+        final Intent intent = MimeTypeUtils.getIntentByMimeType(mimeType, -1, "");
+        String label = ComponentUtils.getLabel(context, intent);
         labels.put(mimeType, label);
         return label;
     }
@@ -84,11 +80,8 @@ public class MimeTypeCache {
             return componentNames.get(mimeType);
         }
 
-        ComponentName componentName = null;
-        ResolveInfo resolveInfo = getBestResolve(context, mimeType);
-        if (resolveInfo != null) {
-            componentName = new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
-        }
+        final Intent intent = MimeTypeUtils.getIntentByMimeType(mimeType, -1, "");
+        ComponentName componentName = ComponentUtils.getComponentName(context, intent);
         this.componentNames.put(mimeType, componentName);
 
         return componentName;
@@ -195,50 +188,6 @@ public class MimeTypeCache {
     public String getDetailColumn(Context context, String mimeType) {
         Map<String, String> detailColumns = fetchDetailColumns(context);
         return detailColumns.get(mimeType);
-    }
-
-    /**
-     * Search best matching app for given mimeType.
-     *
-     * @param context
-     * @param mimeType
-     * @return ResolveInfo for best matching app
-     */
-    private static ResolveInfo getBestResolve(Context context, String mimeType) {
-        final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = MimeTypeUtils.getIntentByMimeType(mimeType, -1, "");
-        final List<ResolveInfo> matches = packageManager.queryIntentActivities(intent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-
-        final int size = matches.size();
-        if (size == 0) {
-            return null;
-        } else if (size == 1) {
-            return matches.get(0);
-        }
-
-        // Try finding preferred activity, otherwise detect disambig
-        final ResolveInfo foundResolve = packageManager.resolveActivity(intent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-        final boolean foundDisambig = (foundResolve.match &
-                IntentFilter.MATCH_CATEGORY_MASK) == 0;
-
-        if (!foundDisambig) {
-            // Found concrete match, so return directly
-            return foundResolve;
-        }
-
-        // Accept first system app
-        ResolveInfo firstSystem = null;
-        for (ResolveInfo info : matches) {
-            final boolean isSystem = (info.activityInfo.applicationInfo.flags
-                    & ApplicationInfo.FLAG_SYSTEM) != 0;
-
-            if (isSystem && firstSystem == null) firstSystem = info;
-        }
-
-        // Return first system found, otherwise first from list
-        return firstSystem != null ? firstSystem : matches.get(0);
     }
 
     /**

@@ -35,6 +35,7 @@ import fr.neamar.kiss.searcher.QueryInterface;
 import fr.neamar.kiss.ui.ImprovedQuickContactBadge;
 import fr.neamar.kiss.ui.ListPopup;
 import fr.neamar.kiss.ui.ShapedContactBadge;
+import fr.neamar.kiss.utils.ComponentUtils;
 import fr.neamar.kiss.utils.FuzzyScore;
 import fr.neamar.kiss.utils.MimeTypeUtils;
 import fr.neamar.kiss.utils.UserHandle;
@@ -164,7 +165,7 @@ public class ContactsResult extends CallResult {
             if (appDrawable == null) {
                 ComponentName componentName = KissApplication.getMimeTypeCache(context).getComponentName(context, contactPojo.getImData().getMimeType());
                 if (componentName != null) {
-                    appDrawable = iconsHandler.getDrawableIconForPackage(componentName, this.userHandle);
+                    appDrawable = iconsHandler.getDrawableIconForPackage(ComponentUtils.getLaunchingComponent(context, componentName), this.userHandle);
                 } else {
                     // This should never happen, let's just return the generic activity icon
                     appDrawable = context.getPackageManager().getDefaultActivityIcon();
