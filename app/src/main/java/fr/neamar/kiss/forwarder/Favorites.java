@@ -133,10 +133,10 @@ public class Favorites extends Forwarder implements View.OnClickListener, View.O
             if (viewHolder == null) {
                 // If not, build a new one
                 viewHolder = new ViewHolder(Result.fromPojo(mainActivity, favoritePojo), favoritePojo, mainActivity, mainActivity.favoritesBar);
-                viewHolder.view.setOnClickListener(this);
-                viewHolder.view.setOnLongClickListener(this);
-                viewHolder.view.setOnTouchListener(this);
             }
+            viewHolder.view.setOnClickListener(this);
+            viewHolder.view.setOnLongClickListener(this);
+            viewHolder.view.setOnTouchListener(this);
 
             holders.add(viewHolder);
 
@@ -163,9 +163,9 @@ public class Favorites extends Forwarder implements View.OnClickListener, View.O
                 notificationDot.setColorFilter(dotColor);
 
                 if (favoritePojo instanceof AppPojo) {
-                    String packageName = ((AppPojo) favoritePojo).packageName;
-                    notificationDot.setTag(packageName);
-                    notificationDot.setVisibility(notificationPrefs.contains(packageName) ? View.VISIBLE : View.GONE);
+                    String packageKey = ((AppPojo) favoritePojo).getPackageKey();
+                    notificationDot.setTag(packageKey);
+                    notificationDot.setVisibility(notificationPrefs.contains(packageKey) ? View.VISIBLE : View.GONE);
                 }
             }
         }

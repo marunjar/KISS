@@ -29,7 +29,7 @@
     <string name="alias_phone">anrufen,wählen,telefon</string>
     <string name="alias_contacts">Kontakte,Leute,Personen,Beziehungen</string>
     <string name="alias_web">Internet,Web,Browser,Netz,Navigator</string>
-    <string name="alias_mail">Mail,EMail,E-Mail,Nachrichten,Post,Brief</string>
+    <string name="alias_mail">E-Mail,Nachrichten,Post,Brief</string>
     <string name="alias_market">Market,Store,App-Center,Appcenter,Anwendungen,Appstore,App-Store,Laden,Appzentrale,App-Zentrale</string>
     <string name="alias_clock">Uhr,Alarm,Timer,Stoppuhr,Wecker</string>
     <string name="alias_messaging">Textnachricht,Nachrichten,SMS,MMS</string>
@@ -202,10 +202,10 @@
     <string name="search_results_options">Suchergebnisse</string>
     <string name="search_provider_toggle">Verweise auf Web-Suchanbieter anzeigen</string>
     <string name="copy_confirmation">In Zwischenablage kopiert</string>
-    <string name="search_provider_default">Web-Suchanbieter für Eingabe mit Enter-Taste</string>
-    <string name="regenerate_shortcuts">Verknüpfungen entfernen</string>
-    <string name="regenerate_shortcuts_desc">Alle Verknüpfungen zurücksetzten\?</string>
-    <string name="regenerate_shortcuts_done">Verknüpfungen wurden entfernt</string>
+    <string name="search_provider_default">Bevorzugte Web-Suchmaschine bei Eingabe</string>
+    <string name="regenerate_shortcuts">Verknüpfungen zurücksetzen</string>
+    <string name="regenerate_shortcuts_desc">Sollen alle Verknüpfungen zurückgesetzt werden\?</string>
+    <string name="regenerate_shortcuts_done">Verknüpfungen wurden zurückgesetzt</string>
     <string name="pref_fav_tags_select">In Favoritenleiste anzuzeigende Stichwörter</string>
     <string name="pref_fav_tags_drawable_desc">Speicher für große Zahl an favorisierten Stichworten reduzieren</string>
     <string name="pref_fav_tags_drawable">Symbole für favorisierte Stichworte erzeugen</string>
@@ -244,7 +244,7 @@
     <string name="theme_light">Hell</string>
     <string name="theme_customize_enabled">Aktiviert</string>
     <string name="theme_customize_disabled">Deaktiviert</string>
-    <string name="theme_customize_default">Von Thema</string>
+    <string name="theme_customize_default">Thema-Standard</string>
     <string name="theme_shadow">Schriftkontur (Schatten)</string>
     <string name="theme_customisation">Erweiterte Thema-Anpassung</string>
     <string name="icons_pack_teardrop_name">Tränenförmig</string>
@@ -293,7 +293,7 @@
     <string name="import_settings">Einstellungen und Stichworte importieren</string>
     <string name="export_settings">Einstellungen und Stichworte exportieren</string>
     <string name="clipboard_warning_dialog">Dadurch wird der Inhalt der Zwischenablage überschrieben.</string>
-    <string name="title_import_export">Import &amp; Export</string>
+    <string name="title_import_export">Import und Export</string>
     <string name="theme_bar_color">Farbe der Favoritenleiste und Suchleiste</string>
     <string name="contact_mime_types_title">Anzuzeigende Kontakte auswählen</string>
 </resources>

@@ -29,7 +29,7 @@
     <string name="pref_tags_menu_dismiss">Itxi etiketen menua hautatu ondoren</string>
     <string name="pref_tags_menu">Gehitu etiketak menuan</string>
     <string name="ctx_menu">KISS menua</string>
-    <string name="pref_fav_tags_select">Gogoko-barran erkutsiko diren etiketak</string>
+    <string name="pref_fav_tags_select">Gogoko-barran erakutsiko diren etiketak</string>
     <string name="pref_toggle_tags_select">Menuan erakutsiko diren etiketak</string>
     <string name="screen_toggle_tags">Pertsonalizatu etiketen menua</string>
     <string name="shortcuts_no_host_permission">KISS jada ez da zure abiarazle nagusia eta ezin dituzu lasterbideak erabili.</string>
@@ -247,7 +247,7 @@
     <string name="history_frequency">Maiz erabilitakoak</string>
     <string name="hide_search_bar_hint">Kendu adierazle-testua bilaketa-barratik</string>
     <string name="icons_pack_square_name">Laukia</string>
-    <string name="icons_pack_squircle_name">Squircle</string>
+    <string name="icons_pack_squircle_name">Karratu zirkularra</string>
     <string name="icons_pack_teardrop_name">Malkoa</string>
     <string name="icons_pack_circle_name">Biribila</string>
     <string name="history_frecency">Azkenaldian eta maiz erabilitakoak</string>
@@ -275,4 +275,24 @@
     <string name="custom_icon_activity_with_pack">jarduera paketearekin</string>
     <string name="exclude_favorites_apps">Baztertu gogokoak aplikazioen zerrendatik</string>
     <string name="title_import_export">Inportatu eta esportatu</string>
+    <string name="theme_bar_color">Gogokoen eta bilaketa-barraren kolorea</string>
+    <string name="import_settings_dialog">Honek uneko ezarpenak eta etiketak arbelaren edukiarekin gainidatziko ditu. Dauden etiketak KENDU egingo dira. Ziur zaude\?</string>
+    <string name="import_settings">Inportatu ezarpenak eta etiketak</string>
+    <string name="export_settings">Esportatu ezarpenak eta etiketak</string>
+    <string name="clipboard_warning_dialog">Honek arbeleko edukia gainidatziko du.</string>
+    <string name="loading">Kargatzen…</string>
+    <string name="contacts_shape_summary">Kontaktuen ikonoaren forma</string>
+    <string name="contact_pack_mask">Eman forma kontaktuen ikonoei</string>
+    <string name="force_shape">Behartu atzeko planoko forma</string>
+    <string name="contact_pack_mask_summary">Erabili ikono pakete maskara kontaktuetarako</string>
+    <string name="force_shape_summary">Erabili maskara moldatzailea ez diren ikonoetan</string>
+    <string name="force_adaptive_summary">Ez egokitzen diren ikonoetarako, murriztu eskala eta jarri atzeko plano zuriaren gainean</string>
+    <string name="custom_icon_badged_adaptive_fill">egokitutako betegarri betegarria</string>
+    <string name="custom_icon_badged_adaptive">badge moldatzailea</string>
+    <string name="custom_icon_badged_with_pack">paketearekin bereizten da</string>
+    <string name="custom_icon_badged">txaparekin</string>
+    <string name="custom_icon_activity_adaptive_fill">jarduera egokitzapen betegarria</string>
+    <string name="custom_icon_activity_adaptive">jarduera moldakorra</string>
+    <string name="custom_icon_application_adaptive_fill">aplikazio egokitzapen betegarria</string>
+    <string name="custom_icon_application_adaptive">aplikazio moldatzailea</string>
 </resources>
