@@ -180,7 +180,7 @@
     <string name="popup_tags_title">Etiquetas disponibles</string>
     <string name="popup_tags_actions">Acciones disponibles</string>
     <string name="show_history">Mostrar historial</string>
-    <string name="unable_to_initialize_shortcuts">No se pudieron inicializar los atajos. Cerciórese de configurar KISS como iniciador predeterminado.</string>
+    <string name="unable_to_initialize_shortcuts">No se pudieron inicializar los atajos. Asegúrese de configurar KISS como iniciador predeterminado.</string>
     <string name="pref_tags_menu_dismiss">Cerrar menú de etiquetas luego de la selección</string>
     <string name="show_untagged">Mostrar items sin etiquetas</string>
     <string name="pref_show_untagged">Mostrar acción para los elementos sin etiqueta</string>
@@ -295,4 +295,5 @@
     <string name="clipboard_warning_dialog">Esto sobrescribirá el contenido del portapapeles.</string>
     <string name="title_import_export">Importar y exportar</string>
     <string name="theme_bar_color">Color de las barras Favoritos y Búsqueda</string>
+    <string name="gesture_homescreen">Ir a pantalla de inicio</string>
 </resources>

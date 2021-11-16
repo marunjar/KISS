@@ -12,7 +12,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.UserManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -32,15 +34,18 @@ import fr.neamar.kiss.IconsHandler;
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.R;
 import fr.neamar.kiss.adapter.RecordAdapter;
-import fr.neamar.kiss.icons.IconPack;
 import fr.neamar.kiss.pojo.ShortcutPojo;
 import fr.neamar.kiss.ui.ListPopup;
 import fr.neamar.kiss.utils.ComponentUtils;
 import fr.neamar.kiss.utils.FuzzyScore;
+import fr.neamar.kiss.utils.PackageManagerUtils;
 import fr.neamar.kiss.utils.ShortcutUtil;
 import fr.neamar.kiss.utils.SpaceTokenizer;
 
 public class ShortcutsResult extends Result {
+
+    private static final String TAG = ShortcutsResult.class.getSimpleName();
+
     private final ShortcutPojo shortcutPojo;
 
     ShortcutsResult(ShortcutPojo shortcutPojo) {
@@ -50,7 +55,6 @@ public class ShortcutsResult extends Result {
 
     @NonNull
     @Override
-    @SuppressWarnings("CatchAndPrintStackTrace")
     public View display(final Context context, View view, @NonNull ViewGroup parent, FuzzyScore fuzzyScore) {
         if (view == null)
             view = inflateFromId(context, R.layout.item_shortcut, parent);
@@ -91,12 +95,14 @@ public class ShortcutsResult extends Result {
                 // Retrieve activity icon by intent URI
                 try {
                     Intent intent = Intent.parseUri(shortcutPojo.intentUri, 0);
-                    ComponentName componentName = ComponentUtils.getComponentName(context, intent);
+                    ComponentName componentName = PackageManagerUtils.getComponentName(context, intent);
                     if (componentName != null) {
-                        appDrawable = iconsHandler.getDrawableIconForPackage(ComponentUtils.getLaunchingComponent(context, componentName), new fr.neamar.kiss.utils.UserHandle());
+                        appDrawable = iconsHandler.getDrawableIconForPackage(PackageManagerUtils.getLaunchingComponent(context, componentName), new fr.neamar.kiss.utils.UserHandle());
                     }
+                } catch (NullPointerException e) {
+                    Log.e(TAG, "Unable to get activity icon for '" + shortcutPojo.getName() + "'", e);
                 } catch (URISyntaxException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Unable to parse uri for '" + shortcutPojo.getName() + "'", e);
                 }
             }
 
@@ -105,15 +111,18 @@ public class ShortcutsResult extends Result {
                 try {
                     appDrawable = packageManager.getApplicationIcon(shortcutPojo.packageName);
                     if (appDrawable != null)
-                        appDrawable = iconsHandler.getIconPack().applyBackgroundAndMask(context, appDrawable, true);
+                        appDrawable = iconsHandler.applyIconMask(context, appDrawable, new fr.neamar.kiss.utils.UserHandle());
                 } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Unable to find package " + shortcutPojo.packageName, e);
                 }
             }
 
             // This should never happen, let's just return the generic activity icon
-            if (appDrawable == null)
+            if (appDrawable == null) {
                 appDrawable = context.getPackageManager().getDefaultActivityIcon();
+                if (appDrawable != null)
+                    appDrawable = iconsHandler.applyIconMask(context, appDrawable, new fr.neamar.kiss.utils.UserHandle());
+            }
 
             Drawable shortcutDrawable = getDrawable(context);
 
@@ -148,8 +157,7 @@ public class ShortcutsResult extends Result {
         }
 
         if (shortcutDrawable != null) {
-            final IconPack<?> iconPack = KissApplication.getApplication(context).getIconsHandler().getIconPack();
-            shortcutDrawable = iconPack.applyBackgroundAndMask(context, shortcutDrawable, true);
+            shortcutDrawable = KissApplication.getApplication(context).getIconsHandler().applyIconMask(context, shortcutDrawable, new fr.neamar.kiss.utils.UserHandle());
         }
 
         return shortcutDrawable;
@@ -206,9 +214,11 @@ public class ShortcutsResult extends Result {
     @TargetApi(Build.VERSION_CODES.O)
     private Drawable getDrawableFromOreoShortcut(Context context) {
         ShortcutInfo shortcutInfo = getShortCut(context);
-        if (shortcutInfo != null) {
+        if (shortcutInfo != null && shortcutInfo.getActivity() != null) {
+            UserManager manager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            fr.neamar.kiss.utils.UserHandle user = new fr.neamar.kiss.utils.UserHandle(manager.getSerialNumberForUser(shortcutInfo.getUserHandle()), shortcutInfo.getUserHandle());
             IconsHandler iconsHandler = KissApplication.getApplication(context).getIconsHandler();
-            return iconsHandler.getDrawableIconForPackage(shortcutInfo.getActivity(), new fr.neamar.kiss.utils.UserHandle());
+            return iconsHandler.getDrawableIconForPackage(shortcutInfo.getActivity(), user);
         }
         return null;
     }

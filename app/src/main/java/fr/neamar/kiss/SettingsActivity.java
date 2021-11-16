@@ -449,7 +449,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        KissApplication.getApplication(this).getIconsHandler().onPrefChanged(sharedPreferences);
+        KissApplication.getApplication(this).getIconsHandler().onPrefChanged(sharedPreferences, key);
 
         if (key.equalsIgnoreCase("available-search-providers")) {
             addCustomSearchProvidersPreferences(prefs);
@@ -460,8 +460,6 @@ public class SettingsActivity extends PreferenceActivity implements
             }
             removeSearchProviderDefault(); // in order to refresh default search engine choices
             addDefaultSearchProvider(prefs);
-        } else if (key.equalsIgnoreCase("icons-pack")) {
-            KissApplication.getApplication(this).getIconsHandler().loadIconsPack(sharedPreferences.getString(key, "default"));
         } else if (key.equalsIgnoreCase("enable-phone-history")) {
             boolean enabled = sharedPreferences.getBoolean(key, false);
             if (enabled && !Permission.checkPermission(SettingsActivity.this, Permission.PERMISSION_READ_PHONE_STATE)) {
