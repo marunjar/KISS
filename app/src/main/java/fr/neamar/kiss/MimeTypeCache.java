@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import fr.neamar.kiss.utils.ComponentUtils;
 import fr.neamar.kiss.utils.MimeTypeUtils;
+import fr.neamar.kiss.utils.PackageManagerUtils;
 
 public class MimeTypeCache {
 
@@ -70,7 +70,7 @@ public class MimeTypeCache {
         }
 
         final Intent intent = MimeTypeUtils.getIntentByMimeType(mimeType, -1, "");
-        String label = ComponentUtils.getLabel(context, intent);
+        String label = PackageManagerUtils.getLabel(context, intent);
         labels.put(mimeType, label);
         return label;
     }
@@ -81,7 +81,7 @@ public class MimeTypeCache {
         }
 
         final Intent intent = MimeTypeUtils.getIntentByMimeType(mimeType, -1, "");
-        ComponentName componentName = ComponentUtils.getComponentName(context, intent);
+        ComponentName componentName = PackageManagerUtils.getComponentName(context, intent);
         this.componentNames.put(mimeType, componentName);
 
         return componentName;
