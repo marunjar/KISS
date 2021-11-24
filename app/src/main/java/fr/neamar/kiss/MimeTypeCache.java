@@ -190,6 +190,16 @@ public class MimeTypeCache {
         return detailColumns.get(mimeType);
     }
 
+    private static String greatestCommonPrefix(String a, String b) {
+        int minLength = Math.min(a.length(), b.length());
+        for (int i = 0; i < minLength; i++) {
+            if (a.charAt(i) != b.charAt(i)) {
+                return a.substring(0, i);
+            }
+        }
+        return a.substring(0, minLength);
+    }
+
     /**
      * Generates unique labels for given mime types, appends mimeType itself if an app supports multiple mime types
      *
@@ -211,11 +221,38 @@ public class MimeTypeCache {
             }
             mimeTypesPerLabel.add(mimeType);
         }
+
         // check supported mime types and make labels unique
         for (String mimeType : mimeTypes) {
             String label = getLabel(context, mimeType);
-            if (mappedMimeTypes.get(label).size() > 1) {
-                label += " (" + MimeTypeUtils.getShortMimeType(mimeType) + ")";
+            Set<String> mimeTypesPerLabel = mappedMimeTypes.get(label);
+            if (mimeTypesPerLabel != null && mimeTypesPerLabel.size() > 1) {
+                String prefix = null;
+                for (String labelMimeType : mimeTypesPerLabel) {
+                    if (labelMimeType != null) {
+                        String shortLabel = MimeTypeUtils.getShortMimeType(labelMimeType);
+                        if (prefix == null) {
+                            prefix = shortLabel;
+                        } else {
+                            prefix = greatestCommonPrefix(prefix, shortLabel);
+                        }
+                    }
+                }
+                if (prefix != null) {
+                    // assume dot separated words
+                    int pos = prefix.lastIndexOf('.');
+                    if (pos == -1) {
+                        // no dot found, remove whole prefix
+                        pos = prefix.length();
+                    } else {
+                        // remove words before the dot
+                        pos += 1;
+                    }
+                    label += " (" + MimeTypeUtils.getShortMimeType(mimeType).substring(pos) + ")";
+                } else {
+                    // no prefix !?
+                    label += " (" + MimeTypeUtils.getShortMimeType(mimeType) + ")";
+                }
             }
             uniqueLabels.put(mimeType, label);
         }
