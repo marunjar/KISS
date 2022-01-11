@@ -107,20 +107,8 @@ public class ShortcutsResult extends Result {
 
             if (appDrawable == null) {
                 // Retrieve app icon (no Oreo shortcut or a shortcut from an activity that was removed from an installed app)
-                try {
-                    appDrawable = packageManager.getApplicationIcon(shortcutPojo.packageName);
-                    if (appDrawable != null)
-                        appDrawable = iconsHandler.applyIconMask(context, appDrawable, new fr.neamar.kiss.utils.UserHandle());
-                } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(TAG, "Unable to find package " + shortcutPojo.packageName, e);
-                }
-            }
-
-            // This should never happen, let's just return the generic activity icon
-            if (appDrawable == null) {
-                appDrawable = context.getPackageManager().getDefaultActivityIcon();
-                if (appDrawable != null)
-                    appDrawable = iconsHandler.applyIconMask(context, appDrawable, new fr.neamar.kiss.utils.UserHandle());
+                appDrawable = PackageManagerUtils.getApplicationIcon(context, shortcutPojo.packageName);
+                appDrawable = iconsHandler.applyIconMask(context, appDrawable, new fr.neamar.kiss.utils.UserHandle());
             }
 
             Drawable shortcutDrawable = getDrawable(context);

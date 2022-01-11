@@ -7,16 +7,22 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
 public class PackageManagerUtils {
 
+    private static final String TAG = PackageManagerUtils.class.getSimpleName();
+
     /**
      * Method to enable/disable a specific component
      */
-    public static void enableComponent(Context ctx, Class component, boolean enabled) {
+    public static void enableComponent(Context ctx, Class<?> component, boolean enabled) {
         PackageManager pm = ctx.getPackageManager();
         ComponentName cn = new ComponentName(ctx, component);
         pm.setComponentEnabledSetting(cn,
@@ -136,5 +142,27 @@ public class PackageManagerUtils {
         return null;
     }
 
+    /**
+     * @param context     context
+     * @param packageName package name
+     * @return icon for application with package name, default icon if nothing found
+     */
+    @NonNull
+    public static Drawable getApplicationIcon(Context context, String packageName) {
+        final PackageManager packageManager = context.getPackageManager();
+
+        Drawable drawable = null;
+        try {
+            drawable = packageManager.getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "Unable to find package " + packageName, e);
+        }
+
+        if (drawable == null) {
+            // this should never happen, let's just use the generic activity icon
+            drawable = context.getPackageManager().getDefaultActivityIcon();
+        }
+        return drawable;
+    }
 
 }

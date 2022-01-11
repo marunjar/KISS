@@ -18,6 +18,7 @@ import java.util.List;
 
 import fr.neamar.kiss.ui.GoogleCalendarIcon;
 import fr.neamar.kiss.utils.DrawableUtils;
+import fr.neamar.kiss.utils.PackageManagerUtils;
 import fr.neamar.kiss.utils.UserHandle;
 
 public class SystemIconPack implements IconPack<Void> {
@@ -96,16 +97,8 @@ public class SystemIconPack implements IconPack<Void> {
 
         // This should never happen, let's just return the application icon
         if (drawable == null) {
-            try {
-                drawable = ctx.getPackageManager().getApplicationIcon(componentName.getPackageName());
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, "Unable to find package " + componentName.getPackageName(), e);
-            }
+            drawable = PackageManagerUtils.getApplicationIcon(ctx, componentName.getPackageName());
         }
-
-        // This should never happen, let's just return the generic activity icon
-        if (drawable == null)
-            drawable = ctx.getPackageManager().getDefaultActivityIcon();
 
         return drawable;
     }
