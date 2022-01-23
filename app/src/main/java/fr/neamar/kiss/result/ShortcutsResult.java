@@ -2,6 +2,7 @@ package fr.neamar.kiss.result;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 import fr.neamar.kiss.DataHandler;
 import fr.neamar.kiss.IconsHandler;
@@ -197,8 +199,11 @@ public class ShortcutsResult extends Result {
 
         ShortcutInfo shortcutInfo = getShortCut(context);
         if (shortcutInfo != null) {
-            launcherApps.startShortcut(shortcutInfo, v.getClipBounds(), null);
-            return;
+            try {
+                launcherApps.startShortcut(shortcutInfo, v.getClipBounds(), null);
+                return;
+            } catch (ActivityNotFoundException | IllegalStateException ignored) {
+            }
         }
 
         // Application removed? Invalid shortcut? Shortcut to an app on an unmounted SD card?
@@ -268,7 +273,7 @@ public class ShortcutsResult extends Result {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 // Refresh tags for given app
-                pojo.setTags(tagInput.getText().toString());
+                pojo.setTags(tagInput.getText().toString().trim().toLowerCase(Locale.ROOT));
                 KissApplication.getApplication(context).getDataHandler().getTagsHandler().setTags(pojo.id, pojo.getTags());
                 // Show toast message
                 String msg = context.getResources().getString(R.string.tags_confirmation_added);
