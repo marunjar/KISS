@@ -424,6 +424,11 @@ public class DataHandler extends BroadcastReceiver
         return (pojo != null) ? pojo.getName() : "???";
     }
 
+    @Nullable
+    public Pojo getItemById(String id) {
+        return getPojo(id);
+    }
+
     /**
      * Update stored shortcut info for all shortcuts of given packageName.
      *
@@ -568,7 +573,7 @@ public class DataHandler extends BroadcastReceiver
         Set<String> excluded = PreferenceManager.getDefaultSharedPreferences(context).getStringSet("excluded-apps-from-history", null);
         if (excluded == null) {
             excluded = new HashSet<>();
-            excluded.add(context.getPackageName());
+            excluded.add("app://" + AppPojo.getComponentName(context.getPackageName(), MainActivity.class.getName(), new UserHandle()));
         }
         return excluded;
     }
@@ -578,7 +583,7 @@ public class DataHandler extends BroadcastReceiver
         Set<String> excluded = PreferenceManager.getDefaultSharedPreferences(context).getStringSet("excluded-apps", null);
         if (excluded == null) {
             excluded = new HashSet<>();
-            excluded.add(context.getPackageName());
+            excluded.add(AppPojo.getComponentName(context.getPackageName(), MainActivity.class.getName(), new UserHandle()));
         }
         return excluded;
     }
