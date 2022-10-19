@@ -1,5 +1,6 @@
 package fr.neamar.kiss.result;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -26,7 +27,10 @@ import java.util.List;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.annotation.StyleableRes;
+
 import fr.neamar.kiss.BuildConfig;
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.MainActivity;
@@ -74,8 +78,7 @@ public abstract class Result {
         else if (pojo instanceof TagDummyPojo)
             return new TagDummyResult((TagDummyPojo)pojo);
 
-
-        throw new RuntimeException("Unable to create a result from POJO");
+        throw new UnsupportedOperationException("Unable to create a result from POJO");
     }
 
     public String getPojoId() {
@@ -209,15 +212,17 @@ public abstract class Result {
             for (int i = 0; i < adapter.getCount(); i += 1) {
                 ListPopup.Item item = adapter.getItem(i);
                 assert item != null;
-                if (item.stringId == R.string.menu_favorites_add)
+                if (item.stringId == R.string.menu_favorites_add) {
                     adapter.remove(item);
+                }
             }
         } else {
             for (int i = 0; i < adapter.getCount(); i += 1) {
                 ListPopup.Item item = adapter.getItem(i);
                 assert item != null;
-                if (item.stringId == R.string.menu_favorites_remove)
+                if (item.stringId == R.string.menu_favorites_remove) {
                     adapter.remove(item);
+                }
             }
         }
 
@@ -244,6 +249,8 @@ public abstract class Result {
                 break;
             case R.string.menu_favorites_remove:
                 launchRemoveFromFavorites(context, pojo);
+                break;
+            default:
                 break;
         }
 
@@ -283,7 +290,7 @@ public abstract class Result {
         parent.removeResult(context, this);
     }
 
-    public final void launch(Context context, View v, QueryInterface queryInterface) {
+    public final void launch(Context context, View v, @Nullable QueryInterface queryInterface) {
         Log.i("log", "Launching " + pojo.id);
 
         // Launch
@@ -292,7 +299,7 @@ public abstract class Result {
         recordLaunch(context, queryInterface);
     }
 
-    void recordLaunch(Context context, QueryInterface queryInterface) {
+    void recordLaunch(Context context, @Nullable QueryInterface queryInterface) {
         // Record the launch after some period,
         // * to ensure the animation runs smoothly
         // * to avoid a flickering -- launchOccurred will refresh the list
@@ -400,6 +407,7 @@ public abstract class Result {
      *
      */
     int getThemeFillColor(Context context) {
+        @SuppressLint("ResourceType") @StyleableRes
         int[] attrs = new int[]{R.attr.resultColor /* index 0 */};
         TypedArray ta = context.obtainStyledAttributes(attrs);
         int color = ta.getColor(0, Color.WHITE);
@@ -432,8 +440,9 @@ public abstract class Result {
                 return null;
             }
             Result result = appResultWeakReference.get();
-            if (result == null)
+            if (result == null) {
                 return null;
+            }
             return result.getDrawable(image.getContext());
         }
 

@@ -192,6 +192,7 @@
     <string name="transparent_search_bar">Transparent search bar</string>
     <string name="transparent_favorites_bar">Transparent favorites bar</string>
     <string name="large_search_bar">Bigger search bar</string>
+    <string name="large_result_list_margins">Bigger list margins</string>
     <string name="rounded_list">Rounded list corners</string>
     <string name="rounded_bars">Rounded bar corners</string>
     <string name="swap_kiss_button_with_menu">KISS button on the right</string>
@@ -292,6 +293,7 @@
     <string name="gesture_homescreen">Go to homescreen</string>
     <string name="gesture_launch_pojo">Launch…</string>
     <string name="small_results">Display smaller results</string>
+    <string name="results_size">Results display size</string>
     <string name="theme_wallpaper">Wallpaper</string>
     <string name="show_subicons">Show app icon on shortcuts</string>
     <string name="custom_name_rename">Rename</string>
