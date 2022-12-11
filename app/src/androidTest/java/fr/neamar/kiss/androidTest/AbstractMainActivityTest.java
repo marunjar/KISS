@@ -12,7 +12,7 @@ import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.MainActivity;
 import fr.neamar.kiss.R;
 
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 abstract class AbstractMainActivityTest {
     @Rule
@@ -21,9 +21,15 @@ abstract class AbstractMainActivityTest {
     @Before
     public void setUp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getInstrumentation().getUiAutomation().executeShellCommand(
-                    "pm grant " + mActivityRule.getActivity().getPackageName()
-                            + " android.permission.READ_CONTACTS");
+            if (shouldHaveContactPermission()) {
+                getInstrumentation().getUiAutomation().executeShellCommand(
+                        "pm grant " + mActivityRule.getActivity().getPackageName()
+                                + " android.permission.READ_CONTACTS");
+            } else {
+                getInstrumentation().getUiAutomation().executeShellCommand(
+                        "pm revoke " + mActivityRule.getActivity().getPackageName()
+                                + " android.permission.READ_CONTACTS");
+            }
         }
 
         mActivityRule.getActivity();
@@ -42,5 +48,9 @@ abstract class AbstractMainActivityTest {
             }
         };
         mActivityRule.getActivity().runOnUiThread(wakeUpDevice);
+    }
+
+    protected boolean shouldHaveContactPermission() {
+        return true;
     }
 }

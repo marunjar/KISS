@@ -618,7 +618,7 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
     }
 
     public void displayClearOnInput() {
-        if (searchEditText.getText().length() > 0) {
+        if (!TextUtils.isEmpty(searchEditText.getText())) {
             clearButton.setVisibility(View.VISIBLE);
             menuButton.setVisibility(View.INVISIBLE);
         } else {
@@ -677,7 +677,7 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
 
         if (display) {
             // Display the app list
-            if (searchEditText.getText().length() != 0) {
+            if (!TextUtils.isEmpty(searchEditText.getText())) {
                 searchEditText.setText("");
             }
             resetTask();
