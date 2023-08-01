@@ -15,6 +15,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.ColorInt;
@@ -116,11 +117,15 @@ public class IconPackXML implements IconPack<IconPackXML.DrawableInfo> {
     @Nullable
     @Override
     public Drawable getComponentDrawable(@NonNull Context ctx, @NonNull ComponentName componentName, @NonNull UserHandle userHandle) {
-        return getComponentDrawable(componentName.toString());
+        Drawable drawable = getComponentDrawable(componentName.toString());
+        if (drawable != null) {
+            return DrawableUtils.getThemedDrawable(ctx, drawable);
+        }
+        return null;
     }
 
     @Nullable
-    public Drawable getComponentDrawable(String componentName) {
+    private Drawable getComponentDrawable(String componentName) {
         CalendarDrawable calendar = getCalendarDrawable(componentName);
         if (calendar != null)
             return getDrawable(calendar);
