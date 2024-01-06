@@ -35,9 +35,9 @@ public class DrawableUtils {
     public static final int SHAPE_SQUIRCLE = 3;
     public static final int SHAPE_ROUND_RECT = 4;
     public static final int SHAPE_TEARDROP_BR = 5;
-    private static final int SHAPE_TEARDROP_BL = 6;
-    private static final int SHAPE_TEARDROP_TL = 7;
-    private static final int SHAPE_TEARDROP_TR = 8;
+    public static final int SHAPE_TEARDROP_BL = 6;
+    public static final int SHAPE_TEARDROP_TL = 7;
+    public static final int SHAPE_TEARDROP_TR = 8;
     public static final int SHAPE_TEARDROP_RND = 9;
     public static final int SHAPE_HEXAGON = 10;
     public static final int SHAPE_OCTAGON = 11;
@@ -78,7 +78,7 @@ public class DrawableUtils {
      * @param shape from SHAPE_*
      * @return margin size
      */
-    private static float getScaleToFit(int shape) {
+    protected static float getScaleToFit(int shape) {
         switch (shape) {
             case SHAPE_SYSTEM:
             case SHAPE_CIRCLE:
