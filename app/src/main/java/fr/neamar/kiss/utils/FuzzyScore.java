@@ -36,6 +36,10 @@ public class FuzzyScore {
      */
     private int camel_bonus;
     /**
+     * bonus if match is uppercase and prev is lower
+     */
+    private int first_letter_bonus;
+    /**
      * penalty applied for every letter in str before the first match
      */
     private int leading_letter_penalty;
@@ -63,6 +67,7 @@ public class FuzzyScore {
         adjacency_bonus = 10;
         separator_bonus = 5;
         camel_bonus = 10;
+        first_letter_bonus = 5;
         leading_letter_penalty = -3;
         max_leading_letter_penalty = -9;
         unmatched_letter_penalty = -1;
@@ -94,6 +99,11 @@ public class FuzzyScore {
 
     public FuzzyScore setCamelBonus(int camel_bonus) {
         this.camel_bonus = camel_bonus;
+        return this;
+    }
+
+    public FuzzyScore setFirstLetterBonus(int first_letter_bonus) {
+        this.first_letter_bonus = first_letter_bonus;
         return this;
     }
 
@@ -131,142 +141,164 @@ public class FuzzyScore {
     }
 
     /**
-     * @param text string converted to codepoints
+     * @param str string converted to codepoints
      * @return true if each character in pattern is found sequentially within text
      */
-    public MatchInfo match(int[] text) {
-        // Loop variables
-        int score = 0;
-        int patternIdx = 0;
-        int strIdx = 0;
-        int strLength = text.length;
-        boolean fullWord = false;
-        boolean prevMatched = false;
-        boolean prevLower = false;
-        boolean prevSeparator = true;       // true so if first letter match gets separator bonus
+    public MatchInfo match(int[] str) {
+        int recursionCount = 0;
+        int recursionLimit = 10;
+        int maxMatches = Math.min(patternLength, str.length);
+        List<Integer> matches = new ArrayList<>();
 
-        // Use "best" matched letter if multiple string letters match the pattern
-        Integer bestLetter = null;
-        Integer bestLower = null;
-        Integer bestLetterIdx = null;
-        int bestLetterScore = 0;
+        MatchInfo matchInfo = matchRecursive(
+                str,
+                0 /* patternCurIndex */,
+                0 /* strCurrIndex */,
+                null /* srcMatches */,
+                matches,
+                maxMatches,
+                0 /* nextMatch */,
+                recursionCount,
+                recursionLimit
+        );
+        this.matchInfo.score = matchInfo.score;
+        this.matchInfo.match = matchInfo.match;
+        if (this.matchInfo.matchedIndices != null) {
+            this.matchInfo.matchedIndices.addAll(matches);
+        }
+        return this.matchInfo;
+    }
 
-        if (matchInfo.matchedIndices != null) {
-            matchInfo.matchedIndices.clear();
+    private MatchInfo matchRecursive(
+            int[] str,
+            int patternCurIndex,
+            int strCurrIndex,
+            List<Integer> srcMatches,
+            List<Integer> matches,
+            int maxMatches,
+            int nextMatch,
+            int recursionCount,
+            int recursionLimit
+    ) {
+        int outScore = 0;
+
+        // Return if recursion limit is reached.
+        if (++recursionCount >= recursionLimit) {
+            return new MatchInfo(false, outScore);
         }
 
-        // Loop over strings
-        while (strIdx != strLength) {
-            Integer patternChar = null;
-            Integer patternLower = null;
-            if (patternIdx != patternLength) {
-                patternChar = this.patternChar[patternIdx];
-                patternLower = this.patternLower[patternIdx];
-            }
-            int strChar = text[strIdx];
-            int strLower = Character.toLowerCase(strChar);
-            int strUpper = Character.toUpperCase(strChar);
-            boolean isWhitespace = Character.isWhitespace(strChar);
+        // Return if we reached ends of strings.
+        if (patternCurIndex == patternLength || strCurrIndex == str.length) {
+            return new MatchInfo(false, outScore);
+        }
 
-            boolean nextMatch = patternChar != null && patternLower == strLower;
-            boolean rematch = bestLetter != null && bestLower == strLower;
+        // Recursion params
+        boolean recursiveMatch = false;
+        List<Integer> bestRecursiveMatches = new ArrayList<>();
+        int bestRecursiveScore = 0;
 
-            boolean advanced = nextMatch && bestLetter != null;
-            boolean patternRepeat = bestLetter != null && patternChar != null && patternLower.equals(bestLower);
-            if (advanced || patternRepeat) {
-                score += bestLetterScore;
-                if (matchInfo.matchedIndices != null) {
-                    matchInfo.matchedIndices.add(bestLetterIdx);
-                }
-                bestLetter = null;
-                bestLower = null;
-                bestLetterIdx = null;
-                bestLetterScore = 0;
-            }
-
-            // Current char is a separator and we have matched all the previous characters, apply
-            // the full match bonus
-            if (isWhitespace && fullWord) {
-                score += full_word_bonus;
-            }
-
-            if (nextMatch || rematch) {
-                int newScore = 0;
-
-                // Apply penalty for each letter before the first pattern match
-                // Note: std::max because penalties are negative values. So max is smallest penalty.
-                if (patternIdx == 0) {
-                    int penalty = Math.max(strIdx * leading_letter_penalty, max_leading_letter_penalty);
-                    score += penalty;
+        // Loop through pattern and str looking for a match.
+        boolean firstMatch = true;
+        while (patternCurIndex < patternLength && strCurrIndex < str.length) {
+            // Match found.
+            if (patternLower[patternCurIndex] == Character.toLowerCase(str[strCurrIndex])) {
+                if (nextMatch >= maxMatches) {
+                    return new MatchInfo(false, outScore);
                 }
 
-                // Apply bonus for consecutive bonuses
-                if (prevMatched && !rematch) {
-                    newScore += adjacency_bonus;
+                if (firstMatch && srcMatches != null) {
+                    matches.clear();
+                    matches.addAll(srcMatches);
+                    firstMatch = false;
                 }
 
-                // Apply bonus for matches after a separator
-                if (prevSeparator) {
-                    newScore += separator_bonus;
-                }
+                List<Integer> recursiveMatches = new ArrayList<>();
+                MatchInfo recursiveResult = matchRecursive(
+                        str,
+                        patternCurIndex,
+                        strCurrIndex + 1,
+                        matches,
+                        recursiveMatches,
+                        maxMatches,
+                        nextMatch,
+                        recursionCount,
+                        recursionLimit
+                );
 
-                // Apply bonus across camel case boundaries. Includes "clever" isLetter check.
-                if (prevLower && strChar == strUpper && strLower != strUpper) {
-                    newScore += camel_bonus;
-                }
-
-                // Update pattern index IF the next pattern letter was matched
-                if (nextMatch) {
-                    ++patternIdx;
-                }
-
-                // Update best letter in text which may be for a "next" letter or a "rematch"
-                if (newScore >= bestLetterScore) {
-
-                    // Apply penalty for now skipped letter
-                    if (bestLetter != null) {
-                        score += unmatched_letter_penalty;
+                if (recursiveResult.match) {
+                    // Pick best recursive score.
+                    if (!recursiveMatch || recursiveResult.score > bestRecursiveScore) {
+                        bestRecursiveMatches.clear();
+                        bestRecursiveMatches.addAll(recursiveMatches);
+                        bestRecursiveScore = recursiveResult.score;
                     }
+                    recursiveMatch = true;
+                }
 
-                    bestLetter = strChar;
-                    bestLower = strLower;
-                    bestLetterIdx = strIdx;
-                    bestLetterScore = newScore;
+                matches.add(strCurrIndex);
+                ++patternCurIndex;
+            }
+            ++strCurrIndex;
+        }
 
-                    if (prevSeparator) {
-                        fullWord = true;
+        boolean matched = patternCurIndex == patternLength;
+
+        if (matched) {
+            outScore = 100;
+
+            // Apply leading letter penalty
+            int penalty = Math.max(max_leading_letter_penalty, leading_letter_penalty * matches.get(0));
+            outScore += penalty;
+
+            //Apply unmatched penalty
+            int unmatched = str.length - nextMatch;
+            outScore += unmatched_letter_penalty * unmatched;
+
+            // Apply ordering bonuses
+            for (int i = 0; i < matches.size(); i++) {
+                int currIdx = matches.get(i);
+
+                if (i > 0) {
+                    int prevIdx = matches.get(i - 1);
+                    if (currIdx == prevIdx + 1) {
+                        outScore += adjacency_bonus;
                     }
                 }
 
-                prevMatched = true;
-            } else {
-                score += unmatched_letter_penalty;
-                prevMatched = false;
-                fullWord = false;
+                // Check for bonuses based on neighbor character value.
+                if (currIdx > 0) {
+                    // Camel case
+                    int neighbor = str[currIdx - 1];
+                    int curr = str[currIdx];
+                    if (
+                            neighbor != Character.toUpperCase(neighbor) &&
+                                    curr != Character.toLowerCase(curr)
+                    ) {
+                        outScore += camel_bonus;
+                    }
+                    boolean isNeighbourSeparator = Character.isWhitespace(neighbor);
+                    if (isNeighbourSeparator) {
+                        outScore += separator_bonus;
+                    }
+                } else {
+                    // First letter
+                    outScore += first_letter_bonus;
+                }
             }
-
-            // Includes "clever" isLetter check.
-            prevLower = strChar == strLower && strLower != strUpper;
-            prevSeparator = isWhitespace;
-
-            ++strIdx;
         }
-
-        // Apply score for last match
-        if (bestLetter != null) {
-            score += bestLetterScore;
-            if (matchInfo.matchedIndices != null) {
-                matchInfo.matchedIndices.add(bestLetterIdx);
-            }
+        // Return best result
+        if (recursiveMatch && (!matched || bestRecursiveScore > outScore)) {
+            // Recursive score is better than "this"
+            matches.clear();
+            matches.addAll(bestRecursiveMatches);
+            outScore = bestRecursiveScore;
+            return new MatchInfo(true, outScore);
+        } else if (matched) {
+            // "this" score is better than recursive
+            return new MatchInfo(true, outScore);
+        } else {
+            return new MatchInfo(false, outScore);
         }
-        // Last word full match bonus
-        if (fullWord) {
-            score += full_word_bonus;
-        }
-
-        matchInfo.match = patternIdx == patternLength;
-        matchInfo.score = score;
-        return matchInfo;
     }
 
     public static class MatchInfo {
@@ -276,7 +308,13 @@ public class FuzzyScore {
          */
         public int score;
         public boolean match;
-        final ArrayList<Integer> matchedIndices;
+        final List<Integer> matchedIndices;
+
+        MatchInfo(boolean match, int score) {
+            this();
+            this.match = match;
+            this.score = score;
+        }
 
         MatchInfo() {
             matchedIndices = null;
