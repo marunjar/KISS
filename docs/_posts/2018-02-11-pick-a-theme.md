@@ -38,3 +38,6 @@ Below is a preview of the built-in themes.
 
 ## Dark transparent theme
 ![Dark transparent theme](/screenshots/dark-transparent-theme.png)
+
+## AMOLED dark
+![Dark transparent theme](/screenshots/amoled-dark-theme.png)
