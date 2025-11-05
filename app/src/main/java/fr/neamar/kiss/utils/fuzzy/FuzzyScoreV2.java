@@ -20,6 +20,10 @@ public class FuzzyScoreV2 implements FuzzyScore {
      */
     private int adjacency_bonus;
     /**
+     * penalty for non adjacent matches
+     */
+    private int non_adjacency_penalty;
+    /**
      * bonus if match occurs after a separator
      */
     private int separator_bonus;
@@ -53,13 +57,14 @@ public class FuzzyScoreV2 implements FuzzyScore {
         for (int i = 0; i < patternLower.length; i += 1) {
             patternLower[i] = Character.toLowerCase(pattern[i]);
         }
-        adjacency_bonus = 15;
-        separator_bonus = 30;
-        camel_bonus = 30;
-        first_letter_bonus = 15;
+        adjacency_bonus = 20;
+        separator_bonus = 15;
+        camel_bonus = 15;
+        first_letter_bonus = 30;
         leading_letter_penalty = -5;
         max_leading_letter_penalty = -30;
         unmatched_letter_penalty = -2;
+        non_adjacency_penalty = -3;
         if (detailedMatchIndices) {
             matchInfo = new MatchInfo(patternLength);
         } else {
@@ -140,7 +145,7 @@ public class FuzzyScoreV2 implements FuzzyScore {
     @Override
     public MatchInfo match(int[] str) {
         int recursionCount = 0;
-        int recursionLimit = 7; // originally 10
+        int recursionLimit = 5; // originally 10
         int maxMatches = Math.min(patternLength, str.length);
         List<Integer> matches = new ArrayList<>();
 
@@ -257,6 +262,8 @@ public class FuzzyScoreV2 implements FuzzyScore {
                     int prevIdx = matches.get(i - 1);
                     if (currIdx == prevIdx + 1) {
                         outScore += adjacency_bonus;
+                    } else {
+                        outScore += non_adjacency_penalty * (currIdx - (prevIdx + 1));
                     }
                 }
 
