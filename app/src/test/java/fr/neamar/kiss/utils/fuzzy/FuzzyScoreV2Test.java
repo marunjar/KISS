@@ -20,6 +20,7 @@ class FuzzyScoreV2Test {
     private static final int leading_letter_penalty = -100;
     private static final int max_leading_letter_penalty = -300;
     private static final int unmatched_letter_penalty = -1;
+    private static final int non_adjacency_penalty = -30;
 
     @ParameterizedTest
     @MethodSource("testProvider")
@@ -36,7 +37,7 @@ class FuzzyScoreV2Test {
     private static Stream<Arguments> testProvider() {
         return Stream.of(
                 Arguments.of("no match", "some string", 0, false),
-                Arguments.of("yt", "YouTube", 100 + camel_bonus + first_letter_bonus + 5 * unmatched_letter_penalty, true),
+                Arguments.of("yt", "YouTube", 100 + camel_bonus + first_letter_bonus + 5 * unmatched_letter_penalty + 2 * non_adjacency_penalty, true),
                 Arguments.of("js", "js", 100 + adjacency_bonus + first_letter_bonus, true),
 
                 // Test full match start of word
@@ -44,8 +45,8 @@ class FuzzyScoreV2Test {
                 // Test full match end of word
                 Arguments.of("js", "start js", 100 + adjacency_bonus + separator_bonus + 6 * unmatched_letter_penalty + max_leading_letter_penalty, true),
 
-                Arguments.of("js", "John Smith", 100 + separator_bonus + first_letter_bonus + 8 * unmatched_letter_penalty, true),
-                Arguments.of("jsmith", "John Smith", 100 + 4 * adjacency_bonus + separator_bonus + first_letter_bonus + 4 * unmatched_letter_penalty, true),
+                Arguments.of("js", "John Smith", 100 + separator_bonus + first_letter_bonus + 8 * unmatched_letter_penalty + 4 * non_adjacency_penalty, true),
+                Arguments.of("jsmith", "John Smith", 100 + 4 * adjacency_bonus + separator_bonus + first_letter_bonus + 4 * unmatched_letter_penalty + 4 * non_adjacency_penalty, true),
 
                 Arguments.of("second", "first second third word", 100 + 5 * adjacency_bonus + separator_bonus + 17 * unmatched_letter_penalty + 3 * leading_letter_penalty, true),
                 Arguments.of("econd", "first second third word", 100 + 4 * adjacency_bonus + 18 * unmatched_letter_penalty + max_leading_letter_penalty, true),
@@ -63,6 +64,7 @@ class FuzzyScoreV2Test {
     private FuzzyScore createFuzzyScore(int[] query) {
         return new FuzzyScoreV2(query, true)
                 .setAdjacencyBonus(adjacency_bonus)
+                .setNonAdjacencyPenalty(non_adjacency_penalty)
                 .setSeparatorBonus(separator_bonus)
                 .setCamelBonus(camel_bonus)
                 .setFirstLetterBonus(first_letter_bonus)

@@ -6,6 +6,8 @@ public interface FuzzyScore {
 
     FuzzyScore setAdjacencyBonus(int adjacency_bonus);
 
+    FuzzyScore setNonAdjacencyPenalty(int non_adjacency_penalty);
+
     FuzzyScore setSeparatorBonus(int separator_bonus);
 
     FuzzyScore setCamelBonus(int camel_bonus);

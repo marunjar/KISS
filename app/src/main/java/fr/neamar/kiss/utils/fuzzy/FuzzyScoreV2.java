@@ -84,6 +84,12 @@ public class FuzzyScoreV2 implements FuzzyScore {
     }
 
     @Override
+    public FuzzyScore setNonAdjacencyPenalty(int non_adjacency_penalty) {
+        this.non_adjacency_penalty = non_adjacency_penalty;
+        return this;
+    }
+
+    @Override
     public FuzzyScore setSeparatorBonus(int separator_bonus) {
         this.separator_bonus = separator_bonus;
         return this;
