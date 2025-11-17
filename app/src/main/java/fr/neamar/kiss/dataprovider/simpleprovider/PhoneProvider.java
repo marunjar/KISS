@@ -2,20 +2,24 @@ package fr.neamar.kiss.dataprovider.simpleprovider;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.regex.Pattern;
 
 import fr.neamar.kiss.pojo.PhonePojo;
 import fr.neamar.kiss.searcher.Searcher;
+import fr.neamar.kiss.utils.PhoneUtils;
 
 public class PhoneProvider extends SimpleProvider<PhonePojo> {
+    private static final String TAG = PhoneProvider.class.getSimpleName();
     private static final String PHONE_SCHEME = "phone://";
-    private final boolean deviceIsPhone;
 
-    // See https://github.com/Neamar/KISS/issues/1137
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^[*+0-9# ]{3,}$");
+    private final boolean deviceIsPhone;
+    private final Context context;
 
     public PhoneProvider(Context context) {
+        this.context = context;
         PackageManager pm = context.getPackageManager();
         deviceIsPhone = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
     }
@@ -23,8 +27,13 @@ public class PhoneProvider extends SimpleProvider<PhonePojo> {
     @Override
     public void requestResults(String query, Searcher searcher) {
         // Append an item only if query looks like a phone number and device has phone capabilities
-        if (deviceIsPhone && PHONE_PATTERN.matcher(query).find()) {
-            searcher.addResult(getResult(query, true));
+        if (deviceIsPhone && PhoneUtils.isPhoneNumber(query)) {
+            String formattedPhone = PhoneUtils.format(context, query);
+            if (!TextUtils.isEmpty(formattedPhone)) {
+                searcher.addResult(getResult(formattedPhone, true));
+            } else {
+                Log.w(TAG, "Failed to format phone number: " + query);
+            }
         }
     }
 
