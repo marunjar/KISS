@@ -27,7 +27,7 @@ public class PhoneUtils {
     }
 
     public static boolean isPhoneNumber(String phoneNumber) {
-        return KISS_PHONE_PATTERN.matcher(phoneNumber).find() || Patterns.PHONE.matcher(phoneNumber).find();
+        return KISS_PHONE_PATTERN.matcher(phoneNumber).matches() || Patterns.PHONE.matcher(phoneNumber).matches();
     }
 
     public static boolean areSamePhoneNumber(Context context, String number1, String number2) {
