@@ -17,12 +17,13 @@ public class PhoneUtils {
     private static final Pattern KISS_PHONE_PATTERN = Pattern.compile("^[*+0-9# ]{3,}$");
 
     public static String format(Context context, String phoneNumber) {
-        String countryIso = getDefaultCountryIso(context);
-        if (TextUtils.isEmpty(countryIso)) {
-            return phoneNumber;
-        } else {
-            return PhoneNumberUtils.formatNumber(phoneNumber, countryIso);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String countryIso = getDefaultCountryIso(context);
+            if (!TextUtils.isEmpty(countryIso)) {
+                return PhoneNumberUtils.formatNumber(phoneNumber, countryIso);
+            }
         }
+        return phoneNumber;
     }
 
     public static boolean isPhoneNumber(String phoneNumber) {
