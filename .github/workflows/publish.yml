@@ -28,8 +28,8 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v5
-        with:
-          - ref: ${{ github.event.release.tag_name }}
+#        with:
+#          - ref: ${{ github.event.release.tag_name }}
 
       - name: Create Release Directory
         run: mkdir -p release
