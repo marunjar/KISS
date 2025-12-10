@@ -1,4 +1,4 @@
-name: Upload release
+name: Publish app
 
 # https://docs.github.com/en/webhooks/webhook-events-and-payloads#release
 on:
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   # create app and upload it to the published release
-  upload:
+  publish:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
