@@ -34,6 +34,18 @@ jobs:
       - name: Create Release Directory
         run: mkdir -p release
 
+      - name: Run Tests
+        run: |
+          bash ./gradlew lint --stacktrace
+          bash ./gradlew testDebugUnitTest --stacktrace
+
+      - name: Build APK
+        run: |
+          bash ./gradlew lint --stacktrace
+          bash ./gradlew testDebugUnitTest --stacktrace
+          bash ./gradlew assembleRelease --stacktrace
+          cp "app/build/outputs/apk/release/app-release-unsigned.apk" "release/"
+
       - name: Archive Source
         run: |
           git archive --format=tar.gz --prefix="${{ env.ARCHIVE_NAME }}/" --output="release/${{ env.ARCHIVE_NAME }}.tar.gz" HEAD
@@ -43,11 +55,6 @@ jobs:
         run: |
           sha256sum "release/${{ env.ARCHIVE_NAME }}.tar.gz" | awk '{print $1}' > "release/${{ env.ARCHIVE_NAME }}.tar.gz.sha256sum"
           sha256sum "release/${{ env.ARCHIVE_NAME }}.zip" | awk '{print $1}' > "release/${{ env.ARCHIVE_NAME }}.zip.sha256sum"
-
-      - name: Build apk
-        run: |
-          bash ./gradlew assembleRelease --stacktrace
-          cp "app/build/outputs/apk/release/app-release-unsigned.apk" "release/"
 
       - name: Upload Files
         env:
