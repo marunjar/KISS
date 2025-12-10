@@ -42,8 +42,8 @@ jobs:
       - name: Build APKs
         run: |
           bash ./gradlew assembleDebug --stacktrace
-          bash ./gradlew assembleRelease --stacktrace
           cp "path: app/build/outputs/apk/debug/app-debug.apk" "release/"
+          bash ./gradlew assembleRelease --stacktrace
           cp "app/build/outputs/apk/release/app-release-unsigned.apk" "release/"
 
       - name: Upload Files
