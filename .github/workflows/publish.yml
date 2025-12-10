@@ -20,7 +20,6 @@ permissions:
 jobs:
   # create app and upload it to the published release
   upload:
-    if: '!github.event.repository.fork'
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
