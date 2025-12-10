@@ -3,7 +3,12 @@ name: Upload release
 # https://docs.github.com/en/webhooks/webhook-events-and-payloads#release
 on:
   release:
-    types: [created, edited, published]
+on:
+  release:
+    types:
+      - published
+      - created
+      - edited
 
 concurrency:
   # Concurrency group that uses the workflow name and PR number if available
