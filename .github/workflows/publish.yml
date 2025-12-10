@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: print info
         run: echo "${{ env.ARCHIVE_NAME }}"
@@ -60,8 +61,6 @@ jobs:
           sha256sum "release/${{ env.ARCHIVE_NAME }}.zip" | awk '{print $1}' > "release/${{ env.ARCHIVE_NAME }}.zip.sha256sum"
 
       - name: Upload Files
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: >
           gh release upload
           --clobber "${{ github.event.release.tag_name }}"
