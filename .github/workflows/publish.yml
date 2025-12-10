@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: print info
         run: echo "${{ env.ARCHIVE_NAME }}"
