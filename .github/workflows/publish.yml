@@ -25,9 +25,6 @@ jobs:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: print info
-        run: echo "${{ env.ARCHIVE_NAME }}"
-
       - name: Checkout Source
         uses: actions/checkout@v5
 
