@@ -3,7 +3,7 @@ name: Upload release
 # https://docs.github.com/en/webhooks/webhook-events-and-payloads#release
 on:
   release:
-    types: [created, edited, published]
+    types: [edited, published]
 
 concurrency:
   # Concurrency group that uses the workflow name and PR number if available
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ARCHIVE_NAME: ${{ github.event.repository.name }}-${{ github.event.release.tag_name }}
-      GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: print info
         run: echo "${{ env.ARCHIVE_NAME }}"
