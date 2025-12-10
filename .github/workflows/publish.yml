@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 jobs:
-  # create source archive and upload it to the published release
+  # create app and upload it to the published release
   upload:
     if: '!github.event.repository.fork'
     runs-on: ubuntu-latest
