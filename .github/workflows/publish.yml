@@ -32,8 +32,6 @@ jobs:
 
       - name: Checkout Source
         uses: actions/checkout@v5
-#        with:
-#          - ref: ${{ github.event.release.tag_name }}
 
       - name: Create Release Directory
         run: mkdir -p release
@@ -43,20 +41,12 @@ jobs:
           bash ./gradlew lint --stacktrace
           bash ./gradlew testDebugUnitTest --stacktrace
 
-      - name: Build APK
+      - name: Build APKs
         run: |
+          bash ./gradlew assembleDebug --stacktrace
           bash ./gradlew assembleRelease --stacktrace
+          cp "path: app/build/outputs/apk/debug/app-debug.apk" "release/"
           cp "app/build/outputs/apk/release/app-release-unsigned.apk" "release/"
-
-      - name: Archive Source
-        run: |
-          git archive --format=tar.gz --prefix="${{ env.ARCHIVE_NAME }}/" --output="release/${{ env.ARCHIVE_NAME }}.tar.gz" HEAD
-          git archive --format=zip --prefix="${{ env.ARCHIVE_NAME }}/" --output="release/${{ env.ARCHIVE_NAME }}.zip" HEAD
-
-      - name: Compute Checksum
-        run: |
-          sha256sum "release/${{ env.ARCHIVE_NAME }}.tar.gz" | awk '{print $1}' > "release/${{ env.ARCHIVE_NAME }}.tar.gz.sha256sum"
-          sha256sum "release/${{ env.ARCHIVE_NAME }}.zip" | awk '{print $1}' > "release/${{ env.ARCHIVE_NAME }}.zip.sha256sum"
 
       - name: Upload Files
         run: >
