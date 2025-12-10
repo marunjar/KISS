@@ -38,15 +38,13 @@ jobs:
       - name: Create Release Directory
         run: mkdir -p release
 
-      - name: Run Tests
+      - name: Validate
         run: |
           bash ./gradlew lint --stacktrace
           bash ./gradlew testDebugUnitTest --stacktrace
 
       - name: Build APK
         run: |
-          bash ./gradlew lint --stacktrace
-          bash ./gradlew testDebugUnitTest --stacktrace
           bash ./gradlew assembleRelease --stacktrace
           cp "app/build/outputs/apk/release/app-release-unsigned.apk" "release/"
 
