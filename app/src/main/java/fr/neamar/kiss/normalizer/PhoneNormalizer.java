@@ -25,8 +25,8 @@ public class PhoneNormalizer {
         int i = 0;
         for (int iterCodePoint = 0; iterCodePoint < numCodePoints; iterCodePoint += 1) {
             int c = Character.codePointAt(phoneNumber, i);
-
-            if (c != ' ' && c != '-' && c != '.' && c != '(' && c != ')' && c != ':' && c != '/') {
+            int digit = Character.digit(c, 10);
+            if (digit != -1 || (c == '+' && codePoints.size() == 0)) {
                 codePoints.add(c);
                 resultMap.add(i);
             }
