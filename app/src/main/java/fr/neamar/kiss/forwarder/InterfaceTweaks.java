@@ -1,7 +1,11 @@
 package fr.neamar.kiss.forwarder;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -9,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -16,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.StyleableRes;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import java.util.List;
 
@@ -53,6 +59,9 @@ public class InterfaceTweaks extends Forwarder {
                 break;
             case "amoled-dark":
                 act.setTheme(R.style.AppThemeAmoledDark);
+                break;
+            default: // "light"
+                act.setTheme(R.style.AppThemeLight);
                 break;
         }
 
@@ -98,13 +107,47 @@ public class InterfaceTweaks extends Forwarder {
     }
 
     public static void applySettingsTheme(Activity act, SharedPreferences prefs) {
-        String theme = prefs.getString("theme", "light");
-        if (theme.equals("amoled-dark")) {
-            act.setTheme(R.style.SettingThemeAmoledDark);
-        } else if (theme.contains("dark")) {
-            act.setTheme(R.style.SettingThemeDark);
+        String theme = prefs.getString("theme", "transparent");
+        switch (theme) {
+            case "amoled-dark":
+                act.setTheme(R.style.SettingThemeAmoledDark);
+                break;
+            case "dark":
+                act.setTheme(R.style.SettingThemeDark);
+                break;
+            default: // "light"
+                act.setTheme(R.style.SettingTheme);
+                break;
         }
         UIColors.updateThemePrimaryColor(act);
+    }
+
+    public static void setDefaultNightMode(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String theme = prefs.getString("theme", "transparent");
+        switch (theme) {
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case "transparent":
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case "semi-transparent":
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case "semi-transparent-dark":
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case "transparent-dark":
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case "amoled-dark":
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            default: // "light"
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+        }
     }
 
     void onCreate() {

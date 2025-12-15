@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BaseThemeLight" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:colorPrimary">@color/kiss_green</item>
         <item name="android:colorPrimaryDark">@color/kiss_green</item>
         <item name="android:colorAccent">@color/kiss_green</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="appSelectableItemBackground">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="appSelectableItemBackground">?android:attr/selectableItemBackgroundBorderless
+        </item>
         <item name="textShadowRadius">0</item>
     </style>
 
-    <style name="BaseThemeDark" parent="@android:style/Theme.Material.NoActionBar">
-        <item name="android:colorPrimary">@color/kiss_green</item>
-        <item name="android:colorPrimaryDark">@color/kiss_green</item>
-        <item name="android:colorAccent">@color/kiss_green</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="appSelectableItemBackground">?android:attr/selectableItemBackgroundBorderless</item>
-        <item name="textShadowRadius">0</item>
-    </style>
-
-    <style name="AppThemeLight" parent="BaseThemeLight">
+    <style name="AppThemeLight" parent="BaseTheme">
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textColor">@android:color/black</item>
@@ -33,10 +25,9 @@
         <item name="searchBackgroundColor">@android:color/white</item>
         <item name="searchBackgroundOutline">@android:color/transparent</item>
         <item name="dividerDrawable">@drawable/list_separator_light</item>
-        <item name="textShadowRadius">0</item>
     </style>
 
-    <style name="AppThemeDark" parent="BaseThemeDark">
+    <style name="AppThemeDark" parent="BaseTheme">
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textColor">@color/kiss_text_on_dark</item>
@@ -50,11 +41,9 @@
         <item name="searchBackgroundColor">@color/kiss_list_background_inverse</item>
         <item name="searchBackgroundOutline">@android:color/transparent</item>
         <item name="dividerDrawable">@drawable/list_separator_dark</item>
-        <item name="textShadowRadius">0</item>
     </style>
 
-
-    <style name="AppThemeAmoledDark" parent="BaseThemeDark">
+    <style name="AppThemeAmoledDark" parent="BaseTheme">
         <item name="android:windowShowWallpaper">false</item>
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:textColor">@color/kiss_text_on_dark</item>
@@ -68,14 +57,6 @@
         <item name="searchBackgroundColor">@android:color/black</item>
 
         <item name="dividerDrawable">@null</item>
-        <item name="textShadowRadius">0</item>
-    </style>
-
-    <style name="SettingThemeAmoledDark" parent="SettingThemeDark">
-        <item name="android:windowShowWallpaper">false</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="android:textColor">@color/kiss_text_on_dark</item>
-        <item name="android:textColorSecondary">#7f7f7f</item>
     </style>
 
     <style name="AppThemeTransparent" parent="AppThemeLight">
@@ -133,6 +114,13 @@
         <item name="android:windowBackground">@color/kiss_list_background_inverse</item>
         <item name="android:colorPrimaryDark">@color/kiss_green</item>
         <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+
+    <style name="SettingThemeAmoledDark" parent="SettingThemeDark">
+        <item name="android:windowShowWallpaper">false</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:textColor">@color/kiss_text_on_dark</item>
+        <item name="android:textColorSecondary">#7f7f7f</item>
     </style>
 
     <style name="OverlayShadowDisabled">
@@ -352,7 +340,8 @@
     <style name="OverlayAccentSystem" parent="OverlayAccentDefault">
     </style>
 
-    <style name="SettingsActionBar" parent="@android:style/Widget.Material.Light.ActionBar.Solid">
+    <style name="SettingsActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
         <item name="android:displayOptions">homeAsUp|showTitle</item>
+        <item name="android:background">@color/kiss_green</item>
     </style>
 </resources>

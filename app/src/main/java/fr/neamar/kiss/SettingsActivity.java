@@ -649,6 +649,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 }
             } else if ("selected-contact-mime-types".equals(key)) {
                 getDataHandler().reloadContactsProvider();
+            } else if ("theme".equals(key)) {
+                InterfaceTweaks.setDefaultNightMode(this);
             }
         }
 
