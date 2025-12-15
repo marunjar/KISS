@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import fr.neamar.kiss.forwarder.InterfaceTweaks;
 import fr.neamar.kiss.utils.IconPackCache;
 
 public class KissApplication extends Application {
@@ -22,6 +23,13 @@ public class KissApplication extends Application {
     private volatile IconsHandler iconsPackHandler;
     private final IconPackCache mIconPackCache = new IconPackCache();
     private final MimeTypeCache mimeTypeCache = new MimeTypeCache();
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        InterfaceTweaks.setDefaultNightMode(this);
+    }
 
     public static KissApplication getApplication(Context context) {
         return (KissApplication) context.getApplicationContext();

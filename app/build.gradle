@@ -19,8 +19,8 @@ android {
     defaultConfig {
         applicationId 'fr.neamar.kiss'
         minSdkVersion 21
-        compileSdkVersion 35
-        targetSdkVersion 35
+        compileSdkVersion 36
+        targetSdkVersion 36
         versionCode 219
         versionName "3.24.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation "androidx.appcompat:appcompat:1.7.1"
+
     androidTestImplementation 'androidx.test:runner:1.7.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     androidTestImplementation 'androidx.test:rules:1.7.0'

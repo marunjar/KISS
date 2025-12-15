@@ -5,7 +5,6 @@ import static android.view.HapticFeedbackConstants.LONG_PRESS;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,7 +41,9 @@ import android.widget.AbsListView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ import fr.neamar.kiss.utils.PackageManagerUtils;
 import fr.neamar.kiss.utils.Permission;
 import fr.neamar.kiss.utils.SystemUiVisibilityHelper;
 
-public class MainActivity extends Activity implements QueryInterface, KeyboardScrollHider.KeyboardHandler, View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements QueryInterface, KeyboardScrollHider.KeyboardHandler, View.OnTouchListener {
 
     public static final String START_LOAD = "fr.neamar.summon.START_LOAD";
     public static final String LOAD_OVER = "fr.neamar.summon.LOAD_OVER";
@@ -160,6 +161,7 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
 
     private ForwarderManager forwarderManager;
     private Permission permissionManager;
+    private OnBackPressedCallback onBackPressedCallback;
 
     /**
      * Called when the activity is first created.
@@ -210,6 +212,14 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
                 onFavoriteChange();
             }
         };
+
+        this.onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                MainActivity.this.handleOnBackPressed();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Since Android 33, we need to specify is the receiver is available from other applications
@@ -501,12 +511,15 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        onBackPressedCallback.remove();
         this.unregisterReceiver(this.mReceiver);
         forwarderManager.onDestroy();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
         //Set the intent so KISS can tell when it was launched as an assistant
         setIntent(intent);
 
@@ -534,8 +547,7 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
         searchEditText.setCursorVisible(false);
     }
 
-    @Override
-    public void onBackPressed() {
+    public void handleOnBackPressed() {
         if (mPopup != null) {
             mPopup.dismiss();
         } else if (isViewingAllApps()) {
@@ -546,11 +558,6 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
             // (which means pressing back in minimalistic mode with history displayed
             // will hide history again)
             clearSearchText();
-        }
-
-        // Calling super.onBackPressed() will quit the launcher, only do this if KISS is not the user's default home.
-        if (!isKissDefaultLauncher()) {
-            super.onBackPressed();
         }
     }
 
@@ -622,11 +629,13 @@ public class MainActivity extends Activity implements QueryInterface, KeyboardSc
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         forwarderManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
