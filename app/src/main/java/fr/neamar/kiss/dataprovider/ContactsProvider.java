@@ -160,7 +160,7 @@ public class ContactsProvider extends Provider<ContactsPojo> {
 
         PhoneUtils phoneUtils = new PhoneUtils(this);
         for (ContactsPojo pojo : pojos) {
-            if (phoneUtils.areSamePhoneNumber(pojo.normalizedPhone.toString(), simplifiedPhoneNumber.toString())) {
+            if (pojo.normalizedPhone != null && phoneUtils.areSamePhoneNumber(pojo.normalizedPhone.toString(), simplifiedPhoneNumber.toString())) {
                 return pojo;
             }
         }
