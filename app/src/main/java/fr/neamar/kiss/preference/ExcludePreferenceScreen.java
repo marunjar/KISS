@@ -4,11 +4,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +28,14 @@ import fr.neamar.kiss.utils.Utilities;
 public class ExcludePreferenceScreen {
 
 	public static PreferenceScreen getInstance(
-			@NonNull PreferenceActivity preferenceActivity,
+			@NonNull PreferenceFragmentCompat preferenceFragment,
 			@StringRes int preferenceTitleResId,
 			@StringRes int preferenceScreenTitleResId,
 			@NonNull OnExcludedListener onExcludedListener,
 			@NonNull IsExcludedCallback isExcludedCallback
 	) {
-		List<AppPojo> appList = KissApplication.getApplication(preferenceActivity).getDataHandler().getApplications();
-		IconsHandler iconsHandler = KissApplication.getApplication(preferenceActivity).getIconsHandler();
+		List<AppPojo> appList = KissApplication.getApplication(preferenceFragment.getContext()).getDataHandler().getApplications();
+		IconsHandler iconsHandler = KissApplication.getApplication(preferenceFragment.getContext()).getIconsHandler();
 
 		AppPojo[] apps;
 		if(appList != null) {
@@ -45,7 +46,7 @@ public class ExcludePreferenceScreen {
 		}
 		Arrays.sort(apps, new NameComparator());
 
-		final PreferenceScreen excludedAppsScreen = preferenceActivity.getPreferenceManager().createPreferenceScreen(preferenceActivity);
+		final PreferenceScreen excludedAppsScreen = preferenceFragment.getPreferenceManager().createPreferenceScreen(preferenceFragment.getContext());
 		excludedAppsScreen.setTitle(preferenceTitleResId);
 
         excludedAppsScreen.setOnPreferenceClickListener(preference -> {
@@ -57,7 +58,7 @@ public class ExcludePreferenceScreen {
         });
 
         for (AppPojo app : apps) {
-			SwitchPreference pref = createExcludeAppSwitch(preferenceActivity, iconsHandler, isExcludedCallback, app, onExcludedListener);
+			SwitchPreference pref = createExcludeAppSwitch(preferenceFragment.getContext(), iconsHandler, isExcludedCallback, app, onExcludedListener);
 
 			excludedAppsScreen.addPreference(pref);
 		}

@@ -3,9 +3,10 @@ package fr.neamar.kiss.preference;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.preference.DialogPreference;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 import fr.neamar.kiss.DataHandler;
 import fr.neamar.kiss.KissApplication;

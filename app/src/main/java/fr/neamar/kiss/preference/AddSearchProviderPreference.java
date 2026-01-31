@@ -7,7 +7,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.DialogPreference;
-import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -19,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.StyleableRes;
+import androidx.preference.PreferenceManager;
 
 import java.util.HashSet;
 import java.util.Set;

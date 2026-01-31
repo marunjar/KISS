@@ -2,10 +2,10 @@ package fr.neamar.kiss.dataprovider.simpleprovider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.webkit.URLUtil;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;

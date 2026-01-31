@@ -4,8 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.preference.SwitchPreference;
 import android.util.AttributeSet;
+
+import androidx.preference.SwitchPreference;
 
 import fr.neamar.kiss.R;
 

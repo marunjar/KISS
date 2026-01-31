@@ -5,10 +5,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceViewHolder;
+
 // https://code.google.com/p/android/issues/detail?id=26194
 // Can be removed once we drop support for KitKat
 // Forced 10 max lines in summary (different Android versions have different values)
-public class SwitchPreference extends android.preference.SwitchPreference {
+public class SwitchPreference extends androidx.preference.SwitchPreference {
 
     public SwitchPreference(Context context) {
         this(context, null);
@@ -23,10 +26,10 @@ public class SwitchPreference extends android.preference.SwitchPreference {
     }
 
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
+    protected void syncSummaryView(@NonNull PreferenceViewHolder holder) {
+        super.syncSummaryView(holder);
 
-        View summary = view.findViewById(android.R.id.summary);
+        View summary = holder.findViewById(android.R.id.summary);
         if (summary instanceof TextView)
             ((TextView) summary).setMaxLines(10);
     }
