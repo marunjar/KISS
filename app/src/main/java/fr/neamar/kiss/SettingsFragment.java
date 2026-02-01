@@ -44,6 +44,8 @@ import fr.neamar.kiss.pojo.AppPojo;
 import fr.neamar.kiss.pojo.NameComparator;
 import fr.neamar.kiss.pojo.Pojo;
 import fr.neamar.kiss.pojo.TagDummyPojo;
+import fr.neamar.kiss.preference.ColorPreference;
+import fr.neamar.kiss.preference.ColorPreferenceDialogFragment;
 import fr.neamar.kiss.preference.DefaultLauncherPreference;
 import fr.neamar.kiss.preference.DialogShowingPreference;
 import fr.neamar.kiss.preference.DialogShowingPreferenceDialogFragment;
@@ -770,6 +772,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         DialogFragment dialogFragment = null;
         if (pref instanceof DialogShowingPreference) {
             dialogFragment = DialogShowingPreferenceDialogFragment.newInstance(pref.getKey(), this::onDialogClosed);
+        } else if (pref instanceof ColorPreference) {
+            dialogFragment = ColorPreferenceDialogFragment.newInstance(pref.getKey());
         }
 
         if (dialogFragment != null) {

@@ -118,7 +118,9 @@
             android:key="theme"
             android:summary="%s"
             android:title="@string/theme_name" />
-        <PreferenceScreen android:title="@string/theme_customisation">
+        <PreferenceScreen
+            android:key="theme-customisation"
+            android:title="@string/theme_customisation">
             <ListPreference
                 android:defaultValue="default"
                 android:entries="@array/shadowEntries"
@@ -380,7 +382,9 @@
                 android:key="pref-fav-tags-drawable"
                 android:summary="@string/pref_fav_tags_drawable_desc"
                 android:title="@string/pref_fav_tags_drawable" />
-            <PreferenceScreen android:title="@string/screen_toggle_tags">
+            <PreferenceScreen
+                android:key="customize-tags-menu"
+                android:title="@string/screen_toggle_tags">
                 <SwitchPreference
                     android:defaultValue="false"
                     android:key="pref-tags-menu"
