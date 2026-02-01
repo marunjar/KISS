@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.DialogPreference;
+import androidx.preference.DialogPreference;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -46,54 +46,54 @@ public class AddSearchProviderPreference extends DialogPreference {
     }
 
     //Create the Dialog view
-    @Override
-    protected View onCreateDialogView() {
-        removeViews();
-        providerName.setHint(R.string.search_provider_name);
-        providerUri.setHint(R.string.search_provider_url);
-        providerUri.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
-
-        providerName.setText("");
-        providerUri.setText("");
-
-        //adding margins (default is zero)
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(40, 10, 40, 0);
-        layoutParams.setMarginStart(40);
-        layoutParams.setMarginEnd(40);
-
-        //add the two text fields (with margins)
-        layout.addView(providerName, layoutParams);
-        layout.addView(providerUri, layoutParams);
-
-        // default text color is white that doesn't work well on the light themes
-        String theme = prefs.getString("theme", "light");
-        //if theme is light, change the text color
-        if (!theme.contains("dark")) {
-            @StyleableRes int[] attrs = new int[]{android.R.attr.textColor};
-            TypedArray ta = getContext().obtainStyledAttributes(R.style.AppThemeLight, attrs);
-
-            providerName.setTextColor(ta.getColor(0, Color.TRANSPARENT));
-            providerUri.setTextColor(ta.getColor(0, Color.TRANSPARENT));
-            ta.recycle();
-        }
-
-        return layout;
-    }
-
-    @Override
-    protected void showDialog(Bundle state) {
-        super.showDialog(state);
-
-        final AlertDialog dlg = (AlertDialog) getDialog();
-        dlg.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (validate()) {
-                save();
-                dlg.dismiss();
-            }
-        });
-    }
+//    @Override
+//    protected View onCreateDialogView() {
+//        removeViews();
+//        providerName.setHint(R.string.search_provider_name);
+//        providerUri.setHint(R.string.search_provider_url);
+//        providerUri.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
+//
+//        providerName.setText("");
+//        providerUri.setText("");
+//
+//        //adding margins (default is zero)
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        layoutParams.setMargins(40, 10, 40, 0);
+//        layoutParams.setMarginStart(40);
+//        layoutParams.setMarginEnd(40);
+//
+//        //add the two text fields (with margins)
+//        layout.addView(providerName, layoutParams);
+//        layout.addView(providerUri, layoutParams);
+//
+//        // default text color is white that doesn't work well on the light themes
+//        String theme = prefs.getString("theme", "light");
+//        //if theme is light, change the text color
+//        if (!theme.contains("dark")) {
+//            @StyleableRes int[] attrs = new int[]{android.R.attr.textColor};
+//            TypedArray ta = getContext().obtainStyledAttributes(R.style.AppThemeLight, attrs);
+//
+//            providerName.setTextColor(ta.getColor(0, Color.TRANSPARENT));
+//            providerUri.setTextColor(ta.getColor(0, Color.TRANSPARENT));
+//            ta.recycle();
+//        }
+//
+//        return layout;
+//    }
+//
+//    @Override
+//    protected void showDialog(Bundle state) {
+//        super.showDialog(state);
+//
+//        final AlertDialog dlg = (AlertDialog) getDialog();
+//        dlg.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+//            if (validate()) {
+//                save();
+//                dlg.dismiss();
+//            }
+//        });
+//    }
 
     private boolean validatePipes() {
         return !(providerName.getText().toString().contains("|") || providerUri.getText().toString().contains("|"));

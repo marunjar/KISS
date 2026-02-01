@@ -2,7 +2,7 @@ package fr.neamar.kiss.preference;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.preference.DialogPreference;
+import androidx.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.widget.Toast;
 
@@ -11,22 +11,22 @@ import androidx.preference.PreferenceManager;
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.R;
 
-public class ResetExcludedAppsPreference extends DialogPreference {
+public class ResetExcludedAppsPreference extends DialogShowingPreference {
 
     public ResetExcludedAppsPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        super.onClick(dialog, which);
-        if (which == DialogInterface.BUTTON_POSITIVE) {
-            PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
-                    .putStringSet("excluded-apps", null).apply();
-            KissApplication.getApplication(getContext()).getDataHandler().reloadApps();
-            Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
-        }
-
-    }
+//    @Override
+//    public void onClick(DialogInterface dialog, int which) {
+//        super.onClick(dialog, which);
+//        if (which == DialogInterface.BUTTON_POSITIVE) {
+//            PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+//                    .putStringSet("excluded-apps", null).apply();
+//            KissApplication.getApplication(getContext()).getDataHandler().reloadApps();
+//            Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
+//        }
+//
+//    }
 
 }

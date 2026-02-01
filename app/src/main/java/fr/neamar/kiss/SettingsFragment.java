@@ -43,6 +43,8 @@ import fr.neamar.kiss.pojo.AppPojo;
 import fr.neamar.kiss.pojo.NameComparator;
 import fr.neamar.kiss.pojo.Pojo;
 import fr.neamar.kiss.pojo.TagDummyPojo;
+import fr.neamar.kiss.preference.DialogShowingPreference;
+import fr.neamar.kiss.preference.DialogShowingPreferenceDialogFragment;
 import fr.neamar.kiss.preference.ExcludePreferenceScreen;
 import fr.neamar.kiss.preference.SwitchPreference;
 import fr.neamar.kiss.searcher.QuerySearcher;
@@ -51,7 +53,7 @@ import fr.neamar.kiss.utils.MimeTypeUtils;
 import fr.neamar.kiss.utils.Permission;
 import fr.neamar.kiss.utils.ShortcutUtil;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
     private static final String TAG = SettingsFragment.class.getSimpleName();
     private static final int REQUEST_CALL_SCREENING_APP = 1;
     private static final String DIALOG_FRAGMENT_TAG = "androidx.preference.PreferenceFragment.DIALOG";
@@ -62,8 +64,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             "gesture-long-press"
     );
     private static Pair<CharSequence[], CharSequence[]> itemToRunListContent = null;
-
-    private boolean requireFullRestart = false;
 
     private SharedPreferences prefs;
 
@@ -95,8 +95,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // Do it here to make the transition as smooth as possible
         ExperienceTweaks.setRequestedOrientation(getActivity(), prefs);
 
-        addPreferencesFromResource(R.xml.preferences);
-//        setPreferencesFromResource(R.xml.preferences, rootKey);
+        setPreferencesFromResource(R.xml.preferences, rootKey);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             removePreference("gestures-holder", "double-tap");
@@ -116,17 +115,21 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (!ShortcutUtil.canDeviceShowShortcuts()) {
             removePreference("exclude_apps_category", "reset-excluded-app-shortcuts");
             removePreference("search-providers", "enable-shortcuts");
-            removePreference("search-providers", "reset");
+            removePreference("search-providers", "reset-search-providers");
         }
 
         final ListPreference iconsPack = findPreference("icons-pack");
-        iconsPack.setEnabled(false);
+        if (iconsPack != null) {
+            iconsPack.setEnabled(false);
+        }
 
         Runnable runnable = () -> {
             SettingsFragment.this.fixSummaries();
 
-            SettingsFragment.this.setListPreferenceIconsPacksData(iconsPack);
-            SettingsFragment.this.getActivity().runOnUiThread(() -> iconsPack.setEnabled(true));
+            if (iconsPack != null) {
+                SettingsFragment.this.setListPreferenceIconsPacksData(iconsPack);
+                SettingsFragment.this.getActivity().runOnUiThread(() -> iconsPack.setEnabled(true));
+            }
 
             SettingsFragment.this.setAdditionalContactsData();
             SettingsFragment.this.addCustomSearchProvidersPreferences(prefs);
@@ -198,11 +201,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         MultiSelectListPreference multiPreference = findPreference("selected-contact-mime-types");
-        if (supportedMimeTypes.isEmpty()) {
-            multiPreference.setEnabled(false);
+        if (multiPreference != null) {
+            if (supportedMimeTypes.isEmpty()) {
+                multiPreference.setEnabled(false);
+            }
+            multiPreference.setEntries(mimeTypeEntries);
+            multiPreference.setEntryValues(mimeTypeEntryValues);
         }
-        multiPreference.setEntries(mimeTypeEntries);
-        multiPreference.setEntryValues(mimeTypeEntryValues);
     }
 
     /**
@@ -213,7 +218,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         HashSet<PreferenceGroup> groups = new HashSet<>();
         for (String gesturePref : PREF_LISTS_WITH_DEPENDENCY) {
             Preference pref = findPreference(gesturePref);
-            groups.add(getParent(pref));
+            if (pref != null) {
+                groups.add(getParent(pref));
+            }
         }
         // set new order numbers
         for (PreferenceGroup group : groups) {
@@ -344,11 +351,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private void removePreference(String parentKey, String key) {
         PreferenceGroup p = findPreference(parentKey);
-        Preference c = p.findPreference(key);
-        if (c != null) {
-            p.removePreference(c);
-        } else {
-            Log.d(TAG, "Preference to remove not found: " + parentKey + "/" + key);
+        if (p != null) {
+            Preference c = p.findPreference(key);
+            if (c != null) {
+                p.removePreference(c);
+            } else {
+                Log.d(TAG, "Preference to remove not found: " + parentKey + "/" + key);
+            }
         }
     }
 
@@ -392,7 +401,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         );
 
         PreferenceGroup category = findPreference("exclude_apps_category");
-        category.addPreference(excludedAppsScreen);
+        if (category != null) {
+            category.addPreference(excludedAppsScreen);
+        }
     }
 
     private void addExcludedFromHistoryAppSettings() {
@@ -417,7 +428,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         );
 
         PreferenceGroup category = findPreference("exclude_apps_category");
-        category.addPreference(excludedAppsScreen);
+        if (category != null) {
+            category.addPreference(excludedAppsScreen);
+        }
     }
 
     private void addExcludedShortcutAppSettings() {
@@ -446,7 +459,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         );
 
         PreferenceGroup category = findPreference("exclude_apps_category");
-        category.addPreference(excludedAppsScreen);
+        if (category != null) {
+            category.addPreference(excludedAppsScreen);
+        }
     }
 
     private void addCustomSearchProvidersPreferences(SharedPreferences prefs) {
@@ -482,7 +497,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private void addCustomSearchProvidersSelect(SharedPreferences prefs) {
         MultiSelectListPreference multiPreference = createCustomSearchProvidersPreference("selected-search-provider-names", R.string.search_providers_title, 10);
         PreferenceGroup category = findPreference("web-providers");
-        category.addPreference(multiPreference);
+        if (category != null) {
+            category.addPreference(multiPreference);
+        }
     }
 
     private void addCustomSearchProvidersDelete(final SharedPreferences prefs) {
@@ -516,7 +533,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         });
 
         PreferenceGroup category = findPreference("web-providers");
-        category.addPreference(multiPreference);
+        if (category != null) {
+            category.addPreference(multiPreference);
+        }
     }
 
     private MultiSelectListPreference createCustomSearchProvidersPreference(@NonNull String key, @StringRes int title, int order) {
@@ -562,7 +581,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         standardPref.setDefaultValue("Google"); // Google is standard on install
 
         PreferenceGroup category = findPreference("web-providers");
-        category.addPreference(standardPref);
+        if (category != null) {
+            category.addPreference(standardPref);
+        }
     }
 
     @Override
@@ -600,7 +621,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                         public void onDenied() {
                             // You don't want to give us permission, that's fine. Revert the toggle.
                             SwitchPreference p = findPreference(key);
-                            p.setChecked(false);
+                            if (p != null) {
+                                p.setChecked(false);
+                            }
                             Toast.makeText(getContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -649,13 +672,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onPause() {
         super.onPause();
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-
-        // Some settings require a full UI refresh,
-        // Flag this, so that MainActivity get the information onResume().
-        if (requireFullRestart) {
-            prefs.edit().putBoolean("require-layout-update", true).apply();
-            requireFullRestart = false;
-        }
     }
 
     @Override
@@ -666,21 +682,26 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private void fixSummaries() {
         int historyLength = getDataHandler().getHistoryLength();
         if (historyLength > 5) {
-            findPreference("reset").setSummary(String.format(getString(R.string.items_title), historyLength));
+            Preference resetHistory = findPreference("reset-history");
+            if (resetHistory != null) {
+                resetHistory.setSummary(String.format(getString(R.string.items_title), historyLength));
+            }
         }
 
         // Only display "rate the app" preference if the user has been using KISS long enough to enjoy it ;)
         Preference rateApp = findPreference("rate-app");
-        if (historyLength < 300) {
-            getPreferenceScreen().removePreference(rateApp);
-        } else {
-            rateApp.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=" + getContext().getApplicationContext().getPackageName()));
-                startActivity(intent);
+        if (rateApp != null) {
+            if (historyLength < 300) {
+                getPreferenceScreen().removePreference(rateApp);
+            } else {
+                rateApp.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("market://details?id=" + getContext().getApplicationContext().getPackageName()));
+                    startActivity(intent);
 
-                return true;
-            });
+                    return true;
+                });
+            }
         }
     }
 
@@ -711,48 +732,51 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     private void addHiddenTagsTogglesInformation(SharedPreferences prefs) {
-        Set<String> menuTags = TagsMenu.getPrefTags(prefs, getContext());
         MultiSelectListPreference selectListPreference = findPreference("pref-toggle-tags-list");
-        Set<String> tagsSet = getDataHandler()
-                .getTagsHandler()
-                .getAllTagsAsSet();
+        if (selectListPreference != null) {
+            Set<String> tagsSet = getDataHandler()
+                    .getTagsHandler()
+                    .getAllTagsAsSet();
 
-        // append tags that are available to toggle now
-        tagsSet.addAll(menuTags);
+            // append tags that are available to toggle now
+            Set<String> menuTags = TagsMenu.getPrefTags(prefs, getContext());
+            tagsSet.addAll(menuTags);
 
-        String[] tagArray = tagsSet.toArray(new String[0]);
-        Arrays.sort(tagArray);
-        selectListPreference.setEntries(tagArray);
-        selectListPreference.setEntryValues(tagArray);
-        selectListPreference.setValues(menuTags);
+            String[] tagArray = tagsSet.toArray(new String[0]);
+            Arrays.sort(tagArray);
+            selectListPreference.setEntries(tagArray);
+            selectListPreference.setEntryValues(tagArray);
+            selectListPreference.setValues(menuTags);
 
-        // Enable the preference
-        getActivity().runOnUiThread(() -> {
-            selectListPreference.setEnabled(true);
-        });
+            // Enable the preference
+            getActivity().runOnUiThread(() -> {
+                selectListPreference.setEnabled(true);
+            });
+        }
     }
 
     private void addTagsFavInformation() {
-        Set<String> favTags = getFavTags();
         final MultiSelectListPreference selectListPreference = findPreference("pref-fav-tags-list");
+        if (selectListPreference != null) {
+            Set<String> tagsSet = getDataHandler()
+                    .getTagsHandler()
+                    .getAllTagsAsSet();
 
-        Set<String> tagsSet = getDataHandler()
-                .getTagsHandler()
-                .getAllTagsAsSet();
+            // make sure we can toggle off the tags that are in the favs now
+            Set<String> favTags = getFavTags();
+            tagsSet.addAll(favTags);
 
-        // make sure we can toggle off the tags that are in the favs now
-        tagsSet.addAll(favTags);
+            String[] tagArray = tagsSet.toArray(new String[0]);
+            Arrays.sort(tagArray);
+            selectListPreference.setEntries(tagArray);
+            selectListPreference.setEntryValues(tagArray);
+            selectListPreference.setValues(favTags);
 
-        String[] tagArray = tagsSet.toArray(new String[0]);
-        Arrays.sort(tagArray);
-        selectListPreference.setEntries(tagArray);
-        selectListPreference.setEntryValues(tagArray);
-        selectListPreference.setValues(favTags);
-
-        // Enable the preference
-        getActivity().runOnUiThread(() -> {
-            selectListPreference.setEnabled(true);
-        });
+            // Enable the preference
+            getActivity().runOnUiThread(() -> {
+                selectListPreference.setEnabled(true);
+            });
+        }
     }
 
     /**
@@ -779,17 +803,41 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     @Override
-    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
-        String key = preference.getKey();
-
+    public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragmentCompat caller, @NonNull Preference pref) {
         DialogFragment dialogFragment = null;
-        if (dialogFragment != null) {
-            dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
-            return;
+        if (pref instanceof DialogShowingPreference) {
+            dialogFragment = DialogShowingPreferenceDialogFragment.newInstance(pref.getKey(), this::onDialogClosed);
         }
 
-        super.onDisplayPreferenceDialog(preference);
+        if (dialogFragment != null) {
+            // check if dialog is already showing
+            if (getParentFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG) != null) {
+                return true;
+            }
+            dialogFragment.setTargetFragment(caller, 0);
+            dialogFragment.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
+            return true;
+        }
+
+        return false;
     }
 
+    private void onDialogClosed(Preference pref, boolean positiveResult) {
+        switch (pref.getKey()) {
+            case "reset-history":
+                if (positiveResult) {
+                    KissApplication.getApplication(getContext()).getDataHandler().clearHistory();
+                    pref.setSummary(getContext().getString(R.string.history_erased));
+                    Toast.makeText(getContext(), R.string.history_erased, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "reset-search-providers":
+                if (positiveResult) {
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().remove("available-search-providers").apply();
+                    KissApplication.getApplication(getContext()).getDataHandler().reloadSearchProvider();
+                    Toast.makeText(getContext(), R.string.search_provider_reset_done_desc, Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
 }

@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +13,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
@@ -28,7 +25,7 @@ import fr.neamar.kiss.forwarder.ExperienceTweaks;
 import fr.neamar.kiss.forwarder.InterfaceTweaks;
 import fr.neamar.kiss.utils.SystemUiVisibilityHelper;
 
-public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
+public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, PreferenceFragmentCompat.OnPreferenceStartScreenCallback, FragmentManager.OnBackStackChangedListener {
     public static final String ARG_SHOW_FRAGMENT = "show_fragment";
 
     // Those settings require the app to restart
@@ -67,10 +64,12 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.app_name);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(ARG_SHOW_FRAGMENT);
         if (fragment == null) {
             fragment = new SettingsFragment();
@@ -79,6 +78,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 .beginTransaction()
                 .add(R.id.content_container, fragment, ARG_SHOW_FRAGMENT)
                 .commit();
+
     }
 
     @Override
@@ -86,13 +86,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         super.onTitleChanged(title, color);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            if (color != 0 && !(title instanceof Spannable)) {
-                SpannableString ss = new SpannableString(title);
-                ss.setSpan(new ForegroundColorSpan(color), 0, title.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                actionBar.setTitle(ss);
-            } else {
-                actionBar.setTitle(title);
-            }
+            actionBar.setTitle(title);
         }
     }
 
@@ -153,6 +147,9 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public boolean onSupportNavigateUp() {
+        if (getSupportFragmentManager().popBackStackImmediate()) {
+            return true;
+        }
         return super.onSupportNavigateUp();
     }
 
@@ -168,6 +165,12 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 .replace(R.id.content_container, fragment, key)
                 .addToBackStack(key)
                 .commit();
+        setTitle(pref.getTitle());
         return true;
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        // TODO: setTitle(pref.getTitle());
     }
 }

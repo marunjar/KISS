@@ -2,7 +2,7 @@ package fr.neamar.kiss.preference;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.preference.DialogPreference;
+import androidx.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.widget.Toast;
 
@@ -12,7 +12,7 @@ import fr.neamar.kiss.DataHandler;
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.R;
 
-public class ResetExcludedAppShortcutsPreference extends DialogPreference {
+public class ResetExcludedAppShortcutsPreference extends DialogShowingPreference {
 
     public ResetExcludedAppShortcutsPreference(Context context) {
         super(context, null);
@@ -22,20 +22,20 @@ public class ResetExcludedAppShortcutsPreference extends DialogPreference {
         super(context, attrs);
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        super.onClick(dialog, which);
-        if (which == DialogInterface.BUTTON_POSITIVE) {
-            PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
-                    .putStringSet(DataHandler.PREF_KEY_EXCLUDED_SHORTCUT_APPS, null).apply();
-            DataHandler dataHandler = KissApplication.getApplication(getContext()).getDataHandler();
-            // Reload shortcuts to refresh the shortcuts shown in KISS
-            dataHandler.reloadShortcuts();
-            // Reload apps since the `AppPojo.isExcludedShortcuts` value also needs to be refreshed
-            dataHandler.reloadApps();
-            Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
-        }
-
-    }
+//    @Override
+//    public void onClick(DialogInterface dialog, int which) {
+//        super.onClick(dialog, which);
+//        if (which == DialogInterface.BUTTON_POSITIVE) {
+//            PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+//                    .putStringSet(DataHandler.PREF_KEY_EXCLUDED_SHORTCUT_APPS, null).apply();
+//            DataHandler dataHandler = KissApplication.getApplication(getContext()).getDataHandler();
+//            // Reload shortcuts to refresh the shortcuts shown in KISS
+//            dataHandler.reloadShortcuts();
+//            // Reload apps since the `AppPojo.isExcludedShortcuts` value also needs to be refreshed
+//            dataHandler.reloadApps();
+//            Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
+//        }
+//
+//    }
 
 }

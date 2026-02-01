@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/activity_setting">
     <PreferenceScreen
         android:key="history_category"
         android:summary="@string/history_settings_summary"
         android:title="@string/title_history">
-        <fr.neamar.kiss.preference.ResetPreference
+        <fr.neamar.kiss.preference.DialogShowingPreference
             android:dialogMessage="@string/reset_warn"
-            android:key="reset"
+            android:key="reset-history"
             android:order="10"
             android:title="@string/reset_name" />
         <EditTextPreference
@@ -80,7 +81,7 @@
         android:title="@string/title_favorites">
         <fr.neamar.kiss.preference.ResetFavoritesPreference
             android:dialogMessage="@string/reset_favorites_warn"
-            android:key="reset"
+            android:key="reset-favorites"
             android:title="@string/reset_favorites_name" />
         <fr.neamar.kiss.preference.SwitchPreference
             android:defaultValue="true"
@@ -471,7 +472,7 @@
                 android:title="@string/shortcuts_name" />
             <fr.neamar.kiss.preference.ResetShortcutsPreference
                 android:dialogMessage="@string/regenerate_shortcuts_desc"
-                android:key="reset"
+                android:key="reset-shortcuts"
                 android:order="5"
                 android:title="@string/regenerate_shortcuts" />
             <fr.neamar.kiss.preference.SwitchPreference
@@ -493,9 +494,9 @@
                 android:order="30"
                 android:textColor="?attr/searchColor"
                 android:title="@string/custom_search_provider" />
-            <fr.neamar.kiss.preference.ResetSearchProvidersPreference
+            <fr.neamar.kiss.preference.DialogShowingPreference
                 android:dialogMessage="@string/search_provider_reset_desc"
-                android:key="reset"
+                android:key="reset-search-providers"
                 android:order="40"
                 android:title="@string/search_provider_reset" />
         </PreferenceCategory>
