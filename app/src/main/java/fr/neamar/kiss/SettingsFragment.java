@@ -43,9 +43,12 @@ import fr.neamar.kiss.pojo.AppPojo;
 import fr.neamar.kiss.pojo.NameComparator;
 import fr.neamar.kiss.pojo.Pojo;
 import fr.neamar.kiss.pojo.TagDummyPojo;
+import fr.neamar.kiss.preference.DefaultLauncherPreference;
 import fr.neamar.kiss.preference.DialogShowingPreference;
 import fr.neamar.kiss.preference.DialogShowingPreferenceDialogFragment;
 import fr.neamar.kiss.preference.ExcludePreferenceScreen;
+import fr.neamar.kiss.preference.ExportSettingsPreference;
+import fr.neamar.kiss.preference.ImportSettingsPreference;
 import fr.neamar.kiss.preference.SwitchPreference;
 import fr.neamar.kiss.searcher.QuerySearcher;
 import fr.neamar.kiss.utils.DrawableUtils;
@@ -308,46 +311,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             throw new IllegalStateException("Preference `" + listKey + "` is " + prefEntryToRun.getClass() + "; should be " + ListPreference.class);
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_settings, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-//        if (item.getItemId() == R.id.help) {
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setData(Uri.parse("http://help.kisslauncher.com"));
-//            startActivity(intent);
-//            return true;
-//        }
-//        return super.onMenuItemSelected(featureId, item);
-//    }
-
-//    @Override
-//    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-//        super.onPreferenceTreeClick(preferenceScreen, preference);
-//        // If the user has clicked on a preference screen, set up the action bar
-//        if (preference instanceof PreferenceScreen) {
-//            final Dialog dialog = ((PreferenceScreen) preference).getDialog();
-//            UIColors.updateThemePrimaryColor(preference.getContext(), dialog);
-//            if (systemUiVisibilityHelper != null) {
-//                systemUiVisibilityHelper.copyVisibility(dialog.getWindow().getDecorView());
-//            }
-//            Toolbar toolbar = PreferenceScreenHelper.findToolbar((PreferenceScreen) preference);
-//            if (toolbar != null) {
-//                toolbar.setNavigationOnClickListener(v -> {
-//                    dialog.dismiss();
-//                });
-//            }
-//            InterfaceTweaks.applySystemBarInsets(dialog.getWindow().getDecorView());
-//        }
-//
-//        return false;
-//    }
 
     private void removePreference(String parentKey, String key) {
         PreferenceGroup p = findPreference(parentKey);
@@ -833,9 +796,80 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 break;
             case "reset-search-providers":
                 if (positiveResult) {
-                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().remove("available-search-providers").apply();
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                            .remove("available-search-providers").apply();
                     KissApplication.getApplication(getContext()).getDataHandler().reloadSearchProvider();
                     Toast.makeText(getContext(), R.string.search_provider_reset_done_desc, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "reset-excluded-apps":
+                if (positiveResult) {
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                            .putStringSet("excluded-apps", null).apply();
+                    KissApplication.getApplication(getContext()).getDataHandler().reloadApps();
+                    Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "reset-excluded-from-history-apps":
+                if (positiveResult) {
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                            .putStringSet("excluded-apps-from-history", null).apply();
+                    KissApplication.getApplication(getContext()).getDataHandler().reloadApps(); // reload because it's cached in AppPojo#excludedFromHistory
+                    Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "reset-excluded-app-shortcuts":
+                if (positiveResult) {
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                            .putStringSet(DataHandler.PREF_KEY_EXCLUDED_SHORTCUT_APPS, null).apply();
+                    DataHandler dataHandler = KissApplication.getApplication(getContext()).getDataHandler();
+                    // Reload shortcuts to refresh the shortcuts shown in KISS
+                    dataHandler.reloadShortcuts();
+                    // Reload apps since the `AppPojo.isExcludedShortcuts` value also needs to be refreshed
+                    dataHandler.reloadApps();
+                    Toast.makeText(getContext(), R.string.excluded_app_list_erased, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "reset-favorites":
+                if (positiveResult) {
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                            .putString("favorite-apps-list", "").apply();
+
+                    try {
+                        KissApplication.getApplication(getContext()).getDataHandler().reloadApps();
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "Unable to reset favorites", e);
+                    }
+
+                    Toast.makeText(getContext(), R.string.favorites_erased, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "reset-shortcuts":
+                if (positiveResult && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // Remove all shortcuts
+                    ShortcutUtil.removeAllShortcuts(getContext());
+                    // Build all shortcuts
+                    ShortcutUtil.addAllShortcuts(getContext());
+                    Toast.makeText(getContext(), R.string.regenerate_shortcuts_done, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case "enable-notifications":
+                if (positiveResult && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                }
+                break;
+            case "default-launcher":
+                new DefaultLauncherPreference().onDialogClosed(getContext(), positiveResult);
+                break;
+            case "export-settings":
+                new ExportSettingsPreference().onDialogClosed(getContext(), positiveResult);
+                break;
+            case "import-settings":
+                new ImportSettingsPreference().onDialogClosed(getContext(), positiveResult);
+                break;
+            case "restart":
+                if (positiveResult) {
+                    System.exit(0);
                 }
                 break;
         }
