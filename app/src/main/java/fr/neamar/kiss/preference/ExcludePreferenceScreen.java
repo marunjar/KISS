@@ -3,13 +3,13 @@ package fr.neamar.kiss.preference;
 import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.preference.PreferenceActivity;
 import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
 
 import java.util.Arrays;
 import java.util.List;
