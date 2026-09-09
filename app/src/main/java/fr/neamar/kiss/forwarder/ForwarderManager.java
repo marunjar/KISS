@@ -105,5 +105,6 @@ public class ForwarderManager extends Forwarder {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         interfaceTweaks.onConfigurationChanged(newConfig);
         favoritesForwarder.onConfigurationChanged(newConfig);
+        widgetsForwarder.onConfigurationChanged(newConfig);
     }
 }
