@@ -40,7 +40,6 @@ import fr.neamar.kiss.PickAppWidgetActivity;
 import fr.neamar.kiss.R;
 import fr.neamar.kiss.ui.ListPopup;
 import fr.neamar.kiss.ui.WidgetHost;
-import fr.neamar.kiss.ui.WidgetView;
 import fr.neamar.kiss.utils.DrawableUtils;
 import fr.neamar.kiss.utils.Log;
 
@@ -560,12 +559,7 @@ class Widgets extends Forwarder {
 
     public void onConfigurationChanged(Configuration newConfig) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            for (int i = 0; i < widgetArea.getChildCount(); i++) {
-                WidgetView view = (WidgetView) widgetArea.getChildAt(i);
-                view.setOnLightBackground(newConfig.uiMode);
-//                view.updateAppWidgetOptions(Bundle.EMPTY);
-            }
-//             restoreWidgets();
+            restoreWidgets();
         }
     }
 }
