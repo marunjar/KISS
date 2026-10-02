@@ -1,5 +1,7 @@
 package fr.neamar.kiss.broadcast;
 
+import static fr.neamar.kiss.dataprovider.simpleprovider.PhoneProvider.PHONE_SCHEME;
+
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.telecom.Call;
@@ -12,8 +14,8 @@ import androidx.preference.PreferenceManager;
 
 import fr.neamar.kiss.DataHandler;
 import fr.neamar.kiss.KissApplication;
-import fr.neamar.kiss.dataprovider.ContactsProvider;
-import fr.neamar.kiss.pojo.ContactsPojo;
+import fr.neamar.kiss.dataprovider.simpleprovider.PhoneProvider;
+import fr.neamar.kiss.pojo.Pojo;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class IncomingCallScreeningService extends CallScreeningService {
@@ -27,11 +29,11 @@ public class IncomingCallScreeningService extends CallScreeningService {
             String phoneNumber = callDetails.getHandle().getSchemeSpecificPart();
             if (!TextUtils.isEmpty(phoneNumber)) {
                 DataHandler dataHandler = KissApplication.getApplication(this).getDataHandler();
-                ContactsProvider contactsProvider = dataHandler.getContactsProvider();
-                if (contactsProvider != null) {
-                    ContactsPojo contactPojo = contactsProvider.findByPhone(phoneNumber);
-                    if (contactPojo != null) {
-                        dataHandler.addToHistory(contactPojo.getHistoryId());
+                PhoneProvider phoneProvider = dataHandler.getPhoneProvider();
+                if (phoneProvider != null) {
+                    Pojo pojo = phoneProvider.findById(PHONE_SCHEME + phoneNumber);
+                    if (pojo != null) {
+                        dataHandler.addToHistory(pojo.getHistoryId());
                     }
                 }
             }

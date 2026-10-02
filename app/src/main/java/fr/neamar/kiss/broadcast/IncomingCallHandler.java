@@ -1,15 +1,18 @@
 package fr.neamar.kiss.broadcast;
 
+import static fr.neamar.kiss.dataprovider.simpleprovider.PhoneProvider.PHONE_SCHEME;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import fr.neamar.kiss.DataHandler;
 import fr.neamar.kiss.KissApplication;
-import fr.neamar.kiss.dataprovider.ContactsProvider;
-import fr.neamar.kiss.pojo.ContactsPojo;
+import fr.neamar.kiss.dataprovider.simpleprovider.PhoneProvider;
+import fr.neamar.kiss.pojo.Pojo;
 import fr.neamar.kiss.utils.Log;
 import fr.neamar.kiss.utils.PackageManagerUtils;
 
@@ -25,25 +28,17 @@ public class IncomingCallHandler extends BroadcastReceiver {
         }
 
         try {
-            DataHandler dataHandler = KissApplication.getApplication(context).getDataHandler();
-            ContactsProvider contactsProvider = dataHandler.getContactsProvider();
-
-            // Stop if contacts are not enabled
-            if (contactsProvider == null) {
-                return;
-            }
-
             if (TelephonyManager.EXTRA_STATE_RINGING.equals(intent.getStringExtra(TelephonyManager.EXTRA_STATE))) {
                 String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-
-                if (phoneNumber == null) {
-                    // Skipping (private call)
-                    return;
-                }
-
-                ContactsPojo contactPojo = contactsProvider.findByPhone(phoneNumber);
-                if (contactPojo != null) {
-                    dataHandler.addToHistory(contactPojo.getHistoryId());
+                if (!TextUtils.isEmpty(phoneNumber)) {
+                    DataHandler dataHandler = KissApplication.getApplication(context).getDataHandler();
+                    PhoneProvider phoneProvider = dataHandler.getPhoneProvider();
+                    if (phoneProvider != null) {
+                        Pojo pojo = phoneProvider.findById(PHONE_SCHEME + phoneNumber);
+                        if (pojo != null) {
+                            dataHandler.addToHistory(pojo.getHistoryId());
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
