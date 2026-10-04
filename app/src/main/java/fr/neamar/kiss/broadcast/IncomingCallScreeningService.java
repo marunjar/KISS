@@ -1,7 +1,5 @@
 package fr.neamar.kiss.broadcast;
 
-import static fr.neamar.kiss.dataprovider.simpleprovider.PhoneProvider.PHONE_SCHEME;
-
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.telecom.Call;
@@ -31,7 +29,7 @@ public class IncomingCallScreeningService extends CallScreeningService {
                 DataHandler dataHandler = KissApplication.getApplication(this).getDataHandler();
                 PhoneProvider phoneProvider = dataHandler.getPhoneProvider();
                 if (phoneProvider != null) {
-                    Pojo pojo = phoneProvider.findById(PHONE_SCHEME + phoneNumber);
+                    Pojo pojo = phoneProvider.findByPhone(phoneNumber);
                     if (pojo != null) {
                         dataHandler.addToHistory(pojo.getHistoryId());
                     }

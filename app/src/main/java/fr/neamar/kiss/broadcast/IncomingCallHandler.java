@@ -1,7 +1,5 @@
 package fr.neamar.kiss.broadcast;
 
-import static fr.neamar.kiss.dataprovider.simpleprovider.PhoneProvider.PHONE_SCHEME;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +32,7 @@ public class IncomingCallHandler extends BroadcastReceiver {
                     DataHandler dataHandler = KissApplication.getApplication(context).getDataHandler();
                     PhoneProvider phoneProvider = dataHandler.getPhoneProvider();
                     if (phoneProvider != null) {
-                        Pojo pojo = phoneProvider.findById(PHONE_SCHEME + phoneNumber);
+                        Pojo pojo = phoneProvider.findByPhone(phoneNumber);
                         if (pojo != null) {
                             dataHandler.addToHistory(pojo.getHistoryId());
                         }
