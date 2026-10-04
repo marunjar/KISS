@@ -48,6 +48,7 @@ public class PhoneProvider extends SimpleProvider<PhonePojo> {
         return findByPhone(phoneNumber);
     }
 
+    @Nullable
     public Pojo findByPhone(String phoneNumber) {
         if (PhoneUtils.isPhoneNumber(phoneNumber)) {
             return null;
