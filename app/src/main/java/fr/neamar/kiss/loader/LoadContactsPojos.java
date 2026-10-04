@@ -19,6 +19,7 @@ import fr.neamar.kiss.pojo.ContactsPojo;
 import fr.neamar.kiss.utils.Log;
 import fr.neamar.kiss.utils.MimeTypeUtils;
 import fr.neamar.kiss.utils.Permission;
+import fr.neamar.kiss.utils.PhoneUtils;
 
 public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
 
@@ -91,17 +92,21 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
         long startRawContacts = System.currentTimeMillis();
         try (Cursor rawContactCursor = ctx.getContentResolver().query(
                 ContactsContract.RawContacts.CONTENT_URI,
-                new String[]{ContactsContract.RawContacts._ID,
+                new String[]{ContactsContract.RawContacts.DELETED,
+                        ContactsContract.RawContacts._ID,
                         ContactsContract.RawContacts.STARRED}, null, null, null)) {
             if (rawContactCursor != null && rawContactCursor.getCount() > 0) {
+                int deletedIndex = rawContactCursor.getColumnIndex(ContactsContract.RawContacts.DELETED);
                 int rawContactIdIndex = rawContactCursor.getColumnIndex(ContactsContract.RawContacts._ID);
                 int starredIndex = rawContactCursor.getColumnIndex(ContactsContract.RawContacts.STARRED);
                 while (rawContactCursor.moveToNext() && !isCancelled()) {
-                    BasicRawContact basicRawContact = new BasicRawContact(
-                            rawContactCursor.getLong(rawContactIdIndex),
-                            rawContactCursor.getInt(starredIndex) != 0
-                    );
-                    basicRawContacts.put(basicRawContact.getId(), basicRawContact);
+                    if (rawContactCursor.getInt(deletedIndex) == 0) {
+                        BasicRawContact basicRawContact = new BasicRawContact(
+                                rawContactCursor.getLong(rawContactIdIndex),
+                                rawContactCursor.getInt(starredIndex) != 0
+                        );
+                        basicRawContacts.put(basicRawContact.getId(), basicRawContact);
+                    }
                 }
             }
         }
@@ -113,13 +118,13 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
         try (Cursor nickCursor = ctx.getContentResolver().query(
                 ContactsContract.Data.CONTENT_URI,
                 new String[]{
-                        ContactsContract.CommonDataKinds.Nickname.NAME,
-                        ContactsContract.Data.LOOKUP_KEY},
+                        ContactsContract.CommonDataKinds.Nickname.LOOKUP_KEY,
+                        ContactsContract.CommonDataKinds.Nickname.NAME},
                 ContactsContract.Data.MIMETYPE + "= ?",
                 new String[]{ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE},
                 null)) {
             if (nickCursor != null && nickCursor.getCount() > 0) {
-                int lookupKeyIndex = nickCursor.getColumnIndex(ContactsContract.Data.LOOKUP_KEY);
+                int lookupKeyIndex = nickCursor.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.LOOKUP_KEY);
                 int nickNameIndex = nickCursor.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.NAME);
                 while (nickCursor.moveToNext() && !isCancelled()) {
                     String lookupKey = nickCursor.getString(lookupKeyIndex);
@@ -171,6 +176,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
     }
 
     private List<ContactsPojo> createPhoneContacts(@NonNull Context ctx, Map<String, BasicContact> basicContacts, Map<Long, BasicRawContact> basicRawContacts) {
+        PhoneUtils phoneUtils = new PhoneUtils(ctx);
 
         // Prevent duplicates by keeping in memory encountered contacts.
         Map<String, Set<ContactsPojo>> mapContacts = new HashMap<>();
@@ -197,6 +203,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
                     if (phone == null) {
                         phone = "";
                     }
+                    phone = phoneUtils.format(phone);
 
                     if (basicContact != null && basicRawContact != null) {
                         long contactId = basicContact.getContactId();
@@ -217,7 +224,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
             }
         }
 
-        return getFilteredContacts(mapContacts, contact -> contact.normalizedPhone == null ? null : contact.normalizedPhone.toString());
+        return getFilteredContacts(mapContacts, contact -> contact.normalizedPhone == null ? null : contact.normalizedPhone.toString(), (contact, contactToMerge) -> contact.addAdditionalNormalizedPhoneNumber(contactToMerge.normalizedPhone));
     }
 
     private List<ContactsPojo> createGenericContacts(@NonNull Context ctx, @NonNull String mimeType, Map<String, BasicContact> basicContacts, Map<Long, BasicRawContact> basicRawContacts) {
@@ -285,7 +292,7 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
             }
         }
 
-        return getFilteredContacts(mapContacts, contact -> contact.getContactData().getIdentifier());
+        return getFilteredContacts(mapContacts, contact -> contact.getContactData().getIdentifier(), null);
     }
 
     /**
@@ -330,30 +337,35 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
      * @param idSupplier  id supplier for identifying duplicates
      * @return filtered contacts
      */
-    private List<ContactsPojo> getFilteredContacts(Map<String, Set<ContactsPojo>> mapContacts, IdSupplier idSupplier) {
+    private List<ContactsPojo> getFilteredContacts(Map<String, Set<ContactsPojo>> mapContacts, IdSupplier idSupplier, MergeFunction mergeFunction) {
         List<ContactsPojo> contacts = new ArrayList<>();
         // Add phone numbers
         for (Set<ContactsPojo> mappedContacts : mapContacts.values()) {
-            // Find primary phone and add this one.
-            boolean hasPrimary = false;
+            // Shortcut
+            if (mappedContacts.size() == 1) {
+                contacts.add(mappedContacts.iterator().next());
+                continue;
+            }
+
+            // Find primary contact
+            ContactsPojo primary = null;
             for (ContactsPojo contact : mappedContacts) {
                 if (contact.primary) {
-                    contacts.add(contact);
-                    hasPrimary = true;
+                    primary = contact;
                     break;
                 }
             }
 
-            // If no primary available, add all (excluding duplicates).
-            if (!hasPrimary) {
-                Set<String> added = new HashSet<>(mappedContacts.size());
-                for (ContactsPojo contact : mappedContacts) {
-                    String id = idSupplier.getId(contact);
-                    if (id == null) {
+            Set<String> added = new HashSet<>(mappedContacts.size());
+            for (ContactsPojo contact : mappedContacts) {
+                String id = idSupplier.getId(contact);
+                if (id == null || added.add(id)) {
+                    // If no primary contact available, add all (excluding duplicates).
+                    // Else add only primary
+                    if (primary == null || primary == contact) {
                         contacts.add(contact);
-                    } else if (!added.contains(id)) {
-                        added.add(id);
-                        contacts.add(contact);
+                    } else if (mergeFunction != null) {
+                        mergeFunction.merge(primary, contact);
                     }
                 }
             }
@@ -364,6 +376,11 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
     @FunctionalInterface
     private interface IdSupplier {
         String getId(ContactsPojo contact);
+    }
+
+    @FunctionalInterface
+    private interface MergeFunction {
+        void merge(ContactsPojo contact, ContactsPojo contactToMerge);
     }
 
     /**
