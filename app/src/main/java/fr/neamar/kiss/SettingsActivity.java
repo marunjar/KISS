@@ -12,13 +12,14 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             "theme-bar-color", "results-size", "large-result-list-margins", "themed-icons", "icons-hide",
             "pref-fav-tags-drawable", null);
     // Those settings require a restart of the settings
-    private static final List<String> SETTINGS_REQUIRING_RESTART_FOR_SETTINGS_ACTIVITY = Arrays.asList("theme", "force-portrait", "night-mode", null);
+    private static final List<String> SETTINGS_REQUIRING_RESTART_FOR_SETTINGS_ACTIVITY = Arrays.asList("primary-color", "theme", "force-portrait", "night-mode", null);
 
     private boolean requireFullRestart = false;
 
@@ -64,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
         setContentView(R.layout.activity_toolbar_content);
 
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        MaterialToolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();

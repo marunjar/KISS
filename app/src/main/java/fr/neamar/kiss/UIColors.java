@@ -1,6 +1,7 @@
 package fr.neamar.kiss;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -16,6 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StyleableRes;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -231,6 +235,19 @@ public class UIColors {
         return primaryColor;
     }
 
+    public static void setDynamicColors(Application application) {
+        if (DynamicColors.isDynamicColorAvailable()) {
+            // use primary color from theme
+            int color = getColor(application, "primary-color", R.color.kiss_dynamic_color);
+            if (color == COLOR_TRANSPARENT || color == COLOR_LIGHT_TRANSPARENT || color == COLOR_DARK_TRANSPARENT) {
+                color = COLOR_DEFAULT;
+            }
+
+            DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setContentBasedSource(color).build());
+        }
+    }
+
+
     /**
      * Get color for notification dots.
      *
@@ -301,8 +318,6 @@ public class UIColors {
     public static int[] getIconColors(Context context) {
         int[] colors = new int[2];
         context = KissApplication.getApplication(context);
-//        int color = getColorWithoutFallback(context, "primary-color");
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && color == COLOR_SYSTEM) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             colors[0] = ContextCompat.getColor(context, R.color.kiss_icon_background); // background
             colors[1] = ContextCompat.getColor(context, R.color.kiss_icon_foreground); // foreground

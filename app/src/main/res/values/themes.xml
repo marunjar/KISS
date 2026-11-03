@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BaseTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
+    <style name="BaseTheme" parent="@style/Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/kiss_green</item>
         <item name="colorPrimaryDark">@color/kiss_green_dark</item>
         <item name="colorAccent">@color/kiss_green</item>
@@ -355,8 +355,7 @@
     <style name="OverlayAccentSystem" parent="OverlayAccentDefault">
     </style>
 
-    <style name="SettingsActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+    <style name="SettingsActionBar" parent="@style/Widget.Material3.Light.ActionBar.Solid">
         <item name="android:displayOptions">homeAsUp|showTitle</item>
-        <item name="android:background">?attr/colorPrimary</item>
     </style>
 </resources>
