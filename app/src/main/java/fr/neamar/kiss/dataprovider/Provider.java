@@ -81,7 +81,7 @@ public abstract class Provider<T extends Pojo> extends Service implements IProvi
     }
 
     @Override
-    public void reload() {
+    public void reload(ReloadFilter filter) {
         // Handled at subclass level
         if (!pojos.isEmpty()) {
             Log.v(TAG, "Reloading provider: " + this.getClass().getSimpleName());
@@ -93,7 +93,7 @@ public abstract class Provider<T extends Pojo> extends Service implements IProvi
         return this.loaded;
     }
 
-    public void loadOver(List<T> results) {
+    public void loadOver(List<T> results, ReloadFilter filter) {
         long time = System.currentTimeMillis() - start;
 
         Log.d(TAG, "Time to load " + this.getClass().getSimpleName() + ": " + time + "ms");
@@ -101,7 +101,11 @@ public abstract class Provider<T extends Pojo> extends Service implements IProvi
         this.loader.setProvider(null);
         this.loader = null;
         this.loaded = true;
-        this.pojos = results;
+        if (filter == null) {
+            this.pojos = results;
+        } else {
+            this.pojos = filter.merge(this.pojos, results);
+        }
 
         KissApplication.getApplication(this).getDataHandler().notifyMainActivity(MainActivity.LOAD_OVER);
     }

@@ -5,20 +5,24 @@ import android.os.AsyncTask;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Optional;
 
 import fr.neamar.kiss.dataprovider.Provider;
+import fr.neamar.kiss.dataprovider.ReloadFilter;
 import fr.neamar.kiss.pojo.Pojo;
 
 public abstract class LoadPojos<T extends Pojo> extends AsyncTask<Void, Void, List<T>> {
 
     final WeakReference<Context> context;
     final String pojoScheme;
+    private final ReloadFilter filter;
     private WeakReference<Provider<T>> providerReference;
 
-    LoadPojos(Context context, String pojoScheme) {
+    LoadPojos(Context context, String pojoScheme, ReloadFilter filter) {
         super();
         this.context = new WeakReference<>(context);
         this.pojoScheme = pojoScheme;
+        this.filter = filter;
     }
 
     public void setProvider(Provider<T> provider) {
@@ -35,9 +39,16 @@ public abstract class LoadPojos<T extends Pojo> extends AsyncTask<Void, Void, Li
         if (providerReference != null) {
             Provider<T> provider = providerReference.get();
             if (provider != null && !isCancelled()) {
-                provider.loadOver(result);
+                provider.loadOver(result, this.filter);
             }
         }
     }
 
+    protected <T extends ReloadFilter> Optional<T> getFilter(Class<T> clazz) {
+        if (clazz.isInstance(filter)) {
+            return Optional.of((T) filter);
+        } else {
+            return Optional.empty();
+        }
+    }
 }

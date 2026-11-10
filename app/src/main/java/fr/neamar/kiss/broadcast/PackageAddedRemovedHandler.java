@@ -15,6 +15,7 @@ import androidx.preference.PreferenceManager;
 import java.util.Set;
 
 import fr.neamar.kiss.KissApplication;
+import fr.neamar.kiss.loader.PackageNameFilter;
 import fr.neamar.kiss.pojo.AppPojo;
 import fr.neamar.kiss.utils.PackageManagerUtils;
 import fr.neamar.kiss.utils.UserHandle;
@@ -53,7 +54,7 @@ public class PackageAddedRemovedHandler extends BroadcastReceiver {
             if (!replacing) {
                 KissApplication.getApplication(ctx).resetIconsHandler();
                 // Reload application list
-                KissApplication.getApplication(ctx).getDataHandler().reload(APPS);
+                KissApplication.getApplication(ctx).getDataHandler().reload(new PackageNameFilter(packageNames), APPS);
                 // Remove all installed shortcuts
                 for (String packageName : packageNames) {
                     KissApplication.getApplication(ctx).getDataHandler().removeShortcuts(packageName);
@@ -65,7 +66,7 @@ public class PackageAddedRemovedHandler extends BroadcastReceiver {
 
             boolean isAnyPackageVisible = isAnyPackageVisible(ctx, packageNames, user);
             if (isAnyPackageVisible) {
-                KissApplication.getApplication(ctx).getDataHandler().reload(APPS, SHORTCUTS);
+                KissApplication.getApplication(ctx).getDataHandler().reload(new PackageNameFilter(packageNames), APPS, SHORTCUTS);
             }
         }
     }
