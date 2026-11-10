@@ -18,6 +18,7 @@ import java.util.*;
 
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.MimeTypeCache;
+import fr.neamar.kiss.dataprovider.ReloadFilter;
 import fr.neamar.kiss.pojo.ContactData;
 import fr.neamar.kiss.pojo.ContactsPojo;
 import fr.neamar.kiss.utils.Log;
@@ -30,8 +31,8 @@ public class LoadContactsPojos extends LoadPojos<ContactsPojo> {
 
     private static final String TAG = LoadContactsPojos.class.getSimpleName();
 
-    public LoadContactsPojos(Context context) {
-        super(context, "contact://");
+    public LoadContactsPojos(Context context, ReloadFilter filter) {
+        super(context, "contact://", filter);
     }
 
     @Override

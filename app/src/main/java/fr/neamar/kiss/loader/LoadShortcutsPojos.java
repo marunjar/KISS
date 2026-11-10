@@ -10,11 +10,13 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import fr.neamar.kiss.DataHandler;
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.TagsHandler;
+import fr.neamar.kiss.dataprovider.ReloadFilter;
 import fr.neamar.kiss.db.DBHelper;
 import fr.neamar.kiss.db.ShortcutRecord;
 import fr.neamar.kiss.pojo.ShortcutPojo;
@@ -27,8 +29,8 @@ public class LoadShortcutsPojos extends LoadPojos<ShortcutPojo> {
 
     private static final String TAG = LoadShortcutsPojos.class.getSimpleName();
 
-    public LoadShortcutsPojos(Context context) {
-        super(context, ShortcutPojo.SCHEME);
+    public LoadShortcutsPojos(Context context, ReloadFilter filter) {
+        super(context, ShortcutPojo.SCHEME, filter);
     }
 
     @Override
@@ -58,7 +60,11 @@ public class LoadShortcutsPojos extends LoadPojos<ShortcutPojo> {
             UserManager userManager = ContextCompat.getSystemService(context, UserManager.class);
             List<ShortcutInfo> shortcutInfos;
             try {
-                shortcutInfos = ShortcutUtil.getAllShortcuts(context);
+                Optional<PackageNameFilter> filter = getFilter(PackageNameFilter.class);
+                shortcutInfos = filter
+                        .map(packageNameFilter -> packageNameFilter
+                                .execute(packageName -> ShortcutUtil.getShortcuts(context, packageName)))
+                        .orElse(ShortcutUtil.getAllShortcuts(context));
             } catch (SecurityException e) {
                 // shortcut host permission lost (e.g. KISS no longer default launcher)
                 Log.w(TAG, "Unable to get all shortcuts", e);

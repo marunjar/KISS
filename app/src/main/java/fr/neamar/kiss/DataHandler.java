@@ -32,6 +32,7 @@ import fr.neamar.kiss.db.DBHelper;
 import fr.neamar.kiss.db.HistoryMode;
 import fr.neamar.kiss.db.ShortcutRecord;
 import fr.neamar.kiss.db.ValuedHistoryRecord;
+import fr.neamar.kiss.loader.PackageNameFilter;
 import fr.neamar.kiss.pojo.AppPojo;
 import fr.neamar.kiss.pojo.NameComparator;
 import fr.neamar.kiss.pojo.Pojo;
@@ -442,7 +443,7 @@ public class DataHandler implements SharedPreferences.OnSharedPreferenceChangeLi
     private void removeShortcut(ShortcutPojo shortcut) {
         boolean shortcutUpdated = removeShortcut(shortcut.id, shortcut.packageName, shortcut.intentUri);
         if (shortcutUpdated) {
-            reload(SHORTCUTS);
+            reload(new PackageNameFilter(shortcut.getPackageName()), SHORTCUTS);
         }
     }
 
@@ -580,7 +581,7 @@ public class DataHandler implements SharedPreferences.OnSharedPreferenceChangeLi
 
         DBHelper.removeShortcuts(this.context, packageName);
 
-        reload(SHORTCUTS);
+        reload(new PackageNameFilter(packageName), SHORTCUTS);
     }
 
     @NonNull
@@ -667,7 +668,7 @@ public class DataHandler implements SharedPreferences.OnSharedPreferenceChangeLi
         excluded.add(app.packageName);
         PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(PREF_KEY_EXCLUDED_SHORTCUT_APPS, excluded).apply();
         app.setExcludedShortcuts(true);
-        reload(SHORTCUTS);
+        reload(new PackageNameFilter(app.packageName), SHORTCUTS);
     }
 
     public void removeFromExcluded(AppPojo app) {
@@ -677,7 +678,7 @@ public class DataHandler implements SharedPreferences.OnSharedPreferenceChangeLi
         app.setExcluded(false);
 
         // Add shortcuts for this app
-        reload(SHORTCUTS);
+        reload(new PackageNameFilter(app.getPackageName()), SHORTCUTS);
     }
 
     public void removeFromExcluded(String packageName) {
@@ -718,7 +719,7 @@ public class DataHandler implements SharedPreferences.OnSharedPreferenceChangeLi
         excluded.remove(app.packageName);
         PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(PREF_KEY_EXCLUDED_SHORTCUT_APPS, excluded).apply();
         app.setExcludedShortcuts(false);
-        reload(SHORTCUTS);
+        reload(new PackageNameFilter(app.getPackageName()), SHORTCUTS);
     }
 
     /**
@@ -761,10 +762,14 @@ public class DataHandler implements SharedPreferences.OnSharedPreferenceChangeLi
     }
 
     public void reload(@NonNull ProviderName... providerNames) {
+        reload(null, providerNames);
+    }
+
+    public void reload(ReloadFilter filter, @NonNull ProviderName... providerNames) {
         Arrays.stream(providerNames)
                 .map(this::getProvider)
                 .filter(Objects::nonNull)
-                .forEach(IProvider::reload);
+                .forEach(provider -> provider.reload(filter));
     }
 
     @Nullable

@@ -11,14 +11,11 @@ import android.os.UserManager;
 import androidx.core.content.ContextCompat;
 import androidx.core.os.ConfigurationCompat;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import fr.neamar.kiss.KissApplication;
 import fr.neamar.kiss.TagsHandler;
+import fr.neamar.kiss.dataprovider.ReloadFilter;
 import fr.neamar.kiss.db.AppRecord;
 import fr.neamar.kiss.db.DBHelper;
 import fr.neamar.kiss.pojo.AppPojo;
@@ -31,8 +28,8 @@ public class LoadAppPojos extends LoadPojos<AppPojo> {
     private static final String TAG = LoadAppPojos.class.getSimpleName();
     private final TagsHandler tagsHandler;
 
-    public LoadAppPojos(Context context) {
-        super(context, "app://");
+    public LoadAppPojos(Context context, ReloadFilter filter) {
+        super(context, "app://", filter);
         tagsHandler = KissApplication.getApplication(context).getDataHandler().getTagsHandler();
     }
 
@@ -40,12 +37,33 @@ public class LoadAppPojos extends LoadPojos<AppPojo> {
     protected List<AppPojo> doInBackground(Void... params) {
         long start = System.currentTimeMillis();
 
-        List<AppPojo> apps = new ArrayList<>();
-
         Context ctx = context.get();
         if (ctx == null) {
-            return apps;
+            return Collections.emptyList();
         }
+
+        Optional<PackageNameFilter> filter = getFilter(PackageNameFilter.class);
+        List<AppPojo> apps = filter
+                .map(packageNameFilter -> packageNameFilter
+                        .execute(packageName -> getApps(ctx, packageName)))
+                .orElse(getApps(ctx, null));
+        Map<String, AppRecord> customApps = DBHelper.getCustomAppData(ctx);
+        for (AppPojo app : apps) {
+            AppRecord customApp = customApps.get(app.getComponentName());
+            if (customApp == null)
+                continue;
+            if (customApp.hasCustomName())
+                app.setName(customApp.name);
+        }
+
+        long end = System.currentTimeMillis();
+        Log.i(TAG, (end - start) + " milliseconds to list apps");
+
+        return apps;
+    }
+
+    private List<AppPojo> getApps(Context ctx, String packageName) {
+        List<AppPojo> result = new ArrayList<>();
 
         Set<String> excludedAppList = KissApplication.getApplication(ctx).getDataHandler().getExcluded();
         Set<String> excludedFromHistoryAppList = KissApplication.getApplication(ctx).getDataHandler().getExcludedFromHistory();
@@ -67,7 +85,7 @@ public class LoadAppPojos extends LoadPojos<AppPojo> {
         for (android.os.UserHandle profile : manager.getUserProfiles()) {
             boolean isPrivateProfile = PackageManagerUtils.isPrivateProfile(launcherApps, profile);
             UserHandle user = new UserHandle(manager.getSerialNumberForUser(profile), profile);
-            for (LauncherActivityInfo activityInfo : PackageManagerUtils.getActivityList(launcherApps, null, profile)) {
+            for (LauncherActivityInfo activityInfo : PackageManagerUtils.getActivityList(launcherApps, packageName, profile)) {
                 if (isCancelled()) {
                     break;
                 }
@@ -87,7 +105,7 @@ public class LoadAppPojos extends LoadPojos<AppPojo> {
                         newLabelCache.put(labelKey, label);
                     }
                     final AppPojo app = createPojo(user, appInfo.packageName, activityInfo.getName(), label, disabled, excludedAppList, excludedFromHistoryAppList, excludedShortcutsAppList);
-                    apps.add(app);
+                    result.add(app);
                 }
             }
         }
@@ -100,19 +118,7 @@ public class LoadAppPojos extends LoadPojos<AppPojo> {
             editor.apply();
         }
 
-        Map<String, AppRecord> customApps = DBHelper.getCustomAppData(ctx);
-        for (AppPojo app : apps) {
-            AppRecord customApp = customApps.get(app.getComponentName());
-            if (customApp == null)
-                continue;
-            if (customApp.hasCustomName())
-                app.setName(customApp.name);
-        }
-
-        long end = System.currentTimeMillis();
-        Log.i(TAG, (end - start) + " milliseconds to list apps");
-
-        return apps;
+        return result;
     }
 
     private boolean isQuietModeEnabled(UserManager manager, android.os.UserHandle profile) {
