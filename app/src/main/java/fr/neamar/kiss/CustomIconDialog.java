@@ -9,12 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,7 +95,7 @@ public class CustomIconDialog extends DialogFragment {
 
         iconAdapter.setOnItemClickListener((iconData) -> {
             mSelectedDrawable = iconData.componentName;
-            mPreview.setImageDrawable(iconData.getIcon());
+            mPreview.setImageDrawable(iconData.getIcon(requireContext()));
             mPreviewText.setText(mSelectedDrawable.flattenToString());
         });
 
@@ -198,8 +193,8 @@ public class CustomIconDialog extends DialogFragment {
             this.drawableInfo = drawableInfo;
         }
 
-        Drawable getIcon() {
-            return iconPack.getDrawable(drawableInfo);
+        Drawable getIcon(Context context) {
+            return iconPack.getDrawable(context, drawableInfo);
         }
     }
 
@@ -320,7 +315,7 @@ public class CustomIconDialog extends DialogFragment {
                     if (task.isCancelled()) {
                         return null;
                     }
-                    return content.getIcon();
+                    return content.getIcon(itemView.getContext());
                 }, (task, drawable) -> {
                     if (!task.isCancelled() && task == loader) {
                         icon.setImageDrawable(drawable);
