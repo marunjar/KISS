@@ -87,7 +87,7 @@
     <string name="ui_excluded_apps_dialog_title">选择不想包含的应用</string>
     <string name="search_providers_title">选择网络搜索提供者</string>
     <string name="history_mode_name">历史记录排列顺序</string>
-    <string name="menu_shortcut_remove">移除快捷方式</string>
+    <string name="menu_shortcut_remove">取消快捷方式固定</string>
     <string name="enable_favorites_bar">在搜索栏上方显示收藏</string>
     <string name="exclude_favorites_history">历史记录中排除收藏</string>
     <string name="favorites_hide">默认隐藏收藏栏</string>
