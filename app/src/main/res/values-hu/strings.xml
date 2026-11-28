@@ -10,12 +10,6 @@
     <string name="title_history">Előzmények</string>
     <string name="title_providers">Keresés</string>
     <string name="menu_settings">Eszközbeállítások…</string>
-    <string name="ui_empty_1">Keressen bármire</string>
-    <string name="ui_empty_1_sub">Alkalmazások, névjegyek, beállítások…</string>
-    <string name="ui_empty_2">Mindig láthatja az előzményeit</string>
-    <string name="ui_empty_2_sub">A gyors eléréshez</string>
-    <string name="ui_empty_3">Gyors hozzáférés a gyakran használt alkalmazásokhoz</string>
-    <string name="ui_empty_3_sub">A KISS kezdőképernyő tanul a szokásaiból</string>
     <string name="contacts_name">Névjegyek</string>
     <string name="search_name">Webes keresésszolgáltatók</string>
     <string name="settings_name">Eszközbeállítások</string>

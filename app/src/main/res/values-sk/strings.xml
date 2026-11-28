@@ -9,12 +9,6 @@
     <string name="ui_item_contact_hint_call">Hovor</string>
     <string name="title_history">Nastavenia histórie</string>
     <string name="menu_settings">Nastavenia zariadenia…</string>
-    <string name="ui_empty_1">Začni hľadaním čohokoľvek</string>
-    <string name="ui_empty_1_sub">Aplikácie, kontakty, nastavenia, …</string>
-    <string name="ui_empty_2">Vždy zobrazovať históriu</string>
-    <string name="ui_empty_2_sub">Pre rýchly prístup</string>
-    <string name="ui_empty_3">Rýchly prístup pre najpoužívanejšie aplikácie</string>
-    <string name="ui_empty_3_sub">KISS launcher sa učí z Vaších zvykov</string>
     <string name="contacts_name">Kontakty</string>
     <string name="search_name">Poskytovatelia webového vyhľadávania</string>
     <string name="settings_name">Systémové nastavenia</string>

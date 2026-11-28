@@ -11,12 +11,6 @@
     <string name="title_history">Impostazioni cronologia</string>
     <string name="title_providers">Impostazioni ricerca</string>
     <string name="menu_settings">Impostazioni dispositivo…</string>
-    <string name="ui_empty_1">Inizia cercando qualsiasi cosa</string>
-    <string name="ui_empty_1_sub">Applicazioni, contatti, impostazioni, …</string>
-    <string name="ui_empty_2">Visualizza sempre la tua cronologia</string>
-    <string name="ui_empty_2_sub">Per un accesso veloce</string>
-    <string name="ui_empty_3">Accesso rapido alle app più usate</string>
-    <string name="ui_empty_3_sub">KISS launcher impara dalle tue abitudini</string>
     <string name="contacts_name">Contatti</string>
     <string name="search_name">Motori di ricerca web</string>
     <string name="settings_name">Impostazioni dispositivo</string>

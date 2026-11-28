@@ -10,12 +10,6 @@
     <string name="title_history">Povijest</string>
     <string name="title_providers">Traži</string>
     <string name="menu_settings">Postavke uređaja …</string>
-    <string name="ui_empty_1">Traži bilo što</string>
-    <string name="ui_empty_1_sub">Aplikacije, kontakti, postavke, …</string>
-    <string name="ui_empty_2">Uvijek vidi tvoju povijest</string>
-    <string name="ui_empty_2_sub">Za brz pristup</string>
-    <string name="ui_empty_3">Brz pristup najčešće korištenim aplikacijama</string>
-    <string name="ui_empty_3_sub">KISS pokretač uči iz tvojih navika</string>
     <string name="contacts_name">Kontakti</string>
     <string name="search_name">Pretraži internet</string>
     <string name="settings_name">Postavke uređaja</string>

@@ -84,8 +84,6 @@
     <string name="reset_name">മുൻസമ്പർക്കങ്ങളുടെ നിര മായ്ക്കുക</string>
     <string name="main_kiss_back">മുൻസമ്പർക്കങ്ങൾ കാട്ടുക</string>
     <string name="search_name">വെബ് തിരച്ചിൽ ദാതാക്കൾ</string>
-    <string name="ui_empty_2_sub">വേഗമേറിയ ലഭ്യതക്കു</string>
-    <string name="ui_empty_2">മുൻസമ്പർക്കം എപ്പോഴും കാട്ടുക</string>
     <string name="enable_app">പുതിയ ആപ്പുകൾ</string>
     <string name="enable_phone">ഇങ്ങോട്ട് വരുന്ന കോളുകൾ</string>
     <string name="toast_favorites_added">%s ഇഷ്ടപ്പട്ടികയിൽ ചേർത്തു</string>
@@ -184,10 +182,6 @@
     <string name="search_results_options">തിരച്ചിൽ ഫലം</string>
     <string name="contacts_call_on_click">വിളിക്കാൻ കോണ്ടാക്ടിൽ വെറുതെ തൊടു</string>
     <string name="contacts_name">കോണ്ടാക്ടുകൾ</string>
-    <string name="ui_empty_3_sub">കിസ്സ് ലോഞ്ചർ ഉപയോഗസ്വഭാവത്തിൽ നിന്ന് പഠിക്കുന്നു</string>
-    <string name="ui_empty_3">സ്ഥിരം ഉപയോഗിക്കുന്ന അപ്പുകളില്ലേക്ക് വേഗം എത്താം</string>
-    <string name="ui_empty_1_sub">ആപ്പ്‌സിൽ, കോണ്ടാക്ടിൽ, ക്രമീകരണങ്ങളിൽ…</string>
-    <string name="ui_empty_1">എന്തെങ്കിലും തിരഞ്ഞു നോക്കൂ</string>
     <string name="menu_settings">ഉപകരണ ക്രമീകരണങ്ങൾ…</string>
     <string name="title_providers">തിരച്ചിൽ ക്രമീകരണങ്ങൾ</string>
     <string name="title_history">മുൻസമ്പർക്കങ്ങളുടെ ചരിത്രം</string>

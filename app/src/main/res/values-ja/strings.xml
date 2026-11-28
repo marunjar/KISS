@@ -10,12 +10,6 @@
     <string name="title_history">履歴の設定</string>
     <string name="title_providers">検索設定</string>
     <string name="menu_settings">デバイスの設定…</string>
-    <string name="ui_empty_1">何でも検索しましょう</string>
-    <string name="ui_empty_1_sub">アプリ、連絡先、設定、…</string>
-    <string name="ui_empty_2">常に履歴を表示する</string>
-    <string name="ui_empty_2_sub">高速アクセス用</string>
-    <string name="ui_empty_3">最も使用するアプリに素早くアクセス</string>
-    <string name="ui_empty_3_sub">KISS ランチャーはあなたの習慣から学習します</string>
     <string name="contacts_name">連絡先</string>
     <string name="search_name">Web 検索プロバイダー</string>
     <string name="settings_name">デバイス設定</string>

@@ -11,12 +11,6 @@
     <string name="title_history">Historikinställningar</string>
     <string name="title_providers">Åtkomstinställningar</string>
     <string name="menu_settings">Enhetsinställningar</string>
-    <string name="ui_empty_1">Börja söka efter någonting</string>
-    <string name="ui_empty_1_sub">Appar, kontakter, inställningar, …</string>
-    <string name="ui_empty_2">Visa alltid din historik</string>
-    <string name="ui_empty_2_sub">För snabb åtkomst</string>
-    <string name="ui_empty_3">Snabb åtkomst till de mest använda apparna</string>
-    <string name="ui_empty_3_sub">KISS launcher lär sig av dina vanor</string>
     <string name="contacts_name">Kontakter</string>
     <string name="search_name">Webbsök</string>
     <string name="settings_name">Enhetsinställningar</string>

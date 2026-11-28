@@ -11,12 +11,6 @@
     <string name="title_history">Historik</string>
     <string name="title_providers">Sök</string>
     <string name="menu_settings">Enhetsinställningar…</string>
-    <string name="ui_empty_1">Börja leta efter någonting</string>
-    <string name="ui_empty_1_sub">Appar, kontakter, inställningar, …</string>
-    <string name="ui_empty_2">Se alltid din historik</string>
-    <string name="ui_empty_2_sub">För snabb åtkomst</string>
-    <string name="ui_empty_3">Snabb tillgång till mest använda appar</string>
-    <string name="ui_empty_3_sub">KISS-uppstartare lär från dina vanor</string>
     <string name="contacts_name">Kontakter</string>
     <string name="search_name">Sökmotorer</string>
     <string name="settings_name">Enhetsinställningar</string>

@@ -23,12 +23,6 @@
     <string name="rate_the_app">Оцініть застосунок</string>
     <string name="title_history">Налаштування дієпису</string>
     <string name="menu_settings">Налаштування пристрою…</string>
-    <string name="ui_empty_1">Почніть шукати що-небудь</string>
-    <string name="ui_empty_1_sub">Застосунки, контакти, налаштування…</string>
-    <string name="ui_empty_2">Завжди бачити свій дієпис</string>
-    <string name="ui_empty_2_sub">Для швидкого доступу</string>
-    <string name="ui_empty_3">Швидкий доступ до найбільш використовуваних застосунків</string>
-    <string name="ui_empty_3_sub">Запускач KISS дізнається з ваших звичок</string>
     <string name="settings_name">Налаштування пристрою</string>
     <string name="shortcuts_name">Ярлики</string>
     <string name="main_clear">Очистити панель пошуку</string>

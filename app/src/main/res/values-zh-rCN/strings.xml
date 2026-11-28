@@ -6,11 +6,6 @@
     <string name="title_history">历史记录</string>
     <string name="title_providers">搜索</string>
     <string name="menu_settings">设备设置…</string>
-    <string name="ui_empty_1">开始搜索任何内容</string>
-    <string name="ui_empty_1_sub">应用，联系人，设置，…</string>
-    <string name="ui_empty_2">始终查看您的历史记录</string>
-    <string name="ui_empty_2_sub">更快访问</string>
-    <string name="ui_empty_3_sub">KISS 启动器会学习您的习惯</string>
     <string name="settings_name">设备设置</string>
     <string name="search_name">网络搜索</string>
     <string name="shortcuts_name">程序快捷方式</string>
@@ -22,7 +17,6 @@
     <string name="ui_item_search">%1$s 搜索“%2$s”</string>
     <string name="ui_item_phone">呼叫“%s”</string>
     <string name="ui_item_contact_hint_message">信息</string>
-    <string name="ui_empty_3">快速访问最常用应用</string>
     <string name="contacts_name">联系人</string>
     <string name="reset_name">重置历史记录</string>
     <string name="reset_excluded_apps_warn">您确定要重置您的排除应用列表？</string>

@@ -11,12 +11,6 @@
     <string name="title_history">Istorijos nustatymai</string>
     <string name="title_providers">Paieškos nustatymai</string>
     <string name="menu_settings">Įrenginio nustatymai…</string>
-    <string name="ui_empty_1">Pradėti ieškoti bet ko</string>
-    <string name="ui_empty_1_sub">Programėlės, kontaktai, nustatymai, …</string>
-    <string name="ui_empty_2">Visada rodyti istoriją</string>
-    <string name="ui_empty_2_sub">Greitam pasiekimui</string>
-    <string name="ui_empty_3">Greitai pasiekti dažniausiai naudojamas programėles</string>
-    <string name="ui_empty_3_sub">KISS paleidimo priemonė prisiderina prie Jūsų įpročių</string>
     <string name="contacts_name">Kontaktai</string>
     <string name="search_name">Interneto paieškos teikėjai</string>
     <string name="settings_name">Įrenginio nustatymai</string>

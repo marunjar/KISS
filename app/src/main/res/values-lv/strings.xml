@@ -4,9 +4,6 @@
     <string name="ui_search_hint">Meklēt lietotnes, kontaktpersonas, …</string>
     <string name="ui_item_search">Meklēt “%2$s” %1$s</string>
     <string name="ui_item_phone">Zvanīt “%s”</string>
-    <string name="ui_empty_2_sub">Ātrai piekļuvei</string>
-    <string name="ui_empty_3">Ātra piekļuve visbiežāk izmantotajām lietotnēm</string>
-    <string name="ui_empty_3_sub">KISS palaidējs mācās no Taviem ieradumiem</string>
     <string name="contacts_name">Kontaktpersonas</string>
     <string name="contacts_call_on_click">Pieskarties, lai zvanītu kontaktpersonām</string>
     <string name="search_results_options">Iznākuma attēlošana</string>
@@ -46,9 +43,6 @@
     <string name="title_history">Vēsture</string>
     <string name="title_providers">Meklēšana</string>
     <string name="menu_settings">Ierīces iestatījumi…</string>
-    <string name="ui_empty_1">Sāc meklēt jebko</string>
-    <string name="ui_empty_1_sub">Lietotnes, kontaktpersonas, iestatījumi, …</string>
-    <string name="ui_empty_2">Vienmēr redzi savu vēsturi</string>
     <string name="search_name">Tīmekļa meklēšana</string>
     <string name="main_menu">Izvēlne</string>
     <string name="main_clear">Notīrīt meklēšanas joslu</string>

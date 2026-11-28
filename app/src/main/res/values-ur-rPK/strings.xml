@@ -11,12 +11,6 @@
     <string name="title_history">سرگزشت کی ترتیبات</string>
     <string name="title_providers">تلاش کرنے کی ترتیبات</string>
     <string name="menu_settings">آلاتی ترتیبات</string>
-    <string name="ui_empty_1">کسی بھی چیز کی تلاش شروع کریں</string>
-    <string name="ui_empty_1_sub">ایپس، روابط، ترتیبات، …</string>
-    <string name="ui_empty_2">ہمیشہ اپنی سرگزشت دیکھیں</string>
-    <string name="ui_empty_2_sub">تیز رسائی کے لیے</string>
-    <string name="ui_empty_3">زیادہ استعمال ہونے والے ایپس کی فوری رسائی</string>
-    <string name="ui_empty_3_sub">کِس لاؤنچر آپ کی عادات سے سیکھتا ہے</string>
     <string name="contacts_name">روابط</string>
     <string name="contacts_call_on_click">روابط کو کال ملانے کے لیے دبائیں</string>
     <string name="search_results_options">تلاش کرنے کے نتائج</string>
