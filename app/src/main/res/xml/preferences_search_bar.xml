@@ -13,6 +13,7 @@
     <SwitchPreference
         app:defaultValue="false"
         app:key="enable-suggestions-keyboard"
+        app:summary="@string/keyboard_suggestions_desc"
         app:title="@string/keyboard_suggestions" />
     <SwitchPreference
         app:defaultValue="false"
