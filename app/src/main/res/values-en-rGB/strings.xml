@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="keyboard_suggestions">Enable autocomplete/suggestions</string>
+    <string name="keyboard_suggestions_desc">Some keyboards ignore this setting.</string>
     <string name="history_onclick_name">Show history when touching the home screen</string>
     <string name="history_onkeyboard_name">Show history with keyboard</string>
     <string name="wp_animate_center">Centre wallpaper</string>
