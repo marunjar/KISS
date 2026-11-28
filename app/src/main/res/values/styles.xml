@@ -77,7 +77,7 @@
     </style>
 
     <style name="EmptyStateSubtitle" parent="EmptyStateTitle">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textColor">?attr/resultSecondaryColor</item>
         <item name="android:textSize">13sp</item>
     </style>
 
