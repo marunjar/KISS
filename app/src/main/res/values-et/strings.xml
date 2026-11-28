@@ -13,8 +13,6 @@
     <string name="title_history">Ajalugu</string>
     <string name="title_providers">Otsing</string>
     <string name="menu_settings">Seadme sätted…</string>
-    <string name="ui_empty_1_sub">Rakendused, kontaktid, seaded …</string>
-    <string name="ui_empty_2">Näe alati oma ajalugu</string>
     <string name="contacts_name">Kontaktid</string>
     <string name="search_name">Veebiotsingu teenusepakkujad</string>
     <string name="settings_name">Seadme sätted</string>
@@ -26,7 +24,6 @@
     <string name="reset_name">Nulli ajalugu</string>
     <string name="rate_the_app">Hinda rakendust</string>
     <string name="ui_item_search">Otsi „%2$s“ märksõna %1$s\'st</string>
-    <string name="ui_empty_2_sub">Saadaval koheselt</string>
     <string name="contact_pack_mask">Kohenda kontaktide ikooni kuju</string>
     <string name="history_frecency">Hiljuti enimkasutatud</string>
     <string name="gesture_keyboard">Näita klahvistikku</string>
@@ -62,9 +59,6 @@
     <string name="ui_excluded_apps_dialog_title">Vali välistatavad rakendused</string>
     <string name="reset_excluded_apps_warn">Kas sa kindlasti soovid välistatud rakenduste loendi kustutada\?</string>
     <string name="search_provider_toggle">Otsingumootorite lingid</string>
-    <string name="ui_empty_3_sub">KISS õpib sinu harjumustest</string>
-    <string name="ui_empty_3">Leia enamkasutatavad rakendused kiiresti</string>
-    <string name="ui_empty_1">Otsi mida iganes vaja</string>
     <string name="ui_item_open">Ava „%1$s“</string>
     <string name="wp_animate_center">Joonda taustapilt keskele</string>
     <string name="icons_hide_main">Peida ikoonid</string>

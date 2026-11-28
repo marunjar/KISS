@@ -9,10 +9,6 @@
     <string name="title_history">Historie</string>
     <string name="title_providers">Vyhledávání</string>
     <string name="menu_settings">Nastavení zařízení…</string>
-    <string name="ui_empty_1_sub">Aplikace, kontakty, nastavení, …</string>
-    <string name="ui_empty_2">Vždy zobrazovat historii</string>
-    <string name="ui_empty_2_sub">Pro rychlý přístup</string>
-    <string name="ui_empty_3">Rychlý přístup k nejvíce používaným aplikacím</string>
     <string name="app_name">Spouštěč KISS</string>
     <string name="contacts_name">Kontakty</string>
     <string name="search_name">Poskytovatelé webového vyhledávání</string>
@@ -31,8 +27,6 @@
     <string name="color_swatch_description">Barva %1$d</string>
     <string name="color_swatch_description_selected">Barva %1$d byla vybrána</string>
     <string name="ui_item_visit">Navštívit “%1$s”</string>
-    <string name="ui_empty_1">Začít hledat</string>
-    <string name="ui_empty_3_sub">Spouštěč KISS se učí z vašich zvyků</string>
     <string name="shortcuts_name">Zkratky</string>
     <string name="main_kiss">Zobrazit seznam aplikací</string>
     <string name="reset_name">Vynulovat historii</string>

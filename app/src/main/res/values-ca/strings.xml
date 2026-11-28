@@ -10,12 +10,6 @@
     <string name="title_history">Paràmetres de l’historial</string>
     <string name="title_providers">Configuració de cerca</string>
     <string name="menu_settings">Paràmetres del dispositiu…</string>
-    <string name="ui_empty_1">Comenceu cercant qualsevol cosa</string>
-    <string name="ui_empty_1_sub">Aplicacions, contactes, paràmetres…</string>
-    <string name="ui_empty_2">Sempre podeu veure l’historial</string>
-    <string name="ui_empty_2_sub">Per a un accés ràpid</string>
-    <string name="ui_empty_3">Accés ràpid a les aplicacions més emprades</string>
-    <string name="ui_empty_3_sub">El llançador KISS aprèn dels vostres hàbits</string>
     <string name="contacts_name">Contactes</string>
     <string name="search_name">Proveïdors de cerca al web</string>
     <string name="settings_name">Paràmetres del dispositiu</string>

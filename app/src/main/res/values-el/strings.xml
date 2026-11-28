@@ -10,11 +10,7 @@
     <string name="title_history">Ρυθμίσεις ιστορικού</string>
     <string name="title_providers">Ρυθμίσεις αναζήτησης</string>
     <string name="menu_settings">Ρυθμίσεις συσκευής…</string>
-    <string name="ui_empty_1_sub">Εφαρμογές, επαφές, ρυθμίσεις…</string>
-    <string name="ui_empty_2_sub">Για γρήγορη πρόσβαση</string>
     <string name="contacts_name">Επαφές</string>
-    <string name="ui_empty_3">Γρήγορη πρόσβαση στις αγαπημένες σας εφαρμογές</string>
-    <string name="ui_empty_3_sub">Το KISS μαθαίνει από τις συνήθειές σας</string>
     <string name="search_name">Μηχανές αναζήτησης</string>
     <string name="settings_name">Ρυθμίσεις συσκευής</string>
     <string name="main_menu">Μενού</string>
@@ -31,7 +27,6 @@
     <string name="toast_hibernate_completed">Το %s αδρανοποιήθηκε, επανέναρξη για ενεργοποίηση.</string>
     <string name="theme_name">Θέματα</string>
     <string name="reset_name">Διαγραφή ιστορικού</string>
-    <string name="ui_empty_1">Ξεκινήστε αναζήτηση για οτιδήποτε</string>
     <string name="root_mode_name">Λειτουργία υπερχρήστη (root)</string>
     <string name="alias_contacts">επαφές,άνθρωποι,σχέσεις</string>
     <string name="alias_mail">μαιλ,εμαιλ,mail</string>
@@ -47,7 +42,6 @@
     <string name="menu_remove">Αφαίρεση από το ιστορικό</string>
     <string name="toast_hibernate_error">Το %s δεν αδρανοποιήθηκε.</string>
     <string name="menu_contact_copy_phone">Αντιγραφή αριθμού</string>
-    <string name="ui_empty_2">Δείτε πάντα το ιστορικό σας</string>
     <string name="shortcuts_name">Συντομεύσεις</string>
     <string name="reset_excluded_apps_warn">Θέλετε πραγματικά να διαγράψετε τη λίστα;</string>
     <string name="reset_warn">Θέλετε πραγματικά να διαγραψετε το ιστορικό σας;</string>

@@ -8,12 +8,6 @@
     <string name="title_history">Tarix</string>
     <string name="title_providers">Neler Göstərilə</string>
     <string name="menu_settings">Cihaz Parametrləri</string>
-    <string name="ui_empty_1">Bir şeyləri axtarmağa başlayın</string>
-    <string name="ui_empty_1_sub">Proqramlar, kontaktlar, parametrlər, …</string>
-    <string name="ui_empty_2">Hər zaman keçmişi görün.</string>
-    <string name="ui_empty_2_sub">Sürətli erişim üçün</string>
-    <string name="ui_empty_3">Ən çox istifadə proqramlara sürətli giriş</string>
-    <string name="ui_empty_3_sub">KISS başladıcı vərdişlərinizə görə çalışır</string>
     <string name="contacts_name">Kontaktlar</string>
     <string name="search_name">Google axtarışıVeb axtarış təminatçıları</string>
     <string name="settings_name">Parametrlər</string>

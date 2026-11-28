@@ -27,7 +27,6 @@
     <string name="main_menu">Menu</string>
     <string name="shortcuts_name">Lối tắt</string>
     <string name="search_provider_toggle">Liên kết tới nhà cung cấp tìm kiếm trên web</string>
-    <string name="ui_empty_3_sub">KISS launcher học theo thói quen của bạn</string>
     <string name="search_name">Nhà cung cấp tìm kiếm trên web</string>
     <string name="contacts_call_on_click">Nhấn để gọi danh bạ</string>
     <string name="app_name">KISS launcher</string>
@@ -35,11 +34,6 @@
     <string name="settings_name">Cài đặt thiết bị</string>
     <string name="search_results_options">Kết quả tìm kiếm</string>
     <string name="contacts_name">Danh bạ</string>
-    <string name="ui_empty_3">Truy cập nhanh những ứng dụng thường dùng</string>
-    <string name="ui_empty_2_sub">Để truy cập nhanh</string>
-    <string name="ui_empty_2">Luôn hiển thị lịch sử</string>
-    <string name="ui_empty_1_sub">Ứng dụng, danh bạ, cài đặt, …</string>
-    <string name="ui_empty_1">Khởi động tìm kiếm</string>
     <string name="menu_settings">Cài đặt thiết bị…</string>
     <string name="title_providers">Cài đặt tìm kiếm</string>
     <string name="title_history">Cài đặt lịch sử</string>

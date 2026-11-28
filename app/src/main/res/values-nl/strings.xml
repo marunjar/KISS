@@ -10,12 +10,6 @@
     <string name="title_history">Geschiedenis</string>
     <string name="title_providers">Zoeken</string>
     <string name="menu_settings">Apparaatinstellingen…</string>
-    <string name="ui_empty_1">Begin met zoeken</string>
-    <string name="ui_empty_1_sub">Apps, contacten, instellingen, …</string>
-    <string name="ui_empty_2">Geschiedenis altijd tonen</string>
-    <string name="ui_empty_2_sub">Voor snelle toegang</string>
-    <string name="ui_empty_3">Snelle toegang tot de meest gebruikte apps</string>
-    <string name="ui_empty_3_sub">KISS-launcher leert van je gebruik</string>
     <string name="contacts_name">Contacten</string>
     <string name="search_name">Webzoekopdracht</string>
     <string name="settings_name">Apparaatinstellingen</string>

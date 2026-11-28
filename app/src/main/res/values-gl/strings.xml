@@ -10,12 +10,6 @@
     <string name="title_history">Historial</string>
     <string name="title_providers">Busca</string>
     <string name="menu_settings">Axustes do dispositivo…</string>
-    <string name="ui_empty_1">Busca aquí o que queiras</string>
-    <string name="ui_empty_1_sub">Aplicativos, contactos, axustes, …</string>
-    <string name="ui_empty_2">Mostrar sempre o historial</string>
-    <string name="ui_empty_2_sub">Para acceder rápidamente</string>
-    <string name="ui_empty_3">Acceso directo ós aplicativos máis utilizados</string>
-    <string name="ui_empty_3_sub">KISS launcher aprende dos teus hábitos</string>
     <string name="contacts_name">Contactos</string>
     <string name="search_name">Provedores de busca web</string>
     <string name="settings_name">Axustes do dispositivo</string>

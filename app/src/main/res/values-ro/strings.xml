@@ -10,12 +10,6 @@
     <string name="title_history">Istoric</string>
     <string name="title_providers">Căutare</string>
     <string name="menu_settings">Setări dispozitiv…</string>
-    <string name="ui_empty_1">Pornește căutarea</string>
-    <string name="ui_empty_1_sub">Aplicații, contacte, setări, …</string>
-    <string name="ui_empty_2">Arată mereu istoricul</string>
-    <string name="ui_empty_2_sub">Pentru acces rapid</string>
-    <string name="ui_empty_3">Acces rapid la aplicațiile folosite des</string>
-    <string name="ui_empty_3_sub">Lansatorul KISS învață din obiceiurile tale</string>
     <string name="contacts_name">Contacte</string>
     <string name="search_name">Furnizori căutare pe internet</string>
     <string name="settings_name">Setări dispozitiv</string>

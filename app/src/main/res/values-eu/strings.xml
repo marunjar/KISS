@@ -182,12 +182,6 @@
     <string name="search_results_options">Bilaketa-emaitzak</string>
     <string name="contacts_call_on_click">Klik egin kontaktuak deitzeko</string>
     <string name="contacts_name">Kontaktuak</string>
-    <string name="ui_empty_3_sub">KISS abiarazleak zure ohituretaik ikasten du</string>
-    <string name="ui_empty_3">Sarbide bizkorra gehien erabilitako aplikazioentzat</string>
-    <string name="ui_empty_2_sub">Sarbide bizkorrerako</string>
-    <string name="ui_empty_2">Ikusi zure historia beti</string>
-    <string name="ui_empty_1_sub">Aplikazioak, kontaktuak, ezarpenak, …</string>
-    <string name="ui_empty_1">Hasi edozer bilatzen</string>
     <string name="menu_settings">Gailuaren ezarpenak…</string>
     <string name="title_providers">Bilaketa-ezarpenak</string>
     <string name="title_history">Historia-ezarpenak</string>

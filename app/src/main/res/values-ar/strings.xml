@@ -10,12 +10,6 @@
     <string name="title_history">إعدادات السِجلّ</string>
     <string name="title_providers">البحث</string>
     <string name="menu_settings">إعدادات الجهاز…</string>
-    <string name="ui_empty_1">ابدأ البحث عن أي شيء</string>
-    <string name="ui_empty_1_sub">التطبيقات، وجهات الاتصال، والإعدادات، …</string>
-    <string name="ui_empty_2">اطلع دائماً على سجلك</string>
-    <string name="ui_empty_2_sub">للوصول السريع</string>
-    <string name="ui_empty_3">الوصول السريع إلى التطبيقات الأكثر استخدامًا</string>
-    <string name="ui_empty_3_sub">مشغّل KISS يتعلم من عاداتك</string>
     <string name="contacts_name">جهات الاتصال</string>
     <string name="search_name">محركات البحث على الويب</string>
     <string name="settings_name">إعدادات الجهاز</string>

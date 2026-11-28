@@ -33,7 +33,6 @@
     <string name="ui_item_contact_hint_message">Message</string>
     <string name="reset_favorites_warn">Do you really want to reset your favourites?</string>
     <string name="icons_hide_main">Hide icons</string>
-    <string name="ui_empty_3">Quick access to most used apps</string>
     <string name="keyboard_name">Display keyboard on start</string>
     <string name="wp_animate_sides">Side stick wallpaper</string>
     <string name="activity_setting">KISS settings</string>
@@ -52,8 +51,6 @@
     <string name="freeze_history_warn">Are you sure you want to freeze history and turn off further updates? Your history will not change anymore.</string>
     <string name="title_history">History</string>
     <string name="title_providers">Search</string>
-    <string name="ui_empty_1_sub">Apps, contacts, settings, …</string>
-    <string name="ui_empty_2">Always see your history</string>
     <string name="main_kiss">Display app list</string>
     <string name="main_kiss_back">Display history</string>
     <string name="reset_name">Reset history</string>
@@ -164,7 +161,6 @@
     <string name="menu_size_up">Enlarge</string>
     <string name="theme_amoled">AMOLED dark</string>
     <string name="clipboard_warning_dialog">This will overwrite your clipboard content.</string>
-    <string name="ui_empty_2_sub">For fast access</string>
     <string name="notification_dialog">Check KISS in the following menu to turn it on.</string>
     <string name="theme_result_color">Text colour for results</string>
     <string name="contacts_shape_summary">Shape of contacts icon</string>
@@ -250,7 +246,6 @@
     <string name="gesture_homescreen">Go to homescreen</string>
     <string name="results_size">Results display size</string>
     <string name="force_shape">Crop old icons to shape</string>
-    <string name="ui_empty_1">Start searching for anything</string>
     <string name="search_provider_error_url">Please, use a valid URL</string>
     <string name="enable_double_tap_to_lock">Double-tap to lock needs the Android Accessibility API. No data is processed, no data is stored. To use this feature, enable KISS in the following screen.</string>
     <string name="theme_separator">Result separator</string>
@@ -294,7 +289,6 @@
     <string name="search_provider_toggle">Web search</string>
     <string name="import_settings_done">Settings imported.</string>
     <string name="import_settings_error">Unable to import settings.</string>
-    <string name="ui_empty_3_sub">KISS launcher learns from your habits</string>
     <string name="contacts_name">Contacts</string>
     <string name="search_results_options">Results display</string>
     <string name="settings_name">Device settings</string>

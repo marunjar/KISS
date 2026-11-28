@@ -11,12 +11,6 @@
     <string name="title_history">Historio</string>
     <string name="title_providers">Serĉo</string>
     <string name="menu_settings">Aparataj agordoj…</string>
-    <string name="ui_empty_1">Ajn ekserĉi</string>
-    <string name="ui_empty_1_sub">Apps, kontaktoj, agordoj, …</string>
-    <string name="ui_empty_2">Ĉiam vidi vian historion</string>
-    <string name="ui_empty_2_sub">Por rapida aliro</string>
-    <string name="ui_empty_3">Rapida aliro al plej uzataj aplikaĵoj</string>
-    <string name="ui_empty_3_sub">KISS ĵetilo lernas de viaj kutimoj</string>
     <string name="contacts_name">Kontaktoj</string>
     <string name="search_name">Interreta serĉo</string>
     <string name="settings_name">Aparatoagordoj</string>

@@ -7,11 +7,6 @@
     <string name="ui_item_contact_hint_message">Съобщение</string>
     <string name="ui_item_contact_hint_call">Обаждане</string>
     <string name="menu_settings">Настройки на устройството…</string>
-    <string name="ui_empty_1">Започнете да търсите нещо</string>
-    <string name="ui_empty_1_sub">Приложения, контакти, настройки, …</string>
-    <string name="ui_empty_2_sub">За бърз достъп</string>
-    <string name="ui_empty_3">Бърз достъп до най-използваните приложения</string>
-    <string name="ui_empty_3_sub">Стартов панел KISS се учи от вашите навици</string>
     <string name="contacts_name">Контакти</string>
     <string name="search_name">Доставчици на уеб търсене</string>
     <string name="settings_name">Настройки на устройството</string>
@@ -240,7 +235,6 @@
     <string name="search_provider_toggle">Връзки към доставчици на уеб търсене</string>
     <string name="search_results_options">Резултати от търсенето</string>
     <string name="contacts_call_on_click">Натиснете, за да се обадите на контакти</string>
-    <string name="ui_empty_2">Винаги преглеждайте вашата история</string>
     <string name="theme_bar_color">Лента с любими и цвят на лентата за търсене</string>
     <string name="import_settings_dialog">Това ще замени вашите текущи настройки и етикети със съдържание от клипборда. Съществуващите етикети ще бъдат ПРЕМАХНАТИ. Сигурни ли сте?</string>
     <string name="import_settings">Внасяне на настройки и етикети</string>

@@ -204,12 +204,6 @@
     <string name="settings_name">Definições do dipositivo</string>
     <string name="search_name">Serviços de pesquisa na web</string>
     <string name="contacts_name">Contactos</string>
-    <string name="ui_empty_3_sub">KISS aprende com os seus hábitos</string>
-    <string name="ui_empty_3">Acesso rápido às aplicações mais usadas</string>
-    <string name="ui_empty_2_sub">Para acesso rápido</string>
-    <string name="ui_empty_2">Mostrar sempre o histórico</string>
-    <string name="ui_empty_1_sub">Aplicações, contactos, definições…</string>
-    <string name="ui_empty_1">Pesquisar qualquer coisa</string>
     <string name="menu_settings">Definições do dispositivo…</string>
     <string name="title_providers">Pesquisa</string>
     <string name="title_history">Histórico</string>

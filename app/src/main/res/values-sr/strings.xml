@@ -10,12 +10,6 @@
     <string name="title_history">Историја</string>
     <string name="title_providers">Претрага</string>
     <string name="menu_settings">Поставке уређаја…</string>
-    <string name="ui_empty_1">Почните претрагом било чега</string>
-    <string name="ui_empty_1_sub">Апликације, контакти, поставке…</string>
-    <string name="ui_empty_2">Увек видите ваш историјат</string>
-    <string name="ui_empty_2_sub">За бржи приступ</string>
-    <string name="ui_empty_3">Брзи приступ најчешће коришћеним апликацијама</string>
-    <string name="ui_empty_3_sub">КИС покретач учи ваше навике</string>
     <string name="contacts_name">Контакти</string>
     <string name="search_name">Претрага веба</string>
     <string name="settings_name">Подешавања уређаја</string>

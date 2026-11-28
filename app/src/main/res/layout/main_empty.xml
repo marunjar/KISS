@@ -10,17 +10,14 @@
     android:layout_marginRight="@dimen/list_margin_horizontal"
     android:background="?attr/listBackgroundColor"
     android:elevation="2dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/EmptyStateRow">
 
         <ImageView
-            style="@style/ResultItemIcon"
-            android:layout_gravity="center"
+            style="@style/EmptyStateIcon"
             android:contentDescription="@null"
             android:src="@drawable/ic_search"
             app:tint="?attr/resultColor" />
@@ -28,125 +25,61 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="?attr/resultShadowColor"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="?attr/textShadowRadius"
-                android:text="@string/ui_empty_1"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?attr/resultColor" />
+                style="@style/EmptyStateTitle"
+                android:text="@string/ui_empty_search" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="?attr/resultShadowColor"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="?attr/textShadowRadius"
-                android:text="@string/ui_empty_1_sub"
-                android:textColor="?android:attr/textColorTertiary" />
+                style="@style/EmptyStateSubtitle"
+                android:text="@string/ui_empty_search_sub" />
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:contentDescription="@null"
-        android:src="?attr/dividerDrawable" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/EmptyStateRow">
 
         <ImageView
-            style="@style/ResultItemIcon"
-            android:layout_gravity="center"
+            style="@style/EmptyStateIcon"
             android:contentDescription="@null"
-            android:src="@drawable/ic_menu"
+            android:src="@drawable/ic_wifi_off"
             app:tint="?attr/resultColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="?attr/resultShadowColor"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="?attr/textShadowRadius"
-                android:text="@string/ui_empty_2"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?attr/resultColor" />
+                style="@style/EmptyStateTitle"
+                android:text="@string/ui_empty_privacy" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="?attr/resultShadowColor"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="?attr/textShadowRadius"
-                android:text="@string/ui_empty_2_sub"
-                android:textColor="?android:attr/textColorTertiary" />
+                style="@style/EmptyStateSubtitle"
+                android:text="@string/ui_empty_privacy_sub" />
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:contentDescription="@null"
-        android:src="?attr/dividerDrawable" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/EmptyStateRow">
 
         <ImageView
-            style="@style/ResultItemIcon"
-            android:layout_gravity="center"
+            style="@style/EmptyStateIcon"
             android:contentDescription="@null"
-            android:src="@drawable/ic_launcher_white"
+            android:src="@drawable/ic_history"
             app:tint="?attr/resultColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="?attr/resultShadowColor"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="?attr/textShadowRadius"
-                android:text="@string/ui_empty_3"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?attr/resultColor" />
+                style="@style/EmptyStateTitle"
+                android:text="@string/ui_empty_learn" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:shadowColor="?attr/resultShadowColor"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="?attr/textShadowRadius"
-                android:text="@string/ui_empty_3_sub"
-                android:textColor="?android:attr/textColorTertiary" />
+                style="@style/EmptyStateSubtitle"
+                android:text="@string/ui_empty_learn_sub" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

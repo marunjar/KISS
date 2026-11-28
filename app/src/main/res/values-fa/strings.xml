@@ -9,12 +9,6 @@
     <string name="ui_item_contact_hint_call">تماس</string>
     <string name="title_history">تنظیمات تاریخچه</string>
     <string name="menu_settings">تنظیمات دستگاه …</string>
-    <string name="ui_empty_1">جستجو</string>
-    <string name="ui_empty_1_sub">برنامه ها، مخاطبین، تنظیمات، …</string>
-    <string name="ui_empty_2">همیشه تاریخچه خود را ببینید</string>
-    <string name="ui_empty_2_sub">برای دسترسی سریع</string>
-    <string name="ui_empty_3">دسترسی سریع به اکثر برنامه های مورد استفاده</string>
-    <string name="ui_empty_3_sub">کیس از عادت های شما یاد می گیرد</string>
     <string name="contacts_name">مخاطبین</string>
     <string name="search_name">ارائه دهندگان جستجوی وب</string>
     <string name="settings_name">تنظیمات دستگاه</string>

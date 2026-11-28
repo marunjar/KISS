@@ -23,16 +23,10 @@
     <string name="color_system">Systemfarver</string>
     <string name="color_picker_default_title">Vælg en farve</string>
     <string name="unable_to_initialize_shortcuts">Fandt ingen genveje. Er KISS din standard appstarter?</string>
-    <string name="ui_empty_1_sub">Apps, kontakter, indstillinger, …</string>
     <string name="title_history">Historikindstillinger</string>
     <string name="title_providers">Søgeindstillinger</string>
     <string name="menu_settings">Enhedsindstillinger…</string>
-    <string name="ui_empty_1">Begynd at søge efter hvad som helst</string>
-    <string name="ui_empty_2">Se altid din historik</string>
-    <string name="ui_empty_3">Hurtig adgang til mest brugte apps</string>
-    <string name="ui_empty_2_sub">For hurtigt at få adgang</string>
     <string name="keyboard_name">Vis tastaturet ved opstart</string>
-    <string name="ui_empty_3_sub">KISS-appstarteren lærer af dine vaner</string>
     <string name="contacts_name">Kontakter</string>
     <string name="shortcuts_name">Genveje</string>
     <string name="main_kiss">Vis liste med apps</string>

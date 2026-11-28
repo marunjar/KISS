@@ -10,12 +10,6 @@
     <string name="title_history">Geçmiş</string>
     <string name="title_providers">Arama</string>
     <string name="menu_settings">Aygıt ayarları…</string>
-    <string name="ui_empty_1">Bir şeyleri aramaya başlayın</string>
-    <string name="ui_empty_1_sub">Uygulamalar, kişiler, ayarlar…</string>
-    <string name="ui_empty_2">Her zaman geçmişinizi görün</string>
-    <string name="ui_empty_2_sub">Hızlı erişim için</string>
-    <string name="ui_empty_3">En çok kullanılan uygulamalara hızlı erişim</string>
-    <string name="ui_empty_3_sub">KISS başlatıcı alışkanlıklarınızdan öğrenir</string>
     <string name="contacts_name">Kişiler</string>
     <string name="search_name">Web\'de ara</string>
     <string name="settings_name">Aygıt ayarları</string>

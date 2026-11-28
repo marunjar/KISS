@@ -10,11 +10,6 @@
     <string name="title_history">Historial</string>
     <string name="title_providers">Búsqueda</string>
     <string name="menu_settings">Configuración de dispositivo…</string>
-    <string name="ui_empty_1">Comience buscando cualquier cosa</string>
-    <string name="ui_empty_2">Vea el historial siempre</string>
-    <string name="ui_empty_2_sub">Para un acceso rápido</string>
-    <string name="ui_empty_3">Acceso directo a las aplicaciones más usadas</string>
-    <string name="ui_empty_3_sub">El Iniciador KISS aprende de sus hábitos</string>
     <string name="contacts_name">Contactos</string>
     <string name="search_name">Búsqueda en la web</string>
     <string name="settings_name">Configuración del dispositivo</string>
@@ -72,7 +67,6 @@
     <string name="toast_favorites_added">%s ha sido añadido a favoritos</string>
     <string name="enable_phone">Incluir llamadas entrantes en el historial</string>
     <string name="enable_app">Incluir apps nuevas en el historial</string>
-    <string name="ui_empty_1_sub">Aplicaciones, contactos, configuraciones…</string>
     <string name="ui_excluded_apps">Ver o editar las apps excluidas de KISS</string>
     <string name="ui_excluded_apps_dialog_title">Seleccione las apps a excluir</string>
     <string name="search_providers_title">Seleccionar proveedores de búsqueda web</string>

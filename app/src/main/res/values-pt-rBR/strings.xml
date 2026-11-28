@@ -5,9 +5,6 @@
     <string name="ui_item_contact_hint_call">Ligar</string>
     <string name="title_history">Histórico</string>
     <string name="menu_settings">Configurações do dispositivo…</string>
-    <string name="ui_empty_1_sub">Aplicativos, contatos, configurações…</string>
-    <string name="ui_empty_2_sub">Para acesso rápido</string>
-    <string name="ui_empty_3_sub">O launcher KISS aprende com seus hábitos</string>
     <string name="contacts_name">Contatos</string>
     <string name="search_name">Pesquisar na web</string>
     <string name="settings_name">Configurações do dispositivo</string>
@@ -19,9 +16,6 @@
     <string name="portrait_title">Forçar modo retrato</string>
     <string name="ui_item_search">Pesquisar no %1$s por “%2$s”</string>
     <string name="ui_search_hint">Procurar aplicativos, contatos…</string>
-    <string name="ui_empty_2">Sempre veja o seu histórico</string>
-    <string name="ui_empty_3">Acesso rápido aos aplicativos mais usados</string>
-    <string name="ui_empty_1">Comece procurando por qualquer coisa</string>
     <string name="shortcuts_name">Atalhos</string>
     <string name="main_kiss">Exibir lista de aplicativos</string>
     <string name="main_kiss_back">Exibir histórico</string>

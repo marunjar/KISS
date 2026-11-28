@@ -10,12 +10,6 @@
     <string name="title_history">Historia</string>
     <string name="title_providers">Wyszukiwanie</string>
     <string name="menu_settings">Ustawienia urządzenia</string>
-    <string name="ui_empty_1">Szukaj czegokolwiek</string>
-    <string name="ui_empty_1_sub">Aplikacje, kontakty, ustawienia…</string>
-    <string name="ui_empty_2">Zawsze wyświetlaj historię</string>
-    <string name="ui_empty_2_sub">Dla szybkiego dostępu</string>
-    <string name="ui_empty_3">Szybki dostęp do najczęściej używanych aplikacji</string>
-    <string name="ui_empty_3_sub">KISS uczy się nawyków podczas używania</string>
     <string name="contacts_name">Kontakty</string>
     <string name="search_name">Dostawcy wyszukiwania</string>
     <string name="settings_name">Ustawienia urządzenia</string>

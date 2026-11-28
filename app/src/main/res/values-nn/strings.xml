@@ -9,11 +9,6 @@
     <string name="title_history">Historikkinnstillingar</string>
     <string name="title_providers">Søkeinnstillingar</string>
     <string name="menu_settings">Einingsinnstillingar …</string>
-    <string name="ui_empty_1">Søk etter kva som helst</string>
-    <string name="ui_empty_1_sub">Appar, kontaktar, innstillingar, …</string>
-    <string name="ui_empty_2_sub">For snøgt tilgjenge</string>
-    <string name="ui_empty_3">Snøgt tilgjenge til ofte nytta appar</string>
-    <string name="ui_empty_3_sub">KISS-heimskjerm lærer seg vanane dine</string>
     <string name="contacts_call_on_click">Trykk for å ringe kontaktar</string>
     <string name="search_results_options">Søkjesvar</string>
     <string name="search_name">Søkjemotorar</string>
@@ -53,7 +48,6 @@
     <string name="activity_setting">KISS-innstillingar</string>
     <string name="ui_item_contact_hint_message">Melding</string>
     <string name="reset_name">Tøm historikk</string>
-    <string name="ui_empty_2">Vis alltid historikken din</string>
     <string name="contacts_name">Kontaktar</string>
     <string name="main_kiss_back">Vis historikk</string>
     <string name="ui_excluded_apps">Vis eller brigd appar utestengde ifrå KISS</string>
